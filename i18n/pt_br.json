@@ -9,8 +9,6 @@
   "interface.start_game": "Iniciar Jogo",
   "interface.end_game": "Terminar Jogo",
   "interface.is_the_spy": "é o espião!",
-  "interface.spy_icon_created_by": "Ícone do espião criado por",
-  "interface.website_created_by": "Site criado por",
   "interface.game_information": "Informação do Jogo",
   "location.airplane": "Avião",
   "location.airplane.role1": "Passageiro de Primeira Classe",

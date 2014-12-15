@@ -318,6 +318,10 @@ $(function(){
         changeLanguage($("#languages").val());
     });
 
+    $("#me").click(function(){
+        document.location.href = atob("bWFpbHRvOmFkcmlhbm9jb2xhQGdtYWlsLmNvbQ==");
+    });
+
     //set add/rem buttons initial state
     checkAddRem();
 
