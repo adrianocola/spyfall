@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+    <head lang="en">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+        <title>SpyFall</title>
+        <link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.0/css/normalize.min.css'>
+        <link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.0/css/foundation.min.css'>
+        <link rel='stylesheet' href='index.css'>
+
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
+
+    </head>
+
+    <body>
+
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.3/fastclick.min.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.0/js/foundation.min.js"></script>
+
+        <script type="text/javascript" src="index.js"></script>
+
+        <div id="container">
+
+            <div class="row header">
+                <div class="column small-4 medium-3 medium-offset-3 text-center"><img src="spy.png" width="20"/><span>Spyfall</span></div>
+                <div class="column small-8 medium-3 medium-pull-3">
+                    <select id="languages">
+                        <option value="en">English</option>
+                        <option value="pt_br">Português (Brasil)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row content">
+                <div class="row text-center"><a data-reveal-id="locations" data-i18n="game_locations"></a></div>
+                <div id="players" class="column small-12 medium-6 small-centered"></div>
+                <div id="players_controls" class="row">
+                    <div class="column small-6 medium-3 medium-offset-3"><a id="add_player" data-i18n="add_player" class="button expand">Add Player</a></div>
+                    <div class="column small-6 medium-3 medium-pull-3"><a id="rem_player" data-i18n="rem_player" class="button alert expand">Remove Player</a></div>
+                </div>
+                <div id="game_controls" class="column medium-6 small-centered"><a id="start_game" data-i18n="start_game" class="button expand success">Start Game</a><a id="end_game" data-i18n="end_game" data-reveal-id="game_result" class="button alert expand">End Game</a></div>
+                <div id="locations" data-reveal="data-reveal" class="reveal-modal small text-center">
+                    <h2 data-i18n="game_locations"></h2>
+                    <div class="row">
+                        <div id="locations_left" class="column small-6"></div>
+                        <div id="locations_right" class="column small-6"></div>
+                    </div><a class="close-reveal-modal">&#215</a>
+                </div>
+                <div id="game_result" data-reveal="data-reveal" class="reveal-modal small text-center">
+                    <h2 id="game_information" data-i18n="game_information">Game Information:</h2>
+                    <div id="game_result_text"></div><a class="close-reveal-modal">&#215</a>
+                </div>
+            </div>
+
+            <div class="row footer">
+                <div class="text-center">
+                    <span id="spy_icon_created_by" data-i18n="spy_icon_created_by"></span> <span>Dan Hetteix (<a href="http://thenounproject.com/">TheNounProject</a>)</span>
+                </div>
+                <div class="text-center">
+                    <span id="website_created_by" data-i18n="website_created_by"></span> <span>Adriano Cola</span>
+                </div>
+                <div class="text-center">
+                    <a href="https://github.com/adrianocola/spyfall">https://github.com/adrianocola/spyfall</a>
+                </div>
+            </div>
+
+
+        </div>
+
+    </body>
+</html>

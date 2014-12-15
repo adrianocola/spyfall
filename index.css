@@ -1,0 +1,29 @@
+
+#container{
+  padding: 30px 0;
+  display: none;
+}
+
+input, .button.player_button {
+  height: 40px;
+  padding: 10px;
+  margin: 5px 0;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+#players_controls {
+  margin: 10px 0;
+}
+
+#game_controls {
+  margin-top: 10px;
+}
+
+.footer {
+  margin-top: 20px;
+  font-size: 12px;
+  color: #aaaaaa;
+}
+
+
