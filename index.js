@@ -99,15 +99,15 @@ $(function(){
         var playerName = name?name:"player" + playerNum;
         $("#players").append(
             '<div id="p' + playerNum + '" class="player_data">' +
-            '<input class="player_input" value=' + playerName + '>' +
-            '<a class="button success expand player_button" href="#" data-reveal-id="modal' + playerNum + '">' + playerName + '</a>' +
-            '<div id="modal' + playerNum + '" class="reveal-modal small text-center" data-reveal>' +
-            '<h2 class="player_title"> ' + playerName + '</h2>' +
-            '<h4><strong><span data-i18n="location"></span>: </strong><span class="player_location">' + playerNum + '</span></h4>'+
-            '<h4><strong><span data-i18n="role"></span>: </strong><span class="player_role">' + playerNum + '</span></h4>'+
-            '<a class="close-reveal-modal">&#215;</a>' +
-            '<a class="button alert close-modal" data-i18n="close">Close</a>' +
-            '</div>' +
+                '<input class="player_input" value=' + playerName + '>' +
+                '<a class="button success expand player_button" href="#" data-reveal-id="modal' + playerNum + '">' + playerName + '</a>' +
+                '<div id="modal' + playerNum + '" class="reveal-modal small text-center" data-reveal>' +
+                    '<h2 class="player_title"> ' + playerName + '</h2>' +
+                    '<h4><strong><span data-i18n="location"></span>: </strong><span class="player_location">' + playerNum + '</span></h4>'+
+                    '<h4><strong><span data-i18n="role"></span>: </strong><span class="player_role">' + playerNum + '</span></h4>'+
+                    '<a class="close-reveal-modal">&#215;</a>' +
+                    '<a class="button alert close-modal" data-i18n="close">Close</a>' +
+                '</div>' +
             '</div>');
 
 
@@ -117,12 +117,13 @@ $(function(){
         var close = $("#p" + playerNum + " .close-modal");
         var closeTrigger = $("#p" + playerNum + " .close-reveal-modal");
 
-
         //changed name
         input.change(function(){
-            var newValue = input.val();
-            button.html(newValue);
-            title.html(newValue);
+            var newName = input.val();
+            button.html(newName);
+            title.html(newName);
+
+            playerName = newName;
         });
 
         //want to view role
