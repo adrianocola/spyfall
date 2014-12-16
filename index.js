@@ -122,8 +122,6 @@ $(function(){
             var newName = input.val();
             button.html(newName);
             title.html(newName);
-
-            playerName = newName;
         });
 
         //want to view role
@@ -135,7 +133,7 @@ $(function(){
             button.addClass('disabled secondary');
             button.removeClass('success');
 
-            ga('send', 'event', 'Game', 'ViewPlayerRole', playerName);
+            ga('send', 'event', 'Game', 'ViewPlayerRole', playerNum);
         });
 
         close.click(function(){
