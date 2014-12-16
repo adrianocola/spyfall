@@ -131,6 +131,8 @@ $(function(){
 
             button.addClass('disabled secondary');
             button.removeClass('success');
+
+            ga('send', 'event', 'Game', 'ViewPlayerRole', playerName);
         });
 
         close.click(function(){
