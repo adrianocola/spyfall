@@ -69,7 +69,7 @@ $(function(){
         all_locations.sort();
 
         for(var i=0; i < locationsSize; i++){
-            if(i < (locationsSize/2+1)){
+            if(i < (locationsSize/2)){
                 $("#locations_left").append('<div>' + all_locations[i] + '</div>');
             }else{
                 $("#locations_right").append('<div>' + all_locations[i] + '</div>');
@@ -102,7 +102,7 @@ $(function(){
             '<input class="player_input" value=' + playerName + '>' +
             '<a class="button success expand player_button" href="#" data-reveal-id="modal' + playerNum + '">' + playerName + '</a>' +
             '<div id="modal' + playerNum + '" class="reveal-modal small text-center" data-reveal>' +
-            '<h2> ' + playerName + '</h2>' +
+            '<h2 class="player_title"> ' + playerName + '</h2>' +
             '<h4><strong><span data-i18n="location"></span>: </strong><span class="player_location">' + playerNum + '</span></h4>'+
             '<h4><strong><span data-i18n="role"></span>: </strong><span class="player_role">' + playerNum + '</span></h4>'+
             '<a class="close-reveal-modal">&#215;</a>' +
@@ -113,6 +113,7 @@ $(function(){
 
         var input = $("#p" + playerNum + " .player_input");
         var button = $("#p" + playerNum + " .player_button");
+        var title = $("#p" + playerNum + " .player_title");
         var close = $("#p" + playerNum + " .close-modal");
         var closeTrigger = $("#p" + playerNum + " .close-reveal-modal");
 
@@ -121,6 +122,7 @@ $(function(){
         input.change(function(){
             var newValue = input.val();
             button.html(newValue);
+            title.html(newValue);
         });
 
         //want to view role
