@@ -61,12 +61,18 @@ $(function(){
         var locationsSize = _.size(locations);
         $("#locations_left").html("");
         $("#locations_right").html("");
+
+        var all_locations = [];
         for(var i=1; i <= locationsSize; i++){
-            var location = i18n["location." + locations[i]];
+            all_locations.push(i18n["location." + locations[i]]);
+        }
+        all_locations.sort();
+
+        for(var i=0; i < locationsSize; i++){
             if(i < (locationsSize/2+1)){
-                $("#locations_left").append('<div>' + location + '</div>');
+                $("#locations_left").append('<div>' + all_locations[i] + '</div>');
             }else{
-                $("#locations_right").append('<div>' + location + '</div>');
+                $("#locations_right").append('<div>' + all_locations[i] + '</div>');
             }
         }
     }
