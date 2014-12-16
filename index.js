@@ -263,8 +263,12 @@ $(function(){
 
     function startGame(){
 
+
+
         var location = locations[_.random(_.size(locations)-1)];
         var playersCount = $("#players .player_data").length;
+
+        ga('send', 'Spyfall', 'Game', 'Start', {location: location,'players': playersCount});
 
         var allRoles = getAllRoles();
         var availableRoles = getAvailableRoles(playersCount,allRoles);
@@ -295,6 +299,8 @@ $(function(){
 
         $("#players .player_button").hide();
         $("#players .player_input").show();
+
+        ga('send', 'Spyfall', 'Game', 'End');
 
         $("#languages").removeAttr("disabled","disabled");
         $("#players_controls").show();
