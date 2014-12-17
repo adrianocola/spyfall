@@ -1,34 +1,34 @@
 $(function(){
 
-    var locations  = {
-        "1": "airplane",
-        "2": "bank",
-        "3": "beach",
-        "4": "broadway_theater",
-        "5": "casino",
-        "6": "cathedral",
-        "7": "circus_tent",
-        "8": "corporate_party",
-        "9": "crusader_army",
-        "10": "day_spa",
-        "11": "embassy",
-        "12": "hospital",
-        "13": "hotel",
-        "14": "military_base",
-        "15": "movie_studio",
-        "16": "ocean_liner",
-        "17": "passenger_train",
-        "18": "pirate_ship",
-        "19": "polar_station",
-        "20": "police_station",
-        "21": "restaurant",
-        "22": "school",
-        "23": "service_station",
-        "24": "space_station",
-        "25": "submarine",
-        "26": "supermarket",
-        "27": "university"
-    }
+    var locations  = [
+        "airplane",
+        "bank",
+        "beach",
+        "broadway_theater",
+        "casino",
+        "cathedral",
+        "circus_tent",
+        "corporate_party",
+        "crusader_army",
+        "day_spa",
+        "embassy",
+        "hospital",
+        "hotel",
+        "military_base",
+        "movie_studio",
+        "ocean_liner",
+        "passenger_train",
+        "pirate_ship",
+        "polar_station",
+        "police_station",
+        "restaurant",
+        "school",
+        "service_station",
+        "space_station",
+        "submarine",
+        "supermarket",
+        "university"
+    ]
 
     var i18n = {};
 
@@ -58,18 +58,17 @@ $(function(){
 
     function updateLocations(){
         //update locations
-        var locationsSize = _.size(locations);
         $("#locations_left").html("");
         $("#locations_right").html("");
 
         var all_locations = [];
-        for(var i=1; i <= locationsSize; i++){
+        for(var i=0; i < locations.length; i++){
             all_locations.push(i18n["location." + locations[i]]);
         }
         all_locations.sort();
 
-        for(var i=0; i < locationsSize; i++){
-            if(i < (locationsSize/2)){
+        for(var i=0; i < locations.length; i++){
+            if(i < (locations.length/2)){
                 $("#locations_left").append('<div>' + all_locations[i] + '</div>');
             }else{
                 $("#locations_right").append('<div>' + all_locations[i] + '</div>');
@@ -266,7 +265,7 @@ $(function(){
 
     function startGame(){
 
-        var location = locations[_.random(_.size(locations)-1)];
+        var location = locations[_.random(locations.length-1)];
         var playersCount = $("#players .player_data").length;
 
         ga('send', 'event', 'Game', 'Start', location);
