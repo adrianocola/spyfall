@@ -20,6 +20,10 @@ input, .button.player_button {
   margin: 40px 0 20px 0;
 }
 
+#room_controls {
+  margin: 40px 0 20px 0;
+}
+
 #game_controls {
   margin-top: 10px;
 }

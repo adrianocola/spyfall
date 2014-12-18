@@ -1,5 +1,11 @@
 $(function(){
 
+    //var peer = new Peer(makeid(4),{key: 'hi5939pursjaif6r'});
+    //
+    //peer.on('open', function(id) {
+    //    console.log('My peer ID is: ' + id);
+    //});
+
     $("#container").show();
 
     var locations  = [
@@ -33,6 +39,16 @@ $(function(){
     ]
 
     var i18n = {};
+
+    function makeid(size){
+        var text = "";
+        var possible = "abcdefghijklmnopqrstuvwxyz0123456789";
+
+        for( var i=0; i < size; i++ )
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+        return text;
+    }
 
     function changeLanguage(lang){
         $.getJSON('i18n/' + lang + '.json',function(data){
