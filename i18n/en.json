@@ -10,6 +10,8 @@
   "interface.end_game": "End Game",
   "interface.is_the_spy": "is the spy!",
   "interface.game_information": "Game Information",
+  "interface.start_timer": "Start Timer",
+  "interface.pause_timer": "Pause Timer",
   "location.airplane": "Airplane",
   "location.airplane.role1": "First Class Passenger",
   "location.airplane.role2": "Air Marshall",

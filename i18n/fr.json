@@ -10,6 +10,8 @@
   "interface.end_game": "Terminer",
   "interface.is_the_spy": "&eacute;tait l'espion !",
   "interface.game_information": "Fin de la manche",
+  "interface.start_timer": "Commencer Minuterie",
+  "interface.pause_timer": "Pause Minuterie",
   "location.airplane": "Avion",
   "location.airplane.role1": "Passager de 1<sup>&egrave;re</sup> classe",
   "location.airplane.role2": "Officier de la Police de l'Air",

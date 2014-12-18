@@ -1,5 +1,7 @@
 $(function(){
 
+    $("#container").show();
+
     var locations  = [
         "airplane",
         "bank",
@@ -44,8 +46,6 @@ $(function(){
             changeLanguage('en');
         });
     }
-
-    $("#container").show();
 
     function updateInterface(){
 
@@ -289,10 +289,13 @@ $(function(){
         $("#players_controls").hide();
         $("#start_game").hide();
         $("#end_game").show();
+        $("#timer_container").show();
         $("#game_result").hide();
 
         updateInterface();
 
+        $("#timer").countdown({until: +480, compact: true, description: '', format: 'M:S',onExpiry: function(){ beep(3); }});
+        $('#timer').countdown('pause');
     }
 
     function endGame(){
@@ -306,8 +309,19 @@ $(function(){
         $("#players_controls").show();
         $("#start_game").show();
         $("#end_game").hide();
+        $("#timer_container").hide();
         $("#game_result").show();
 
+        $('#timer').countdown('destroy');
+
+    }
+
+    function beep(times){
+        for(var i=0; i< times; i++){
+            setTimeout(function(){
+                new Beep(22050).play(1000, 0.5, [Beep.utils.amplify(8000)]);
+            },i*1000);
+        }
     }
 
     $("#add_player").click(function(){
@@ -332,6 +346,21 @@ $(function(){
 
     $("#me").click(function(){
         document.location.href = atob("bWFpbHRvOmFkcmlhbm9jb2xhQGdtYWlsLmNvbQ==");
+    });
+
+    $("#timer_control").click(function(){
+        $('#timer').countdown('toggle');
+
+        if($("#timer_control").hasClass("success")){
+            $("#timer_control").removeClass('success');
+            $("#timer_control").addClass('alert');
+            $("#timer_control").html(i18n["interface.pause_timer"]);
+        }else{
+            $("#timer_control").removeClass('alert');
+            $("#timer_control").addClass('success');
+            $("#timer_control").html(i18n["interface.start_timer"]);
+        }
+
     });
 
     //set add/rem buttons initial state

@@ -16,6 +16,10 @@ input, .button.player_button {
   margin: 10px 0;
 }
 
+#timer_container {
+  margin: 40px 0 20px 0;
+}
+
 #game_controls {
   margin-top: 10px;
 }

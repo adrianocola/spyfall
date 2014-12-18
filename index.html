@@ -19,6 +19,7 @@
 
         <link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.0/css/normalize.min.css'>
         <link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.0/css/foundation.min.css'>
+        <link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/jquery-countdown/2.0.1/jquery.countdown.min.css'>
         <link rel='stylesheet' href='index.css'>
 
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
@@ -30,7 +31,10 @@
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-countdown/2.0.1/jquery.plugin.min.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-countdown/2.0.1/jquery.countdown.min.js"></script>
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.3/fastclick.min.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/beepjs/0.0.1/beep.min.js"></script>
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.0/js/foundation.min.js"></script>
 
         <script type="text/javascript" src="index.js"></script>
@@ -55,7 +59,17 @@
                     <div class="column small-6 medium-3 medium-offset-3"><a id="add_player" data-i18n="add_player" class="button expand">Add Player</a></div>
                     <div class="column small-6 medium-3 medium-pull-3"><a id="rem_player" data-i18n="rem_player" class="button alert expand">Remove Player</a></div>
                 </div>
-                <div id="game_controls" class="column medium-6 small-centered"><a id="start_game" data-i18n="start_game" class="button expand success">Start Game</a><a id="end_game" data-i18n="end_game" data-reveal-id="game_result" class="button alert expand">End Game</a></div>
+
+                <div id="timer_container" class="row">
+                    <div class="column small-6 medium-3 medium-offset-3"><a id="timer_control" data-i18n="start_timer" class="button expand success">Start Timer</a></div>
+                    <div class="column small-6 medium-3 medium-pull-3 text-center"><div id="timer"></div></div>
+                </div>
+
+                <div id="game_controls" class="column medium-6 small-centered">
+                    <a id="start_game" data-i18n="start_game" class="button expand success">Start Game</a>
+                    <a id="end_game" data-i18n="end_game" data-reveal-id="game_result" class="button alert expand">End Game</a>
+                </div>
+
                 <div id="locations" data-reveal="data-reveal" class="reveal-modal small text-center">
                     <h2 data-i18n="game_locations"></h2>
                     <div class="row">
