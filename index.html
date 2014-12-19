@@ -6,6 +6,7 @@
         <title>SpyFall</title>
 
         <script>
+            //big hack to prevent loading the https page ( if it is https peer.js won't work)
             if (window.location.protocol != "http:")
             window.location.href = "http:" + window.location.href.substring(window.location.protocol.length);
         </script>

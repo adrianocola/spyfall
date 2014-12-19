@@ -505,7 +505,7 @@ $(function(){
 
     $("#room_join_button").click(function(){
 
-        var room_id = $("#room_join_id").val();
+        var room_id = $("#room_join_id").val().toUpperCase();
         var player_name = $("#room_join_name").val();
 
         var ladda = $("#room_join_button").ladda();
