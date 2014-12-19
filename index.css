@@ -35,6 +35,7 @@ input, .button.player_button {
 
 #room_container {
   margin-top: 30px;
+  display: none;
 }
 
 #room_controls {
