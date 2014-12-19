@@ -1,10 +1,14 @@
 $(function(){
 
-    //var peer = new Peer(makeid(4),{key: 'hi5939pursjaif6r'});
-    //
-    //peer.on('open', function(id) {
-    //    console.log('My peer ID is: ' + id);
-    //});
+    //TODO refactor all this mess! Split in more files/classes
+
+    var peer;
+    var players = {};
+    var game_info = {
+        state: 'stopped',
+        spy: -1,
+        location: 'none'
+    };
 
     $("#container").show();
 
@@ -42,7 +46,7 @@ $(function(){
 
     function makeid(size){
         var text = "";
-        var possible = "abcdefghijklmnopqrstuvwxyz0123456789";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
         for( var i=0; i < size; i++ )
             text += possible.charAt(Math.floor(Math.random() * possible.length));
@@ -70,12 +74,17 @@ $(function(){
             element.html(i18n["interface." + element.attr("data-i18n")]);
         });
 
+        $('*[data-i18n-ph]').each(function(){
+            var element = $(this);
+            element.attr("placeholder",i18n["interface." + element.attr("data-i18n-ph")]);
+        });
+
     }
 
     function updateLocations(){
         //update locations
-        $("#locations_left").html("");
-        $("#locations_right").html("");
+        $(".locations_left").html("");
+        $(".locations_right").html("");
 
         var all_locations = [];
         for(var i=0; i < locations.length; i++){
@@ -85,9 +94,9 @@ $(function(){
 
         for(var i=0; i < locations.length; i++){
             if(i < (locations.length/2)){
-                $("#locations_left").append('<div>' + all_locations[i] + '</div>');
+                $(".locations_left").append('<div>' + all_locations[i] + '</div>');
             }else{
-                $("#locations_right").append('<div>' + all_locations[i] + '</div>');
+                $(".locations_right").append('<div>' + all_locations[i] + '</div>');
             }
         }
     }
@@ -98,7 +107,7 @@ $(function(){
     function checkAddRem(){
         if($("#players .player_data").length >= 8){
             $("#add_player").addClass("disabled secondary");
-        }else if($("#players .player_data").length <= 3){
+        }else if($("#players .player_data").length <= 1){
             $("#rem_player").removeClass("alert");
             $("#rem_player").addClass("disabled secondary");
         }else{
@@ -110,12 +119,18 @@ $(function(){
 
 
     function addPlayer(name){
+
+        if($("#add_player").hasClass("disabled")) return false;
+
+        name = (typeof name === "string")?name:undefined;
+
         var playerNum = $("#players .player_data").length+1;
         var playerName = name?name:"player" + playerNum;
         $("#players").append(
-            '<div id="p' + playerNum + '" class="player_data">' +
-                '<input class="player_input" value=' + playerName + '>' +
+            '<div id="p' + playerNum + '" class="player_data ' + playerName + '">' +
+                '<input class="player_input" data-i18n-ph="player_name" value=' + playerName + '>' +
                 '<a class="button success expand player_button" href="#" data-reveal-id="modal' + playerNum + '">' + playerName + '</a>' +
+                '<div class="player_remote">*</div>' +
                 '<div id="modal' + playerNum + '" class="reveal-modal small text-center" data-reveal>' +
                     '<h2 class="player_title"> ' + playerName + '</h2>' +
                     '<h4><strong><span data-i18n="location"></span>: </strong><span class="player_location">' + playerNum + '</span></h4>'+
@@ -126,6 +141,7 @@ $(function(){
             '</div>');
 
 
+        var player = $("#p" + playerNum);
         var input = $("#p" + playerNum + " .player_input");
         var button = $("#p" + playerNum + " .player_button");
         var title = $("#p" + playerNum + " .player_title");
@@ -159,6 +175,22 @@ $(function(){
         $("#players .player_button").hide();
 
         $("#players").foundation();
+
+        checkAddRem();
+    }
+
+    function remPlayer(name){
+
+        name = (typeof name === "string")?name:undefined;
+
+        if(name){
+            $("#players .player_data." + name).remove();
+        }else{
+            if($("#rem_player").hasClass("disabled")) return false;
+            $("#players .player_data:last-child").remove();
+        }
+
+        checkAddRem();
     }
 
     function configurePlayer(playerNum, location, role){
@@ -166,8 +198,21 @@ $(function(){
         var playerLocation = $("#p" + playerNum + " .player_location");
         var playerRole = $("#p" + playerNum + " .player_role");
 
+        if(peer){
+            var p_peer = players[playerName];
+            if(p_peer){
+                p_peer.send({type: "GAME_START", role: role, location: location});
+
+                //if is a remote player, prevent manager looking at his role
+                var button = $("#p" + playerNum + " .player_button");
+                button.removeClass('success');
+                button.addClass('disabled secondary');
+            }
+        }
+
         //is spy?
         if(role===0){
+            game_info.spy = playerName;
             playerLocation.html("???");
             playerRole.html('<img src="spy.png" width=20>' + i18n["spy"]);
             $("#game_result_text").html("");
@@ -290,23 +335,30 @@ $(function(){
         var availableRoles = getAvailableRoles(playersCount,allRoles);
         var assignedPlayersRoles = assignPlayersRoles(playersCount,availableRoles);
 
-        //assign to each player a random role from the available roles
-        for(var i=0;i<playersCount;i++){
-            configurePlayer(i+1,location,assignedPlayersRoles[i]);
-        }
-
         $("#players .player_input").hide();
         $("#players .player_button").show();
 
         $("#players .player_button").removeClass('disabled secondary');
         $("#players .player_button").addClass('success');
 
+        //assign to each player a random role from the available roles
+        for(var i=0;i<playersCount;i++){
+            configurePlayer(i+1,location,assignedPlayersRoles[i]);
+        }
+
+        game_info.state = "running";
+        game_info.location = location;
+
         $("#languages").attr("disabled","disabled");
-        $("#players_controls").hide();
-        $("#start_game").hide();
-        $("#end_game").show();
-        $("#timer_container").show();
         $("#game_result").hide();
+        $("#start_game").fadeOut();
+        $("#room_controls").fadeOut();
+        $("#room_create").fadeOut();
+
+        $("#players_controls").fadeOut(function(){
+            $("#end_game").fadeIn();
+            $("#timer_container").fadeIn();
+        });
 
         updateInterface();
 
@@ -330,6 +382,17 @@ $(function(){
 
         $('#timer').countdown('destroy');
 
+        if(!game_info.room){
+            $("#room_controls").show();
+        }else{
+            $("#room_create").show();
+        }
+
+
+        game_info.state = "stopped";
+
+        broadcast({type: "GAME_END", location: game_info.location, spy: game_info.spy});
+
     }
 
     function beep(times){
@@ -340,17 +403,16 @@ $(function(){
         }
     }
 
-    $("#add_player").click(function(){
-        if($("#add_player").hasClass("disabled")) return false;
-        addPlayer();
-        checkAddRem();
-    });
+    function broadcast(msg){
+        for(p_name in players){
+            var p_peer = players[p_name];
+            p_peer.send(msg);
+        }
+    }
 
-    $("#rem_player").click(function(){
-        if($("#rem_player").hasClass("disabled")) return false;
-        $("#players .player_data:last-child").remove();
-        checkAddRem();
-    });
+    $("#add_player").click(addPlayer);
+
+    $("#rem_player").click(remPlayer);
 
     $("#start_game").click(startGame);
 
@@ -369,23 +431,173 @@ $(function(){
 
         if($("#timer_control").hasClass("success")){
             $("#timer_control").removeClass('success');
-            $("#timer_control").addClass('alert');
             $("#timer_control").html(i18n["interface.pause_timer"]);
         }else{
-            $("#timer_control").removeClass('alert');
             $("#timer_control").addClass('success');
             $("#timer_control").html(i18n["interface.start_timer"]);
         }
 
     });
 
+    $("#create_room").click(function(){
+
+        var ladda = $("#create_room").ladda();
+        ladda.ladda( 'start' );
+
+        peer = new Peer(makeid(4),{key: 'hi5939pursjaif6r'});
+
+        peer.on('open', function(id) {
+            game_info.room = id;
+            $("#room_id").html(id);
+
+            ga('send', 'event', 'Room', 'Created');
+
+            $("#room_controls").fadeOut(function(){
+                $("#room_create").fadeIn();
+                ladda.ladda( 'stop' );
+            });
+        });
+
+        peer.on('connection', function(conn) {
+
+            var player;
+
+            conn.on('data', function(msg){
+                if(msg.type){
+                    if(msg.type === "PLAYER_JOIN"){
+
+                        //check if exists player with this name
+                        if($(".player_input[value=" + msg.name + "]").length===0){
+                            conn.send({type: "INVALID_PLAYER"});
+                        }else{
+                            player = msg.name;
+                            players[msg.name] = conn;
+
+                            $('.player_data.' + player + ' .player_remote').fadeIn();
+
+                            conn.send({type: "CONNECTED"});
+                        }
+
+                    }
+                }
+            });
+
+            conn.on('close', function(conn) {
+                $('.player_data.' + player + ' .player_remote').fadeOut();
+                delete players[player];
+            });
+
+        });
+
+
+    });
+
+    $("#enter_room").click(function(){
+
+        peer = new Peer(makeid(4),{key: 'hi5939pursjaif6r'});
+
+        $('.row.content').fadeOut();
+        $("#room_controls").fadeOut(function(){
+            $("#room_join").fadeIn();
+        });
+
+    });
+
+    $("#room_join_button").click(function(){
+
+        var room_id = $("#room_join_id").val();
+        var player_name = $("#room_join_name").val();
+
+        var ladda = $("#room_join_button").ladda();
+
+        ladda.ladda( 'start' );
+
+        var conn = peer.connect(room_id);
+
+        $("#room_game").fadeOut();
+
+        function onError(msg){
+            if($("#room_game_data").hasClass('alert')) return;
+            ladda.ladda('stop');
+            $("#room_game").fadeIn();
+            $("#room_game_data").html(msg);
+            $("#room_game_data").removeClass('disabled secondary success');
+            $("#room_game_data").addClass('alert');
+        }
+
+        peer.on('error', function(){
+            onError(i18n["interface.error_room_connection"]);
+        });
+
+        conn.on('close', function(){
+            onError(i18n["interface.error_room_connection"]);
+        });
+
+        conn.on('open', function(){
+
+            conn.send({type: "PLAYER_JOIN", name: player_name});
+
+            conn.on('data', function(data){
+                if(data.type){
+                    if(data.type === "CONNECTED") {
+                        $("#room_game_data").html(i18n["interface.game_connected"]);
+                        $("#room_game_data").removeClass('alert');
+                        $("#room_game_data").addClass('disabled secondary');
+
+                        $("#room_info_id").html(room_id);
+                        $("#room_info_name").html(player_name);
+
+                        $("#room_join").fadeOut(function(){
+                            $("#room_info").fadeIn();
+                            $("#room_locations").fadeIn();
+                            $("#room_game").fadeIn();
+                        });
+                        $("#header_locations").fadeOut();
+
+                        ga('send', 'event', 'Room', 'Joined');
+
+                    }else if(data.type === "INVALID_PLAYER"){
+                        onError(i18n["interface.error_room_invalid_player"]);
+                        conn.close();
+                    }else if(data.type === "GAME_START"){
+                        $("#room_game_data").html(i18n["interface.show_my_role"]);
+                        $("#room_game_data").removeClass('disabled secondary');
+                        $("#room_game_data").addClass('success');
+                        $("#room_game_data").attr("data-reveal-id","room_game_me");
+
+                        $("#room_game_name").html(player_name);
+
+                        if(data.role===0){
+                            $("#room_game_location").html("???");
+                            $("#room_game_role").html('<img src="spy.png" width=20>' + i18n["spy"]);
+                        }else{
+                            $("#room_game_location").html(i18n["location." + data.location]);
+                            $("#room_game_role").html(i18n["location." + data.location + ".role" + data.role]);
+                        }
+                        $("#room_game_role").html();
+                    }else if(data.type === "GAME_END"){
+                        $("#room_game_data").html(i18n["interface.game_stopped"]);
+                        $("#room_game_data").removeClass('success');
+                        $("#room_game_data").addClass('disabled secondary');
+                        $("#room_game_data").attr("data-reveal-id","game_result");
+
+                    }
+                }
+
+            });
+
+
+
+
+        });
+
+    });
+
     //set add/rem buttons initial state
     checkAddRem();
 
-    //start with 3 players
+    //start with one player ("me")
     addPlayer("player1");
-    addPlayer("player2");
-    addPlayer("player3");
 
     //set game initial state
     endGame();
