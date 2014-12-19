@@ -444,7 +444,7 @@ $(function(){
         var ladda = $("#create_room").ladda();
         ladda.ladda( 'start' );
 
-        peer = new Peer(makeid(4),{key: 'hi5939pursjaif6r'});
+        peer = new Peer(makeid(4),{key: 'hi5939pursjaif6r', secure: true});
 
         peer.on('open', function(id) {
             game_info.room = id;
@@ -494,7 +494,7 @@ $(function(){
 
     $("#enter_room").click(function(){
 
-        peer = new Peer(makeid(4),{key: 'hi5939pursjaif6r'});
+        peer = new Peer(makeid(7),{key: 'hi5939pursjaif6r', secure: true});
 
         $('.row.content').fadeOut();
         $("#room_controls").fadeOut(function(){
