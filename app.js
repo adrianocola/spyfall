@@ -50,9 +50,13 @@ io.on('connection', function (socket) {
     var room;
     var player;
 
-    socket.on('create_room',function(){
+    socket.on('create_room',function(_room){
 
-        room = genRoom();
+        if(_room){
+            room = _room;
+        }else{
+            room = genRoom();
+        }
         sockets[room] = socket;
 
         rooms[room] = {};

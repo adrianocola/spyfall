@@ -444,7 +444,10 @@ $(function(){
         socket = io();
 
         socket.on('connect', function () {
-            socket.emit('create_room');
+            socket.emit('create_room', game_info.room);
+
+            $('.player_remote').fadeOut();
+            players = {};
         });
 
         socket.on('created_room',function(room){
@@ -489,6 +492,13 @@ $(function(){
 
     $("#enter_room").click(function(){
 
+        if($.cookie("room")){
+            $("#room_join_id").val($.cookie("room"));
+        }
+        if($.cookie("player")){
+            $("#room_join_name").val($.cookie("player"));
+        }
+
         $('.row.content').fadeOut();
         $("#room_controls").fadeOut(function(){
             $("#room_join").fadeIn();
@@ -518,6 +528,9 @@ $(function(){
             game_info.room = room_id;
 
             socket.emit('data',{type: "PLAYER_JOIN", name: player_name});
+
+            $.cookie("player",player_name);
+            $.cookie("room",room_id);
 
         });
 
@@ -583,6 +596,10 @@ $(function(){
         });
 
         socket.on('disconnected',function(){
+            onError(i18n["interface.error_room_connection"]);
+        });
+
+        socket.on('disconnect',function(){
             onError(i18n["interface.error_room_connection"]);
         });
 
