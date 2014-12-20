@@ -6,9 +6,9 @@
         <title>SpyFall</title>
 
         <script>
-            //big hack to prevent loading the https page ( if it is https peer.js won't work)
-            if (window.location.protocol != "http:")
-            window.location.href = "http:" + window.location.href.substring(window.location.protocol.length);
+            if(window.location.hostname === "adrianocola.github.io"){
+                window.location.replace("http://adrianocola.com/spyfall");
+            }
         </script>
 
         <script>
@@ -21,7 +21,6 @@
             ga('send', 'pageview');
 
         </script>
-
 
         <link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.0/css/normalize.min.css'>
         <link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.0/css/foundation.min.css'>
@@ -43,18 +42,18 @@
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-countdown/2.0.1/jquery.countdown.min.js"></script>
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.3/fastclick.min.js"></script>
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/beepjs/0.0.1/beep.min.js"></script>
-        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/peerjs/0.3.14/peer.min.js"></script>
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/Ladda/0.9.4/spin.min.js"></script>
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/Ladda/0.9.4/ladda.min.js"></script>
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/Ladda/0.9.4/ladda.jquery.min.js"></script>
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.0/js/foundation.min.js"></script>
+        <script type="text/javascript" src="/socket.io/socket.io.js"></script>
 
         <script type="text/javascript" src="index.js"></script>
 
         <div id="container">
 
             <div class="row header">
-                <div class="column small-4 medium-3 medium-offset-3 text-center"><img src="spy.png" width="20"/><span>Spyfall</span></div>
+                <div class="column small-4 medium-3 medium-offset-3 text-center"><img src="../spy.png" width="20"/><span>Spyfall</span></div>
                 <div class="column small-8 medium-3 medium-pull-3">
                     <select id="languages">
                         <option value="en">English</option>
@@ -112,8 +111,8 @@
 
                 <div id="room_create" class="row">
                     <div class="column small-4 medium-3 medium-offset-3 text-center">
-                        <a class="button expand disabled secondary">
-                            <span data-i18n="room_id"></span>
+                        <a class="button expand disabled secondary uppercase">
+                            <span data-i18n="room"></span>
                             :
                             <span id="room_id"></span>
                         </a>
@@ -124,11 +123,11 @@
                 </div>
 
                 <div id="room_join" class="row">
-                    <div class="column small-4 medium-2 medium-offset-3 text-center">
-                        <input id="room_join_id" data-i18n-ph="room_id">
+                    <div class="column small-4 medium-2 medium-offset-3 text-center no-right-padding">
+                        <input id="room_join_id" data-i18n-ph="room" class="uppercase">
                     </div>
-                    <div class="column small-4 medium-2 text-center">
-                        <input id="room_join_name" data-i18n-ph="player_name">
+                    <div class="column small-4 medium-2 text-center no-right-padding">
+                        <input id="room_join_name" data-i18n-ph="player" class="uppercase">
                     </div>
                     <div class="column small-4 medium-2 medium-pull-3 text-center">
                         <a id="room_join_button" data-i18n="join" data-style="zoom-out" class="ladda-button button expand success"></a>

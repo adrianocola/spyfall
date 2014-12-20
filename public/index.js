@@ -2,7 +2,7 @@ $(function(){
 
     //TODO refactor all this mess! Split in more files/classes
 
-    var peer;
+    var socket;
     var players = {};
     var game_info = {
         state: 'stopped',
@@ -126,9 +126,12 @@ $(function(){
 
         var playerNum = $("#players .player_data").length+1;
         var playerName = name?name:"player" + playerNum;
+
+        playerName = playerName.toUpperCase();
+
         $("#players").append(
             '<div id="p' + playerNum + '" class="player_data ' + playerName + '">' +
-                '<input class="player_input" data-i18n-ph="player_name" value=' + playerName + '>' +
+                '<input class="player_input uppercase" data-i18n-ph="player_name" value=' + playerName + '>' +
                 '<a class="button success expand player_button" href="#" data-reveal-id="modal' + playerNum + '">' + playerName + '</a>' +
                 '<div class="player_remote">*</div>' +
                 '<div id="modal' + playerNum + '" class="reveal-modal small text-center" data-reveal>' +
@@ -136,7 +139,7 @@ $(function(){
                     '<h4><strong><span data-i18n="location"></span>: </strong><span class="player_location">' + playerNum + '</span></h4>'+
                     '<h4><strong><span data-i18n="role"></span>: </strong><span class="player_role">' + playerNum + '</span></h4>'+
                     '<a class="close-reveal-modal">&#215;</a>' +
-                    '<a class="button alert close-modal" data-i18n="close">Close</a>' +
+                    '<a class="button alert close-modal" data-i18n="close"></a>' +
                 '</div>' +
             '</div>');
 
@@ -150,9 +153,14 @@ $(function(){
 
         //changed name
         input.change(function(){
-            var newName = input.val();
-            button.html(newName);
-            title.html(newName);
+
+            player.removeClass(playerName);
+
+            playerName = input.val().toUpperCase();
+            button.html(playerName);
+            title.html(playerName);
+
+            player.addClass(playerName);
         });
 
         //want to view role
@@ -179,29 +187,23 @@ $(function(){
         checkAddRem();
     }
 
-    function remPlayer(name){
+    function remPlayer(){
 
-        name = (typeof name === "string")?name:undefined;
-
-        if(name){
-            $("#players .player_data." + name).remove();
-        }else{
-            if($("#rem_player").hasClass("disabled")) return false;
-            $("#players .player_data:last-child").remove();
-        }
+        if($("#rem_player").hasClass("disabled")) return false;
+        $("#players .player_data:last-child").remove();
 
         checkAddRem();
     }
 
     function configurePlayer(playerNum, location, role){
-        var playerName = $("#p" + playerNum + " .player_input").val();
+        var playerName = $("#p" + playerNum + " .player_input").val().toUpperCase();
         var playerLocation = $("#p" + playerNum + " .player_location");
         var playerRole = $("#p" + playerNum + " .player_role");
 
-        if(peer){
-            var p_peer = players[playerName];
-            if(p_peer){
-                p_peer.send({type: "GAME_START", role: role, location: location});
+        if(socket){
+
+            if(players[playerName]){
+                socket.emit('data',playerName,{type: "GAME_START", role: role, location: location});
 
                 //if is a remote player, prevent manager looking at his role
                 var button = $("#p" + playerNum + " .player_button");
@@ -214,7 +216,7 @@ $(function(){
         if(role===0){
             game_info.spy = playerName;
             playerLocation.html("???");
-            playerRole.html('<img src="spy.png" width=20>' + i18n["spy"]);
+            playerRole.html('<img src="../spy.png" width=20>' + i18n["spy"]);
             $("#game_result_text").html("");
             $("#game_result_text").append('<div><span data-i18n="location"></span>: ' + i18n["location." + location] + '</div>');
             $("#game_result_text").append('<div>' + playerName + ' <span data-i18n="is_the_spy"></span></div>');
@@ -391,7 +393,9 @@ $(function(){
 
         game_info.state = "stopped";
 
-        broadcast({type: "GAME_END", location: game_info.location, spy: game_info.spy});
+        if(socket){
+            socket.emit('broadcast',{type: "GAME_END", location: game_info.location, spy: game_info.spy});
+        }
 
     }
 
@@ -400,13 +404,6 @@ $(function(){
             setTimeout(function(){
                 new Beep(22050).play(1000, 0.5, [Beep.utils.amplify(8000)]);
             },i*1000);
-        }
-    }
-
-    function broadcast(msg){
-        for(p_name in players){
-            var p_peer = players[p_name];
-            p_peer.send(msg);
         }
     }
 
@@ -444,11 +441,16 @@ $(function(){
         var ladda = $("#create_room").ladda();
         ladda.ladda( 'start' );
 
-        peer = new Peer(makeid(4),{key: 'hi5939pursjaif6r'});
+        socket = io();
 
-        peer.on('open', function(id) {
-            game_info.room = id;
-            $("#room_id").html(id);
+        socket.on('connect', function () {
+            socket.emit('create_room');
+        });
+
+        socket.on('created_room',function(room){
+            game_info.room = room;
+
+            $("#room_id").html(game_info.room);
 
             ga('send', 'event', 'Room', 'Created');
 
@@ -456,45 +458,36 @@ $(function(){
                 $("#room_create").fadeIn();
                 ladda.ladda( 'stop' );
             });
-        });
+        })
 
-        peer.on('connection', function(conn) {
+        socket.on('data',function(data){
 
-            var player;
+            if(data.type === "PLAYER_JOIN"){
 
-            conn.on('data', function(msg){
-                if(msg.type){
-                    if(msg.type === "PLAYER_JOIN"){
+                //check if exists player with this name
+                if($('.player_data.' + data.name).length===0){
+                    socket.emit('data',data.name,{type: "INVALID_PLAYER"});
+                }else{
+                    players[data.name] = true;
 
-                        //check if exists player with this name
-                        if($(".player_input[value=" + msg.name + "]").length===0){
-                            conn.send({type: "INVALID_PLAYER"});
-                        }else{
-                            player = msg.name;
-                            players[msg.name] = conn;
+                    $('.player_data.' + data.name + ' .player_remote').fadeIn();
 
-                            $('.player_data.' + player + ' .player_remote').fadeIn();
-
-                            conn.send({type: "CONNECTED"});
-                        }
-
-                    }
+                    socket.emit('data',data.name,{type: "CONNECTED"});
                 }
-            });
 
-            conn.on('close', function(conn) {
-                $('.player_data.' + player + ' .player_remote').fadeOut();
-                delete players[player];
-            });
+            }else if(data.type === "PLAYER_LEFT"){
+
+                delete players[data.name];
+
+                $('.player_data.' + data.name + ' .player_remote').fadeOut();
+
+            }
 
         });
-
 
     });
 
     $("#enter_room").click(function(){
-
-        peer = new Peer(makeid(7),{key: 'hi5939pursjaif6r'});
 
         $('.row.content').fadeOut();
         $("#room_controls").fadeOut(function(){
@@ -506,15 +499,96 @@ $(function(){
     $("#room_join_button").click(function(){
 
         var room_id = $("#room_join_id").val().toUpperCase();
-        var player_name = $("#room_join_name").val();
+        var player_name = $("#room_join_name").val().toUpperCase();
 
         var ladda = $("#room_join_button").ladda();
 
         ladda.ladda( 'start' );
 
-        var conn = peer.connect(room_id);
-
         $("#room_game").fadeOut();
+
+        socket = io();
+
+        socket.on('connect', function () {
+            socket.emit('join_room',room_id,player_name);
+        });
+
+        socket.on('joined_room', function () {
+
+            game_info.room = room_id;
+
+            socket.emit('data',{type: "PLAYER_JOIN", name: player_name});
+
+        });
+
+        socket.on('data',function(data){
+
+            if(data.type === "INVALID_PLAYER"){
+                onError(i18n["interface.error_room_invalid_player"]);
+            }else if(data.type === "CONNECTED"){
+
+                $("#room_game_data").html(i18n["interface.game_connected"]);
+                $("#room_game_data").removeClass('alert');
+                $("#room_game_data").addClass('disabled secondary');
+
+                $("#room_info_id").html(room_id);
+                $("#room_info_name").html(player_name);
+
+                $("#room_join").fadeOut(function(){
+                    $("#room_info").fadeIn();
+                    $("#room_locations").fadeIn();
+                    $("#room_game").fadeIn();
+                });
+                $("#header_locations").fadeOut();
+
+                ga('send', 'event', 'Room', 'Joined');
+
+            }else if(data.type === "GAME_START"){
+                $("#room_game_data").html(i18n["interface.show_my_role"]);
+                $("#room_game_data").removeClass('disabled secondary');
+                $("#room_game_data").addClass('success');
+                $("#room_game_data").attr("data-reveal-id","room_game_me");
+
+                $("#room_game_name").html(player_name);
+
+                if(data.role===0){
+                    $("#room_game_location").html("???");
+                    $("#room_game_role").html('<img src="../spy.png" width=20>' + i18n["spy"]);
+                }else{
+                    $("#room_game_location").html(i18n["location." + data.location]);
+                    $("#room_game_role").html(i18n["location." + data.location + ".role" + data.role]);
+                }
+                $("#room_game_role").html();
+            }else if(data.type === "GAME_END"){
+                $("#room_game_data").html(i18n["interface.game_stopped"]);
+                $("#room_game_data").removeClass('success');
+                $("#room_game_data").addClass('disabled secondary');
+                $("#room_game_data").attr("data-reveal-id","game_result");
+
+            }else if(data.type === "DISCONNECTED"){
+                onError(i18n["interface.error_room_connection"]);
+
+                socket.disconnect();
+                socket = null;
+            }
+
+        });
+
+        socket.on('invalid_socket',function(data){
+            onError(i18n["interface.error_room_connection"]);
+        });
+
+        socket.on('invalid_room',function(data){
+            onError(i18n["interface.error_room_connection"]);
+        });
+
+        socket.on('disconnected',function(){
+            onError(i18n["interface.error_room_connection"]);
+        });
+
+        socket.on('error',function(){
+            onError(i18n["interface.error_room_connection"]);
+        });
 
         function onError(msg){
             if($("#room_game_data").hasClass('alert')) return;
@@ -524,82 +598,12 @@ $(function(){
             $("#room_game_data").removeClass('disabled secondary success');
             $("#room_game_data").addClass('alert');
         }
-
-        peer.on('error', function(){
-            onError(i18n["interface.error_room_connection"]);
-        });
-
-        conn.on('close', function(){
-            onError(i18n["interface.error_room_connection"]);
-        });
-
-        conn.on('open', function(){
-
-            conn.send({type: "PLAYER_JOIN", name: player_name});
-
-            conn.on('data', function(data){
-                if(data.type){
-                    if(data.type === "CONNECTED") {
-                        $("#room_game_data").html(i18n["interface.game_connected"]);
-                        $("#room_game_data").removeClass('alert');
-                        $("#room_game_data").addClass('disabled secondary');
-
-                        $("#room_info_id").html(room_id);
-                        $("#room_info_name").html(player_name);
-
-                        $("#room_join").fadeOut(function(){
-                            $("#room_info").fadeIn();
-                            $("#room_locations").fadeIn();
-                            $("#room_game").fadeIn();
-                        });
-                        $("#header_locations").fadeOut();
-
-                        ga('send', 'event', 'Room', 'Joined');
-
-                    }else if(data.type === "INVALID_PLAYER"){
-                        onError(i18n["interface.error_room_invalid_player"]);
-                        conn.close();
-                    }else if(data.type === "GAME_START"){
-                        $("#room_game_data").html(i18n["interface.show_my_role"]);
-                        $("#room_game_data").removeClass('disabled secondary');
-                        $("#room_game_data").addClass('success');
-                        $("#room_game_data").attr("data-reveal-id","room_game_me");
-
-                        $("#room_game_name").html(player_name);
-
-                        if(data.role===0){
-                            $("#room_game_location").html("???");
-                            $("#room_game_role").html('<img src="spy.png" width=20>' + i18n["spy"]);
-                        }else{
-                            $("#room_game_location").html(i18n["location." + data.location]);
-                            $("#room_game_role").html(i18n["location." + data.location + ".role" + data.role]);
-                        }
-                        $("#room_game_role").html();
-                    }else if(data.type === "GAME_END"){
-                        $("#room_game_data").html(i18n["interface.game_stopped"]);
-                        $("#room_game_data").removeClass('success');
-                        $("#room_game_data").addClass('disabled secondary');
-                        $("#room_game_data").attr("data-reveal-id","game_result");
-
-                    }
-                }
-
-            });
-
-
-
-
-        });
-
     });
 
-    //set add/rem buttons initial state
-    checkAddRem();
-
-    //start with one player ("me")
+    //start with one player
     addPlayer("player1");
 
-    //set game initial state
+    //set game initial state/layout
     endGame();
 
 
