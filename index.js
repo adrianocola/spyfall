@@ -216,7 +216,7 @@ $(function(){
         if(role===0){
             game_info.spy = playerName;
             playerLocation.html("???");
-            playerRole.html('<img src="../spy.png" width=20>' + i18n["spy"]);
+            playerRole.html('<img src="spy.png" width=20>' + i18n["spy"]);
             $("#game_result_text").html("");
             $("#game_result_text").append('<div><span data-i18n="location"></span>: ' + i18n["location." + location] + '</div>');
             $("#game_result_text").append('<div>' + playerName + ' <span data-i18n="is_the_spy"></span></div>');
