@@ -10,8 +10,6 @@ $(function(){
         location: 'none'
     };
 
-    $("#container").show();
-
     var locations  = [
         "airplane",
         "bank",
@@ -61,7 +59,7 @@ $(function(){
             updateInterface();
             updateLocations();
             $("#languages").val(lang);
-            $("#container").show();
+            $("#container").fadeIn();
         }).fail(function(){
             changeLanguage('en');
         });
@@ -100,9 +98,6 @@ $(function(){
             }
         }
     }
-
-    //load the english language
-    changeLanguage($.cookie("locale") || "en");
 
     function checkAddRem(){
         if($("#players .player_data").length >= 8){
@@ -623,6 +618,8 @@ $(function(){
     //set game initial state/layout
     endGame();
 
+    //load the english language
+    changeLanguage($.cookie("locale") || "en");
 
     $(document).foundation();
 
