@@ -52,11 +52,12 @@ io.on('connection', function (socket) {
 
     socket.on('create_room',function(_room){
 
-        if(_room){
-            room = _room;
-        }else{
+        if(!_room || sockets[_room]){
             room = genRoom();
+        }else{
+            room = _room;
         }
+
         sockets[room] = socket;
 
         rooms[room] = {};
