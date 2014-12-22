@@ -92,9 +92,9 @@ $(function(){
 
         for(var i=0; i < locations.length; i++){
             if(i < (locations.length/2)){
-                $(".locations_left").append('<div>' + all_locations[i] + '</div>');
+                $(".locations_left").append('<div class="location_item">' + all_locations[i] + '</div>');
             }else{
-                $(".locations_right").append('<div>' + all_locations[i] + '</div>');
+                $(".locations_right").append('<div class="location_item">' + all_locations[i] + '</div>');
             }
         }
     }

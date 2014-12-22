@@ -12,6 +12,20 @@ input, .button.player_button {
   width: 100%;
 }
 
+#locations {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+#locations .location_item {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+#locations .location_item:last-child {
+  border-bottom: none;
+}
+
+
 .player_data {
   position: relative;
 }
