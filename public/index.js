@@ -1,6 +1,6 @@
 $(function(){
 
-    var countdown = 20;
+    var countdown = 480; //8 minutes
     var socket;
     var players = {};
     var game_info = {
