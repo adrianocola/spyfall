@@ -50,23 +50,27 @@
 
         <script type="text/javascript" src="index.js"></script>
 
-        <div id="container" class="row">
-
-            <div class="row header">
-                <div class="column small-4 medium-3 medium-offset-3 text-center"><img src="../spy.png" width="20"/><span>Spyfall</span></div>
-                <div class="column small-8 medium-3 medium-pull-3">
-                    <select id="languages">
-                        <option value="en">English</option>
-                        <option value="es">Español</option>
-                        <option value="fr">Fran&ccedil;ais</option>
-                        <option value="pt_br">Português (Brasil)</option>
-                    </select>
-                </div>
+        <div id="header" class="row">
+            <div class="column small-4 medium-3 medium-offset-3 text-center"><img src="../spy.png" width="20"/><span>Spyfall</span></div>
+            <div class="column small-8 medium-3 medium-pull-3">
+                <select id="languages">
+                    <option value="de">Deutsch</option>
+                    <option value="en">English</option>
+                    <option value="es">Español</option>
+                    <option value="fr">Fran&ccedil;ais</option>
+                    <option value="pt_br">Português (Brasil)</option>
+                </select>
             </div>
+        </div>
+
+        <div id="container" class="row">
 
             <div id="header_locations" class="row header">
                 <div class="column small-12 medium-6 small-centered text-center">
                     <a data-reveal-id="locations_modal" data-i18n="game_locations"></a>
+                    <!--<a id="config_locations" href="#">
+                        <img src="../cog.png" width="20">
+                    </a>-->
                 </div>
             </div>
 
@@ -183,6 +187,29 @@
                     <a href="https://github.com/adrianocola/spyfall">https://github.com/adrianocola/spyfall</a>
                 </div>
             </div>
+        </div>
+
+        <div id="locations_config" class="row">
+
+
+            <div id="locations_controls" class="row">
+                <div class="column small-8 small-offset-2 medium-4 medium-offset-4">
+                    <a id="add_location" data-i18n="add_player" class="button expand"></a>
+                </div>
+            </div>
+
+            <div id="game_locations2" class="row">
+                <h4 data-i18n="game_locations" class="text-center"></h4>
+                <div class="locations_list column small-8 small-offset-2 medium-4 medium-offset-4"></div>
+            </div>
+
+
+            <div id="locations_save" class="row">
+                <div class="column small-8 small-offset-2 medium-4 medium-offset-4">
+                    <a id="rem_location" data-i18n="rem_player" class="button alert expand"></a>
+                </div>
+            </div>
+
 
 
         </div>

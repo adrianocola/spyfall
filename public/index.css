@@ -1,10 +1,14 @@
 
+#header {
+  padding-top: 40px;
+}
+
 #container{
-  padding: 30px 0;
+  padding-bottom: 30px;
   display: none;
 }
 
-input, .button.player_button {
+.player_input, .button.player_button {
   height: 40px;
   padding: 10px;
   margin: 5px 0;
@@ -104,6 +108,32 @@ input, .button.player_button {
 
 .no-right-padding {
   padding-right: 0;
+}
+
+
+#locations_config {
+  display: none;
+}
+
+.location_config_item {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.location_config_check {
+  left: 0;
+}
+
+.location_config_name {
+  padding-left: 20px;
+}
+
+.location_config_details {
+  right: 20px;
+  position: absolute;
+}
+
+.location_config_setup {
+  display: none;
 }
 
 

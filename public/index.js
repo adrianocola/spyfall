@@ -82,6 +82,7 @@ $(function(){
         //update locations
         $(".locations_left").html("");
         $(".locations_right").html("");
+        $(".locations_list").html("");
 
         var all_locations = [];
         for(var i=0; i < locations.length; i++){
@@ -95,7 +96,56 @@ $(function(){
             }else{
                 $(".locations_right").append('<div class="location_item">' + all_locations[i] + '</div>');
             }
+
+            addConfigLocation(all_locations[i]);
+
+
+
         }
+    }
+
+    function addConfigLocation(location){
+
+
+        var config = $(
+            '<div class="location_config_item">' +
+                '<input class="location_config_check" type="checkbox">' +
+                '<span class="location_config_name">' + location + '</span>' +
+                '<a class="location_config_details" href="#">' +
+                    '<img src="../cog.png" width="20">' +
+                '</a>' +
+                '<a href=""></a>' +
+
+                '<div class="location_config_setup">' +
+                    '<div class="location_config_roles">' +
+                        '<input class="location_config_setup_name" placeholder="location name">' +
+                    '</div>' +
+                    '<a class="location_config_save" class="button alert expand">Save</a>' +
+                '</div>' +
+
+            '</div>'
+        );
+
+        var setup = config.find('.location_config_setup');
+        var roles_list = config.find('.location_config_roles');
+
+        for(var i=0; i<7; i++){
+
+            roles_list.append('<input class="location_config_role" placeholder="location role">');
+
+        }
+
+        config.find('.location_config_details').click(function(){
+            if(setup.is(":visible")){
+                setup.slideUp();
+            }else{
+                setup.slideDown();
+            }
+        });
+
+
+        $(".locations_list").append(config);
+
     }
 
     function checkAddRem(){
@@ -432,6 +482,10 @@ $(function(){
         document.location.href = atob("bWFpbHRvOmFkcmlhbm9jb2xhQGdtYWlsLmNvbQ==");
     });
 
+    //**************************************************************************
+    //******************************* TIMER SETUP ******************************
+    //**************************************************************************
+
     $("#timer_control").click(function(){
         $('#timer').countdown('toggle');
 
@@ -449,6 +503,26 @@ $(function(){
         }
 
     });
+
+
+    //**************************************************************************
+    //**************************** LOCATIONS CONFIG ****************************
+    //**************************************************************************
+
+    $("#config_locations").click(function(){
+
+        $("#container").fadeOut(function(){
+            $("#locations_config").fadeIn();
+        });
+
+
+
+
+    })
+
+    //**************************************************************************
+    //******************************* ROOMS SETUP ******************************
+    //**************************************************************************
 
     $("#create_room").click(function(){
 
