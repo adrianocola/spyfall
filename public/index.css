@@ -12,19 +12,18 @@ input, .button.player_button {
   width: 100%;
 }
 
-#locations {
-  padding-left: 0;
-  padding-right: 0;
+#locations_modal {
+  padding-left: 2px;
+  padding-right: 2px;
 }
 
-#locations .location_item {
+.location_item {
   border-bottom: 1px solid #f0f0f0;
 }
 
-#locations .location_item:last-child {
+.location_item:last-child {
   border-bottom: none;
 }
-
 
 .player_data {
   position: relative;
@@ -39,6 +38,10 @@ input, .button.player_button {
   right: 10px;
 }
 
+#game_locations {
+  display: none;
+}
+
 #players_controls {
   margin: 10px 0;
 }
@@ -47,16 +50,12 @@ input, .button.player_button {
   margin: 40px 0 20px 0;
 }
 
-#room_container {
-  margin-top: 30px;
-}
-
 #room_controls {
-  margin: 0;
+  margin: 40px 0 0 0;
 }
 
 #room_create {
-  margin: 0;
+  margin: 40px 0 0 0;
   display: none;
 }
 

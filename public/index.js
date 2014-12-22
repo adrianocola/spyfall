@@ -1,7 +1,6 @@
 $(function(){
 
-    //TODO refactor all this mess! Split in more files/classes
-
+    var countdown = 20;
     var socket;
     var players = {};
     var game_info = {
@@ -120,7 +119,7 @@ $(function(){
         name = (typeof name === "string")?name:undefined;
 
         var playerNum = $("#players .player_data").length+1;
-        var playerName = name?name:"player" + playerNum;
+        var playerName = name?name:"p" + playerNum;
 
         playerName = playerName.toUpperCase();
 
@@ -161,11 +160,18 @@ $(function(){
         //want to view role
         button.click(function(evt){
 
-            //if already saw role, don't show again (prevent cheating)
-            if(button.hasClass('disabled')) return false;
+            //if the player is the only local player, don't prevent him from seeing his role again
+            if($(".player_data").length - _.size(players) != 1){
 
-            button.addClass('disabled secondary');
-            button.removeClass('success');
+                //if already saw role, don't show again (prevent cheating)
+                if(button.hasClass('disabled')){
+                    return false;
+                }
+
+                button.addClass('disabled secondary');
+                button.removeClass('success');
+
+            }
 
             ga('send', 'event', 'Game', 'ViewPlayerRole', playerNum);
         });
@@ -351,16 +357,21 @@ $(function(){
         $("#start_game").fadeOut();
         $("#room_controls").fadeOut();
         $("#room_create").fadeOut();
+        $("#header_locations").fadeOut();
 
         $("#players_controls").fadeOut(function(){
             $("#end_game").fadeIn();
             $("#timer_container").fadeIn();
+            $("#game_locations").fadeIn();
         });
 
-        updateInterface();
+        $("#timer_control").addClass('success');
+        $("#timer_control").html(i18n["interface.start_timer"]);
 
-        $("#timer").countdown({until: +480, compact: true, description: '', format: 'M:S',onExpiry: function(){ beep(3); }});
+        $("#timer").countdown({until: countdown, compact: true, description: '', format: 'M:S',onExpiry: function(){ beep(3); }});
         $('#timer').countdown('pause');
+
+        updateInterface();
     }
 
     function endGame(){
@@ -376,6 +387,9 @@ $(function(){
         $("#end_game").hide();
         $("#timer_container").hide();
         $("#game_result").show();
+        $("#game_locations").hide();
+        $("#header_locations").show();
+
 
         $('#timer').countdown('destroy');
 
@@ -424,9 +438,14 @@ $(function(){
         if($("#timer_control").hasClass("success")){
             $("#timer_control").removeClass('success');
             $("#timer_control").html(i18n["interface.pause_timer"]);
+            socket.emit('broadcast',{type: "TIMER_START", time: new Date()});
         }else{
             $("#timer_control").addClass('success');
             $("#timer_control").html(i18n["interface.start_timer"]);
+            if(socket){
+                var until = $.countdown.periodsToSeconds($('#timer').countdown("getTimes"))
+                socket.emit('broadcast',{type: "TIMER_STOP", until: until});
+            }
         }
 
     });
@@ -494,7 +513,14 @@ $(function(){
             $("#room_join_name").val($.cookie("player"));
         }
 
-        $('.row.content').fadeOut();
+        $("#header_locations").fadeOut();
+        $("#players_container").fadeOut();
+        $("#game_controls").fadeOut();
+
+        $("#timer_control_container").remove();
+        $("#timer_watch_container").removeClass('medium-3 medium-pull-3');
+        $("#timer_watch_container").addClass('medium-offset-3');
+
         $("#room_controls").fadeOut(function(){
             $("#room_join").fadeIn();
         });
@@ -542,10 +568,14 @@ $(function(){
                 $("#room_info_id").html(room_id);
                 $("#room_info_name").html(player_name);
 
+                $("#timer").countdown({until: countdown, compact: true, description: '', format: 'M:S',onExpiry: function(){ beep(3); }});
+                $('#timer').countdown('pause');
+
                 $("#room_join").fadeOut(function(){
                     $("#room_info").fadeIn();
-                    $("#room_locations").fadeIn();
+                    $("#game_locations").fadeIn();
                     $("#room_game").fadeIn();
+                    $("#timer_container").fadeIn();
                 });
                 $("#header_locations").fadeOut();
 
@@ -558,6 +588,10 @@ $(function(){
                 $("#room_game_data").attr("data-reveal-id","room_game_me");
 
                 $("#room_game_name").html(player_name);
+
+                $('#timer').countdown('destroy');
+                $("#timer").countdown({until: countdown, compact: true, description: '', format: 'M:S',onExpiry: function(){ beep(3); }});
+                $('#timer').countdown('pause');
 
                 if(data.role===0){
                     $("#room_game_location").html("???");
@@ -572,6 +606,21 @@ $(function(){
                 $("#room_game_data").removeClass('success');
                 $("#room_game_data").addClass('disabled secondary');
                 $("#room_game_data").attr("data-reveal-id","game_result");
+
+            }else if(data.type === "TIMER_START"){
+
+                var diff = new Date().getTime() - new Date(data.time).getTime();
+
+                var until = $.countdown.periodsToSeconds($('#timer').countdown("getTimes")) - (diff/1000);
+
+                $('#timer').countdown('resume');
+                $('#timer').countdown("option","until",until);
+
+            }else if(data.type === "TIMER_STOP"){
+
+                $('#timer').countdown("option","until",data.until);
+                $('#timer').countdown('pause');
+
 
             }else if(data.type === "DISCONNECTED"){
                 onError(i18n["interface.error_room_connection"]);
@@ -613,7 +662,7 @@ $(function(){
     });
 
     //start with one player
-    addPlayer("player1");
+    addPlayer("p1");
 
     //set game initial state/layout
     endGame();
