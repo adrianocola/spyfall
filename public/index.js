@@ -82,7 +82,9 @@ $(function(){
             updateInterface();
             updateLocations();
             $("#languages").val(lang);
-            $("#container").fadeIn();
+            if(!$("#locations_config").is(":visible")){
+                $("#container").fadeIn();
+            }
         }).fail(function(){
             changeLanguage('en');
         });
@@ -110,23 +112,30 @@ $(function(){
         $(".locations_list").html("");
 
         var all_locations = [];
-        var locations_map = {};
-        for(var i=0; i < locations.length; i++){
-            var location = i18n["location." + locations[i]];
+
+        for(var i=0; i < selected_locations.length; i++){
+            var location = getLocation(selected_locations[i]);
             all_locations.push(location);
-            locations_map[location] = locations[i];
+
         }
         all_locations.sort();
 
-        for(var i=0; i < locations.length; i++){
-            if(i < (locations.length/2)){
+        for(var i=0; i < selected_locations.length; i++){
+            if(i < (selected_locations.length/2)){
                 $(".locations_left").append('<div class="location_item">' + all_locations[i] + '</div>');
             }else{
                 $(".locations_right").append('<div class="location_item">' + all_locations[i] + '</div>');
             }
+        }
 
-            addConfigLocation(locations_map[all_locations[i]]);
+        all_locations = [];
 
+        for(var i=0; i < locations.length; i++){
+            all_locations.push(locations[i]);
+        }
+
+        for(var i=0; i < all_locations.length; i++){
+            addConfigLocation(all_locations[i]);
         }
     }
 
@@ -667,6 +676,27 @@ $(function(){
 
     $("#add_location").click(function(){
         addConfigLocation();
+    });
+
+    $("#locations_filter").keyup(function(){
+
+        var search = $("#locations_filter").val().toLowerCase();
+
+        $(".location_config_item").each(function(){
+            var config = $(this);
+            var name = config.find(".location_config_title").html().toLowerCase();
+
+           if(name.indexOf(search)===-1){
+               config.hide();
+           }else{
+               config.show();
+           }
+
+        });
+
+
+
+
     });
 
 
