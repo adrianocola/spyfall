@@ -32,6 +32,7 @@
   "interface.import": "Import",
   "interface.export_help": "Use the generated ID to import your custom locations in another device",
   "interface.done": "Done!",
+  "interface.error": "Error!",
   "location.airplane": "Airplane",
   "location.airplane.role1": "First Class Passenger",
   "location.airplane.role2": "Air Marshall",

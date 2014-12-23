@@ -840,8 +840,6 @@ $(function(){
 
                 ladda.ladda( 'stop' );
 
-                $("#locations_import_button").html(i18n['interface.done']);
-
                 for(var id in custom_locations){
                     selected_locations = _.without(selected_locations,id);
                 }
@@ -855,9 +853,28 @@ $(function(){
                 configureCustomLocations();
                 updateSelectedLocations();
 
+                $("#locations_import_button").html(i18n['interface.done']);
+
+                setTimeout(function(){
+                    $("#locations_import_button").html(i18n['interface.import']);
+                },5000);
+
             },error: function(){
 
                 ladda.ladda( 'stop' );
+
+
+                $("#locations_import_button").html(i18n['interface.error']);
+                $("#locations_import_button").removeClass('success');
+                $("#locations_import_button").addClass('alert');
+
+                setTimeout(function(){
+                    $("#locations_import_button").html(i18n['interface.import']);
+                    $("#locations_import_button").removeClass('alert');
+                    $("#locations_import_button").addClass('success');
+                },5000);
+
+
 
             }
         });
