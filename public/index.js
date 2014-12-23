@@ -1046,7 +1046,6 @@ $(function(){
         socket = io();
 
         socket.on('connect', function () {
-            console.log(socket);
             socket.emit('join_room',room_id,player_name);
         });
 
@@ -1156,7 +1155,6 @@ $(function(){
 
             if(socket.connected){
                 setTimeout(function(){
-                    console.log("RETRY");
                     socket.emit('join_room',room_id,player_name);
                 },3000);
             }
