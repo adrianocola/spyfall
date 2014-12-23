@@ -2,7 +2,10 @@ $(function(){
 
     var countdown = 480; //8 minutes
     var socket;
+    var i18n = {};
     var players = {};
+    //variable used to prevent selecting the same location twice in a row
+    var last_location;
     var game_info = {
         state: 'stopped',
         spy: -1,
@@ -39,14 +42,9 @@ $(function(){
         "university"
     ];
 
-    //variable used to prevent selecting the same location twice in a row
-    var last_location;
-
     var custom_locations = store.get('custom_locations') || {};
 
     var selected_locations = store.get('selected_locations') || locations.slice(0);
-
-    var i18n = {};
 
     function getSelectedCustomLocations(){
         var selected_custom_locations = {};
@@ -530,6 +528,16 @@ $(function(){
 
         }
 
+        var locationsDist = {};
+
+        for(var i=0; i< tests; i++){
+            var location = locations[_.random(locations.length-1)];
+            locationsDist[location] = (locationsDist[location] || 0) +1;
+        }
+
+        console.log(_.size(locationsDist) + " locations!");
+        console.log(locationsDist);
+
         return "OK!"
 
 
@@ -697,6 +705,10 @@ $(function(){
             },i*1000);
         }
     }
+
+    //**************************************************************************
+    //******************************** GAME SETUP ******************************
+    //**************************************************************************
 
     $("#add_player").click(addPlayer);
 
