@@ -37,13 +37,37 @@ $(function(){
         "submarine",
         "supermarket",
         "university"
-    ]
+    ];
+
+    var custom_locations = store.get('custom_locations') || {};
+
+    var selected_locations = store.get('selected_locations') || locations.slice(0);
 
     var i18n = {};
 
+    function getLocation(location){
+
+        if(custom_locations[location]){
+            return custom_locations[location].name;
+        }else{
+            return i18n['location.' + location];
+        }
+
+    }
+
+    function getLocationRole(location,roleNum){
+
+        if(custom_locations[location]){
+            return custom_locations[location]["role" + roleNum];
+        }else{
+            return i18n['location.' + location + '.role' + roleNum];
+        }
+
+    }
+
     function makeid(size){
         var text = "";
-        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
         for( var i=0; i < size; i++ )
             text += possible.charAt(Math.floor(Math.random() * possible.length));
@@ -79,14 +103,18 @@ $(function(){
     }
 
     function updateLocations(){
+
         //update locations
         $(".locations_left").html("");
         $(".locations_right").html("");
         $(".locations_list").html("");
 
         var all_locations = [];
+        var locations_map = {};
         for(var i=0; i < locations.length; i++){
-            all_locations.push(i18n["location." + locations[i]]);
+            var location = i18n["location." + locations[i]];
+            all_locations.push(location);
+            locations_map[location] = locations[i];
         }
         all_locations.sort();
 
@@ -97,20 +125,25 @@ $(function(){
                 $(".locations_right").append('<div class="location_item">' + all_locations[i] + '</div>');
             }
 
-            addConfigLocation(all_locations[i]);
-
-
+            addConfigLocation(locations_map[all_locations[i]]);
 
         }
     }
 
-    function addConfigLocation(location){
+    function addConfigLocation(location, custom){
 
+        location = location?location:"";
+
+        if(location){
+            var location_name = getLocation(location);
+        }else{
+            var location_name = i18n["interface.location"];
+        }
 
         var config = $(
             '<div class="location_config_item">' +
                 '<input class="location_config_check" type="checkbox">' +
-                '<span class="location_config_name">' + location + '</span>' +
+                '<span class="location_config_title">' + location_name + '</span>' +
                 '<a class="location_config_details" href="#">' +
                     '<img src="../cog.png" width="20">' +
                 '</a>' +
@@ -118,9 +151,15 @@ $(function(){
 
                 '<div class="location_config_setup">' +
                     '<div class="location_config_roles">' +
-                        '<input class="location_config_setup_name" placeholder="location name">' +
+                        '<div class="location_config_name">' +
+                            '<span class="location_config_name_label">location:</span>' +
+                            '<input class="location_config_name_input" placeholder="location" value="' + location_name + '">' +
+                            '<input class="location_config_id" type="hidden">' +
+                        '</div>' +
+
                     '</div>' +
-                    '<a class="location_config_save" class="button alert expand">Save</a>' +
+                    '<a href="#" class="location_config_save">Save</a>' +
+                    '<a href="#" class="location_config_delete">Delete</a>' +
                 '</div>' +
 
             '</div>'
@@ -128,10 +167,18 @@ $(function(){
 
         var setup = config.find('.location_config_setup');
         var roles_list = config.find('.location_config_roles');
+        var check = config.find('.location_config_check');
 
-        for(var i=0; i<7; i++){
+        for(var i=1; i<=7; i++){
 
-            roles_list.append('<input class="location_config_role" placeholder="location role">');
+            var role = getLocationRole(location,i);
+
+            roles_list.append(
+                '<div class="location_config_role">' +
+                    '<span class="location_config_role_label">role ' + i +':</span>' +
+                    '<input class="location_config_role_input" placeholder="role ' + i + '" value="' + role + '">' +
+                '</div>'
+            );
 
         }
 
@@ -141,12 +188,112 @@ $(function(){
             }else{
                 setup.slideDown();
             }
+
+            return false;
         });
 
+        config.find('.location_config_save').click(function(){
 
-        $(".locations_list").append(config);
+            var name = config.find('.location_config_name_input').val();
+            var id = config.find('.location_config_id').val();
+
+            var location = custom_locations[id];
+
+            config.find('.location_config_title').html(name);
+
+            location.name = name;
+            config.find('.location_config_role_input').each(function(i){
+                location["role" + (i+1)] = $(this).val();
+            });
+
+            store.set('custom_locations', custom_locations);
+
+            return false;
+        });
+
+        check.change(function(){
+
+            if(check.is(":checked")){
+                selected_locations.push(location);
+            }else{
+                selected_locations = _.without(selected_locations,location);
+            }
+
+            store.set('selected_locations',selected_locations);
+
+            updateSelectedLocations();
+
+        });
+
+        if(_.contains(selected_locations,location)){
+            check.attr("checked","checked");
+        }
+
+
+        //if a default location, prevent editing
+        if(_.contains(locations,location)){
+            config.find('.location_config_save').hide();
+            config.find('.location_config_delete').hide();
+            config.find('.location_config_name_input, .location_config_role_input').attr('disabled','disabled');
+        }
+
+        //creating new location
+        if(!location){
+            var id = makeid(10);
+            config.find('.location_config_id').val(id);
+
+            custom_locations[id] = {
+                name: "",
+                role1: "",
+                role2: "",
+                role3: "",
+                role4: "",
+                role5: "",
+                role6: "",
+                role7: ""
+            }
+
+            config.addClass('custom');
+
+        }
+
+        if(custom){
+            $(".custom_locations_list").append(config);
+            config.addClass('custom');
+            config.find('.location_config_id').val(location);
+        }else{
+            $(".locations_list").append(config);
+        }
+
+        updateSelectedLocations();
 
     }
+
+    function configureCustomLocations(){
+
+        var size = _.size(custom_locations);
+
+        for(var id in custom_locations){
+
+            var location = custom_locations[id];
+
+            addConfigLocation(id,true);
+
+        }
+
+    }
+
+    function updateSelectedLocations(){
+
+        var total = locations.length + _.size(custom_locations);
+        var selected = selected_locations.length;
+
+        $("#locations_selected").html(selected);
+        $("#locations_total").html(total);
+
+    }
+
+    configureCustomLocations();
 
     function checkAddRem(){
         if($("#players .player_data").length >= 8){
@@ -210,13 +357,13 @@ $(function(){
         //want to view role
         button.click(function(evt){
 
-            //if the player is the only local player, don't prevent him from seeing his role again
-            if($(".player_data").length - _.size(players) != 1){
+            //if already saw role, don't show again (prevent cheating)
+            if(button.hasClass('disabled')){
+                return false;
+            }
 
-                //if already saw role, don't show again (prevent cheating)
-                if(button.hasClass('disabled')){
-                    return false;
-                }
+            //if the current player is the only local player, don't prevent him from seeing his role again
+            if($(".player_remote:not(:visible)").length !== 1){
 
                 button.addClass('disabled secondary');
                 button.removeClass('success');
@@ -269,11 +416,11 @@ $(function(){
             playerLocation.html("???");
             playerRole.html('<img src="../spy.png" width=20>' + i18n["spy"]);
             $("#game_result_text").html("");
-            $("#game_result_text").append('<div><span data-i18n="location"></span>: ' + i18n["location." + location] + '</div>');
+            $("#game_result_text").append('<div><span data-i18n="location"></span>: ' + getLocation(location) + '</div>');
             $("#game_result_text").append('<div>' + playerName + ' <span data-i18n="is_the_spy"></span></div>');
         }else{
-            playerLocation.html(i18n["location." + location]);
-            playerRole.html(i18n["location." + location + ".role" + role]);
+            playerLocation.html(getLocation(location));
+            playerRole.html(getLocationRole(location,role));
         }
 
 
@@ -379,7 +526,8 @@ $(function(){
 
     function startGame(){
 
-        var location = locations[_.random(locations.length-1)];
+
+        var location = selected_locations[_.random(selected_locations.length-1)];
         var playersCount = $("#players .player_data").length;
 
         ga('send', 'event', 'Game', 'Start', location);
@@ -515,10 +663,12 @@ $(function(){
             $("#locations_config").fadeIn();
         });
 
+    });
 
+    $("#add_location").click(function(){
+        addConfigLocation();
+    });
 
-
-    })
 
     //**************************************************************************
     //******************************* ROOMS SETUP ******************************

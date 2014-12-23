@@ -45,13 +45,19 @@
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/Ladda/0.9.4/spin.min.js"></script>
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/Ladda/0.9.4/ladda.min.js"></script>
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/Ladda/0.9.4/ladda.jquery.min.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/store.js/1.3.14/store.min.js"></script>
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.0/js/foundation.min.js"></script>
         <script type="text/javascript" src="/socket.io/socket.io.js"></script>
 
         <script type="text/javascript" src="index.js"></script>
 
         <div id="header" class="row">
-            <div class="column small-4 medium-3 medium-offset-3 text-center"><img src="../spy.png" width="20"/><span>Spyfall</span></div>
+            <div class="column small-4 medium-3 medium-offset-3 text-center">
+                <a href="/">
+                    <img src="../spy.png" width="20"/>
+                    <span>Spyfall</span>
+                </a>
+            </div>
             <div class="column small-8 medium-3 medium-pull-3">
                 <select id="languages">
                     <option value="de">Deutsch</option>
@@ -191,25 +197,32 @@
 
         <div id="locations_config" class="row">
 
+            <div id="game_locations2" class="row">
+                <h4 data-i18n="game_locations" class="text-center"></h4>
+                <div class="row">
+                    <div class="column small-8 small-offset-2 medium-4 medium-offset-4">
+                        <input id="locations_filter" placeholder="filter">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="column small-8 small-offset-2 medium-4 medium-offset-4 text-center">
+                        <span id="locations_selected">10</span>/<span id="locations_total">10</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="locations_list column small-8 small-offset-2 medium-4 medium-offset-4"></div>
+                </div>
+                <div class="row">
+                    <div class="custom_locations_list column small-8 small-offset-2 medium-4 medium-offset-4"></div>
+                </div>
+
+            </div>
 
             <div id="locations_controls" class="row">
                 <div class="column small-8 small-offset-2 medium-4 medium-offset-4">
-                    <a id="add_location" data-i18n="add_player" class="button expand"></a>
+                    <a id="add_location" data-i18n="add_location" class="button expand"></a>
                 </div>
             </div>
-
-            <div id="game_locations2" class="row">
-                <h4 data-i18n="game_locations" class="text-center"></h4>
-                <div class="locations_list column small-8 small-offset-2 medium-4 medium-offset-4"></div>
-            </div>
-
-
-            <div id="locations_save" class="row">
-                <div class="column small-8 small-offset-2 medium-4 medium-offset-4">
-                    <a id="rem_location" data-i18n="rem_player" class="button alert expand"></a>
-                </div>
-            </div>
-
 
 
         </div>

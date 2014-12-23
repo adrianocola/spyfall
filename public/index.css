@@ -92,6 +92,14 @@
   font-size: 12px
 }
 
+#room_join_id, #room_join_name {
+  height: 40px;
+  padding: 10px;
+  margin: 5px 0;
+  box-sizing: border-box;
+  width: 100%;
+}
+
 #game_controls {
   margin-top: 10px;
 }
@@ -115,16 +123,19 @@
   display: none;
 }
 
+#locations_filter {
+  width: 100%;
+  margin: 10px 0;
+}
+
 .location_config_item {
   border-bottom: 1px solid #f0f0f0;
+  padding: 5px 0;
+  box-sizing: border-box;
 }
 
 .location_config_check {
   left: 0;
-}
-
-.location_config_name {
-  padding-left: 20px;
 }
 
 .location_config_details {
@@ -132,8 +143,51 @@
   position: absolute;
 }
 
-.location_config_setup {
-  display: none;
+.location_config_role, .location_config_title, .location_config_name {
+  text-align: right;
+  margin: 5px;
 }
 
+.location_config_role_label, .location_config_name_label {
+  padding-right: 3%;
+}
 
+.location_config_role_input, .location_config_name_input {
+  width: 65%;
+  margin-right: 5%;
+}
+
+.location_config_role_input:disabled, .location_config_name_input:disabled {
+  color: #aaaaaa;
+}
+
+.location_config_item.custom .location_config_title {
+  color: #008CBA;
+}
+
+input[type="checkbox"].location_config_check{
+  margin-bottom: 0;
+}
+
+.location_config_setup {
+  display: none;
+  text-align: center;
+  margin: 10px 0;
+}
+
+.location_config_save {
+  margin: 0 10px;
+}
+
+.location_config_delete {
+  margin: 0 10px;
+  color: #f04124;
+}
+
+.location_config_delete:hover {
+  color: #cf2a0e;
+}
+
+#locations_controls {
+  margin: 30px 0;
+}
