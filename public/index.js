@@ -8,6 +8,7 @@ $(function(){
     var last_location;
     var game_info = {
         state: 'stopped',
+        timer: 'stopped',
         spy: -1,
         location: 'none'
     };
@@ -453,6 +454,7 @@ $(function(){
     }
 
     function configurePlayer(playerNum, location, role, selected_custom_locations){
+        var player = $("#p" + playerNum);
         var playerName = $("#p" + playerNum + " .player_input").val().toUpperCase();
         var playerLocation = $("#p" + playerNum + " .player_location");
         var playerRole = $("#p" + playerNum + " .player_role");
@@ -468,6 +470,9 @@ $(function(){
                 button.addClass('disabled secondary');
             }
         }
+
+        player.data("role",role);
+        player.data("location",location);
 
         //is spy?
         if(role===0){
@@ -660,6 +665,7 @@ $(function(){
 
         $("#timer").countdown({until: countdown, compact: true, description: '', format: 'M:S',onExpiry: function(){ beep(3); }});
         $('#timer').countdown('pause');
+        game_info.timer = "stopped";
 
         updateInterface();
     }
@@ -736,13 +742,18 @@ $(function(){
         if($("#timer_control").hasClass("success")){
             $("#timer_control").removeClass('success');
             $("#timer_control").html(i18n["interface.pause_timer"]);
-            socket.emit('broadcast',{type: "TIMER_START", time: new Date()});
+
+            var until = $.countdown.periodsToSeconds($('#timer').countdown("getTimes"));
+
+            socket.emit('broadcast',{type: "TIMER_START", time: new Date(), until: until});
+            game_info.timer = "running";
         }else{
             $("#timer_control").addClass('success');
             $("#timer_control").html(i18n["interface.start_timer"]);
             if(socket){
-                var until = $.countdown.periodsToSeconds($('#timer').countdown("getTimes"))
+                var until = $.countdown.periodsToSeconds($('#timer').countdown("getTimes"));
                 socket.emit('broadcast',{type: "TIMER_STOP", until: until});
+                game_info.timer = "stopped";
             }
         }
 
@@ -892,6 +903,38 @@ $(function(){
     //******************************* ROOMS SETUP ******************************
     //**************************************************************************
 
+    function configureRemotePlayer(data){
+
+        selected_locations = data.selected_locations;
+        custom_locations = data.custom_locations;
+
+        $('#timer').countdown('destroy');
+        $("#timer").countdown({until: countdown, compact: true, description: '', format: 'M:S',onExpiry: function(){ beep(3); }});
+        $('#timer').countdown('pause');
+
+        if(data.role===0){
+            $("#room_game_location").html("???");
+            $("#room_game_role").html('<img src="../spy.png" width=20>' + i18n["spy"]);
+        }else{
+            $("#room_game_location").html(getLocation(data.location));
+            $("#room_game_role").html(getLocationRole(data.location,data.role));
+        }
+
+        updateLocations();
+
+    }
+
+    function startRemoteTimer(time, until){
+
+        var diff = new Date().getTime() - new Date(time).getTime();
+
+        until = until - Math.round(diff/1000);
+
+        $('#timer').countdown('resume');
+        $('#timer').countdown("option","until",until);
+
+    }
+
     $("#create_room").click(function(){
 
         var ladda = $("#create_room").ladda();
@@ -923,6 +966,8 @@ $(function(){
 
             if(data.type === "PLAYER_JOIN"){
 
+                var player = $('.player_data.' + data.name);
+
                 //check if exists player with this name
                 if($('.player_data.' + data.name).length===0){
                     socket.emit('data',data.name,{type: "INVALID_PLAYER"});
@@ -932,6 +977,24 @@ $(function(){
                     $('.player_data.' + data.name + ' .player_remote').fadeIn();
 
                     socket.emit('data',data.name,{type: "CONNECTED", selected_locations: selected_locations, custom_locations: getSelectedCustomLocations()});
+
+                    if(game_info.state === "running"){
+
+                        if(game_info.timer==="running"){
+                            var until = $.countdown.periodsToSeconds($('#timer').countdown("getTimes"));
+                            var time = new Date();
+                        }
+
+                        socket.emit('data',data.name,{
+                            type: "GAME_START",
+                            role: player.data("role"),
+                            location: player.data("location"),
+                            selected_locations: selected_locations,
+                            custom_locations: getSelectedCustomLocations(),
+                            time: time,
+                            until: until
+                        });
+                    }
                 }
 
             }else if(data.type === "PLAYER_LEFT"){
@@ -961,7 +1024,7 @@ $(function(){
 
         $("#timer_control_container").remove();
         $("#timer_watch_container").removeClass('small-6 medium-3 medium-pull-3');
-        $("#timer_watch_container").addClass('small-12 medium-offset-3');
+        $("#timer_watch_container").addClass('small-12 medium-6 medium-offset-3');
 
         $("#room_controls").fadeOut(function(){
             $("#room_join").fadeIn();
@@ -1003,15 +1066,15 @@ $(function(){
                 onError(i18n["interface.error_room_invalid_player"]);
             }else if(data.type === "CONNECTED"){
 
-                selected_locations = data.selected_locations;
-                custom_locations = data.custom_locations;
-
                 $("#room_game_data").html(i18n["interface.game_connected"]);
                 $("#room_game_data").removeClass('alert');
                 $("#room_game_data").addClass('disabled secondary');
 
                 $("#room_info_id").html(room_id);
                 $("#room_info_name").html(player_name);
+                $("#room_game_name").html(player_name);
+
+                configureRemotePlayer(data);
 
                 $("#timer").countdown({until: countdown, compact: true, description: '', format: 'M:S',onExpiry: function(){ beep(3); }});
                 $('#timer').countdown('pause');
@@ -1030,28 +1093,16 @@ $(function(){
 
             }else if(data.type === "GAME_START"){
 
-                selected_locations = data.selected_locations;
-                custom_locations = data.custom_locations;
-
                 $("#room_game_data").html(i18n["interface.show_my_role"]);
                 $("#room_game_data").removeClass('disabled secondary');
                 $("#room_game_data").addClass('success');
                 $("#room_game_data").attr("data-reveal-id","room_game_me");
 
-                $("#room_game_name").html(player_name);
+                configureRemotePlayer(data);
 
-                $('#timer').countdown('destroy');
-                $("#timer").countdown({until: countdown, compact: true, description: '', format: 'M:S',onExpiry: function(){ beep(3); }});
-                $('#timer').countdown('pause');
-
-                if(data.role===0){
-                    $("#room_game_location").html("???");
-                    $("#room_game_role").html('<img src="../spy.png" width=20>' + i18n["spy"]);
-                }else{
-                    $("#room_game_location").html(getLocation(data.location));
-                    $("#room_game_role").html(getLocationRole(data.location,data.role));
+                if(data.time && data.until){
+                    startRemoteTimer(data.time, data.until);
                 }
-                $("#room_game_role").html();
 
                 updateLocations();
 
@@ -1063,12 +1114,7 @@ $(function(){
 
             }else if(data.type === "TIMER_START"){
 
-                var diff = new Date().getTime() - new Date(data.time).getTime();
-
-                var until = $.countdown.periodsToSeconds($('#timer').countdown("getTimes")) - (diff/1000);
-
-                $('#timer').countdown('resume');
-                $('#timer').countdown("option","until",until);
+                startRemoteTimer(data.time, data.until);
 
             }else if(data.type === "TIMER_STOP"){
 
