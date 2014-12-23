@@ -1124,9 +1124,6 @@ $(function(){
 
             }else if(data.type === "DISCONNECTED"){
                 onError(i18n["interface.error_room_connection"]);
-
-                socket.disconnect();
-                socket = null;
             }
 
         });
