@@ -10,7 +10,6 @@ html, body {
 }
 
 #container{
-  padding-bottom: 30px;
   display: none;
 }
 
@@ -112,6 +111,7 @@ html, body {
 
 .footer {
   margin-top: 20px;
+  margin-bottom: 30px;
   font-size: 12px;
   color: #aaaaaa;
 }
