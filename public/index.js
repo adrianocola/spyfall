@@ -221,6 +221,7 @@ $(function(){
 
             if(!id){
                 id = makeid(10);
+                location = id;
 
                 config.find('.location_config_id').val(id);
 
@@ -237,13 +238,13 @@ $(function(){
 
             }
 
-            var location = custom_locations[id];
+            var loc = custom_locations[id];
 
             config.find('.location_config_title').html(name);
 
-            location.name = name;
+            loc.name = name;
             config.find('.location_config_role_input').each(function(i){
-                location["role" + (i+1)] = $(this).val();
+                loc["role" + (i+1)] = $(this).val();
             });
 
             store.set('custom_locations', custom_locations);
@@ -260,6 +261,15 @@ $(function(){
             delete custom_locations[id];
 
             store.set('custom_locations', custom_locations);
+
+            if(check.is(":checked")){
+                selected_locations = _.without(selected_locations,location);
+                selected_locations = _.compact(selected_locations);
+
+                store.set('selected_locations',selected_locations);
+
+                updateSelectedLocations();
+            }
 
             config.fadeOut(function(){
                 config.remove();
@@ -287,7 +297,6 @@ $(function(){
         if(_.contains(selected_locations,location)){
             check.attr("checked","checked");
         }
-
 
         //if a default location, prevent editing
         if(_.contains(locations,location)){
