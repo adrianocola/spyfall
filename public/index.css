@@ -74,7 +74,7 @@ html,body {
 #room_id {
   letter-spacing: 2px;
   font-weight: 700;
-  font-family: Consolas, monaco, monospace;
+  font-family: 'Inconsolata', Consolas, monaco, monospace;
 }
 
 #room_join {
@@ -213,7 +213,7 @@ input[type="checkbox"].location_config_check{
 #locations_exported_id {
   letter-spacing: 2px;
   font-weight: 700;
-  font-family: Consolas, monaco, monospace;
+  font-family: 'Inconsolata', Consolas, monaco, monospace;
 }
 
 #locations_import_id {
