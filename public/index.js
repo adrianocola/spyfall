@@ -253,6 +253,8 @@ $(function(){
 
             setup.slideUp();
 
+            ga('send', 'event', 'Custom', 'Save');
+
             return false;
         });
 
@@ -273,6 +275,8 @@ $(function(){
                 updateSelectedLocations();
             }
 
+            ga('send', 'event', 'Custom', 'Delete');
+
             config.fadeOut(function(){
                 config.remove();
             });
@@ -291,6 +295,8 @@ $(function(){
             selected_locations = _.compact(selected_locations);
 
             store.set('selected_locations',selected_locations);
+
+            ga('send', 'event', 'Custom', 'Check');
 
             updateSelectedLocations();
 
