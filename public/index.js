@@ -834,7 +834,7 @@ $(function(){
             url: "/import_custom_locations",
             type: "GET",
             data: {
-                id: $("#locations_import_id").val()
+                id: $("#locations_import_id").val().toUpperCase()
             },
             success: function(data){
 
