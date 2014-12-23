@@ -28,6 +28,7 @@
   "interface.back_to_game": "Voltar para o Jogo",
   "interface.save": "Salvar",
   "interface.delete": "Deletar",
+  "interface.filter": "Filtro",
   "interface.export_locations": "Exportar Locais",
   "interface.import_locations": "Importar Locais",
   "interface.export_id": "Id de Exportação",
