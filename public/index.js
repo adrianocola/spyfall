@@ -45,6 +45,19 @@ $(function(){
 
     var i18n = {};
 
+    function getSelectedCustomLocations(){
+        var selected_custom_locations = {};
+
+        for(var i=0;i<selected_locations.length;i++){
+            var loc = custom_locations[selected_locations[i]];
+            if(loc){
+                selected_custom_locations[selected_locations[i]] = loc;
+            }
+        }
+
+        return selected_custom_locations;
+    }
+
     function getLocation(location){
 
         if(custom_locations[location]){
@@ -284,6 +297,9 @@ $(function(){
         //creating new location
         if(!location){
             config.addClass('custom');
+
+            setup.show();
+
         }
 
         if(custom){
@@ -422,7 +438,7 @@ $(function(){
         checkAddRem();
     }
 
-    function configurePlayer(playerNum, location, role){
+    function configurePlayer(playerNum, location, role, selected_custom_locations){
         var playerName = $("#p" + playerNum + " .player_input").val().toUpperCase();
         var playerLocation = $("#p" + playerNum + " .player_location");
         var playerRole = $("#p" + playerNum + " .player_role");
@@ -430,7 +446,7 @@ $(function(){
         if(socket){
 
             if(players[playerName]){
-                socket.emit('data',playerName,{type: "GAME_START", role: role, location: location});
+                socket.emit('data',playerName,{type: "GAME_START", role: role, location: location, selected_locations: selected_locations, custom_locations: selected_custom_locations});
 
                 //if is a remote player, prevent manager looking at his role
                 var button = $("#p" + playerNum + " .player_button");
@@ -558,8 +574,9 @@ $(function(){
 
         var location = selected_locations[_.random(selected_locations.length-1)];
         var playersCount = $("#players .player_data").length;
+        var selected_custom_locations = getSelectedCustomLocations();
 
-        ga('send', 'event', 'Game', 'Start', location);
+        ga('send', 'event', 'Game', 'Start');
 
         var allRoles = getAllRoles();
         var availableRoles = getAvailableRoles(playersCount,allRoles);
@@ -573,7 +590,7 @@ $(function(){
 
         //assign to each player a random role from the available roles
         for(var i=0;i<playersCount;i++){
-            configurePlayer(i+1,location,assignedPlayersRoles[i]);
+            configurePlayer(i+1,location,assignedPlayersRoles[i],selected_custom_locations);
         }
 
         game_info.state = "running";
@@ -698,6 +715,16 @@ $(function(){
         addConfigLocation(undefined,true);
     });
 
+    $("#locations_back").click(function(){
+
+        updateLocations();
+
+        $("#locations_config").fadeOut(function(){
+            $("#container").fadeIn();
+        });
+
+    });
+
     $("#locations_filter").keyup(function(){
 
         var search = $("#locations_filter").val().toLowerCase();
@@ -749,7 +776,7 @@ $(function(){
                 $("#room_create").fadeIn();
                 ladda.ladda( 'stop' );
             });
-        })
+        });
 
         socket.on('data',function(data){
 
@@ -763,7 +790,7 @@ $(function(){
 
                     $('.player_data.' + data.name + ' .player_remote').fadeIn();
 
-                    socket.emit('data',data.name,{type: "CONNECTED"});
+                    socket.emit('data',data.name,{type: "CONNECTED", selected_locations: selected_locations, custom_locations: getSelectedCustomLocations()});
                 }
 
             }else if(data.type === "PLAYER_LEFT"){
@@ -835,6 +862,9 @@ $(function(){
                 onError(i18n["interface.error_room_invalid_player"]);
             }else if(data.type === "CONNECTED"){
 
+                selected_locations = data.selected_locations;
+                custom_locations = data.custom_locations;
+
                 $("#room_game_data").html(i18n["interface.game_connected"]);
                 $("#room_game_data").removeClass('alert');
                 $("#room_game_data").addClass('disabled secondary');
@@ -855,7 +885,13 @@ $(function(){
 
                 ga('send', 'event', 'Room', 'Joined');
 
+                updateLocations();
+
             }else if(data.type === "GAME_START"){
+
+                selected_locations = data.selected_locations;
+                custom_locations = data.custom_locations;
+
                 $("#room_game_data").html(i18n["interface.show_my_role"]);
                 $("#room_game_data").removeClass('disabled secondary');
                 $("#room_game_data").addClass('success');
@@ -871,10 +907,13 @@ $(function(){
                     $("#room_game_location").html("???");
                     $("#room_game_role").html('<img src="../spy.png" width=20>' + i18n["spy"]);
                 }else{
-                    $("#room_game_location").html(i18n["location." + data.location]);
-                    $("#room_game_role").html(i18n["location." + data.location + ".role" + data.role]);
+                    $("#room_game_location").html(getLocation(data.location));
+                    $("#room_game_role").html(getLocationRole(data.location,data.role));
                 }
                 $("#room_game_role").html();
+
+                updateLocations();
+
             }else if(data.type === "GAME_END"){
                 $("#room_game_data").html(i18n["interface.game_stopped"]);
                 $("#room_game_data").removeClass('success');

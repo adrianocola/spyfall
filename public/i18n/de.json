@@ -25,6 +25,7 @@
   "interface.error_room_connection": "Verbindungsfehler oder ung&uuml;ltiger Raum!",
   "interface.error_room_invalid_player": "Bitte den Besitzer des Raums, einen Spieler mit deinem Namen anzulegen!",
   "interface.add_location": "Add Custom Location",
+  "interface.back_to_game": "Back to Game",
   "location.airplane": "Flugzeug",
   "location.airplane.role1": "Passagier in der 1. Klasse",
   "location.airplane.role2": "Air Marshall",

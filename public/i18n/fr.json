@@ -25,6 +25,7 @@
   "interface.error_room_connection": "Connection error or invalid room!",
   "interface.error_room_invalid_player": "Ask the room owner to create a player with your name!",
   "interface.add_location": "Add Custom Location",
+  "interface.back_to_game": "Back to Game",
   "location.airplane": "Avion",
   "location.airplane.role1": "Passager de 1<sup>&egrave;re</sup> classe",
   "location.airplane.role2": "Officier de la Police de l'Air",

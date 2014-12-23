@@ -25,6 +25,7 @@
   "interface.error_room_connection": "Erro de conexão ou sala inválida!",
   "interface.error_room_invalid_player": "Peça ao dono da sala para criar um jogador com o seu nome!",
   "interface.add_location": "Adicionar Local Personalizado",
+  "interface.back_to_game": "Voltar para o Jogo",
   "location.airplane": "Avião",
   "location.airplane.role1": "Passageiro de Primeira Classe",
   "location.airplane.role2": "Agente Federal Disfarçado",
