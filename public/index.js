@@ -276,6 +276,8 @@ $(function(){
                 selected_locations = _.without(selected_locations,location);
             }
 
+            selected_locations = _.compact(selected_locations);
+
             store.set('selected_locations',selected_locations);
 
             updateSelectedLocations();
