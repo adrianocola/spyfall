@@ -200,3 +200,24 @@ input[type="checkbox"].location_config_check{
 #locations_controls {
   margin: 30px 0;
 }
+
+#locations_exported_container, #locations_importing {
+  display: none;
+}
+
+#locations_exported_help {
+  font-size: 12px;
+}
+
+#locations_exported_id {
+  letter-spacing: 2px;
+  font-weight: 700;
+}
+
+#locations_import_id {
+  height: 40px;
+  padding: 10px;
+  margin: 5px 0;
+  box-sizing: border-box;
+  width: 100%;
+}

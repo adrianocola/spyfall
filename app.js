@@ -34,7 +34,44 @@ var serveStatic = require('serve-static');
 var favicon = require('serve-favicon');
 
 app.use(favicon('./public/favicon.ico'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(serveStatic('./public'));
+
+//**********
+// ROUTES
+//**********
+
+var custom_locations = {};
+
+app.post('/export_custom_locations',function(req,res){
+
+    var id = makeid(4);
+
+    custom_locations[id] = req.param("custom_locations");
+
+    console.log(custom_locations[id]);
+
+    //save for 1 day
+    setTimeout(function(){
+        delete custom_locations[id];
+    },24*60*60*1000); //1 day
+
+    res.json({id: id});
+
+});
+
+app.get('/import_custom_locations',function(req,res){
+
+    var custom_loc = custom_locations[req.param("id")];
+
+    if(!custom_loc){
+        return res.status(400).json(false);;
+    }
+
+    res.json({custom_locations: custom_loc});
+
+});
 
 //**********
 // SOCKET.io
@@ -42,6 +79,7 @@ app.use(serveStatic('./public'));
 
 var sockets = {};
 var rooms = {};
+
 
 var io = app.io = require('socket.io')(server);
 
@@ -78,8 +116,6 @@ io.on('connection', function (socket) {
         socket.emit('joined_room');
 
     });
-
-
 
     socket.on('data',function(to,data){
 

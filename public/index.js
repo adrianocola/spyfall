@@ -39,6 +39,9 @@ $(function(){
         "university"
     ];
 
+    //variable used to prevent selecting the same location twice in a row
+    var last_location;
+
     var custom_locations = store.get('custom_locations') || {};
 
     var selected_locations = store.get('selected_locations') || locations.slice(0);
@@ -327,6 +330,8 @@ $(function(){
 
     function configureCustomLocations(){
 
+        $(".custom_locations_list").html("");
+
         var size = _.size(custom_locations);
 
         for(var id in custom_locations){
@@ -580,12 +585,34 @@ $(function(){
 
     }
 
+    function randomLocation(){
+
+        if(selected_locations.length === 0){
+            return "";
+        }
+
+        if(selected_locations.length === 1){
+            return selected_locations[0];
+        }
+
+        var location;
+        do{
+            location = selected_locations[_.random(selected_locations.length-1)];
+        }
+        while(location === last_location);
+
+        return location;
+
+    }
+
     function startGame(){
 
 
-        var location = selected_locations[_.random(selected_locations.length-1)];
+        var location = randomLocation();
         var playersCount = $("#players .player_data").length;
         var selected_custom_locations = getSelectedCustomLocations();
+
+        last_location = location;
 
         ga('send', 'event', 'Game', 'Start');
 
@@ -752,10 +779,84 @@ $(function(){
 
         });
 
+    });
+
+    $("#locations_export").click(function(){
+
+        var ladda = $("#locations_export").ladda();
+        ladda.ladda( 'start' );
+
+        $.ajax({
+            url: "/export_custom_locations",
+            type: "POST",
+            data: {
+                custom_locations: custom_locations || {}
+            },
+            success: function(data){
+
+                $("#locations_share").fadeOut(function(){
+                    $("#locations_exported_container").fadeIn();
+                });
 
 
+                $("#locations_exported_id").html(data.id);
+            }
+        });
 
     });
+
+    $("#locations_import").click(function(){
+
+        $("#locations_share").fadeOut(function(){
+            $("#locations_importing").fadeIn();
+        });
+
+    });
+
+    $("#locations_import_button").click(function(){
+
+        var ladda = $("#locations_import_button").ladda();
+        ladda.ladda( 'start' );
+
+        $.ajax({
+            url: "/import_custom_locations",
+            type: "GET",
+            data: {
+                id: $("#locations_import_id").val()
+            },
+            success: function(data){
+
+                ladda.ladda( 'stop' );
+
+                $("#locations_import_button").html(i18n['interface.done']);
+
+                for(var id in custom_locations){
+                    selected_locations = _.without(selected_locations,id);
+                }
+
+                custom_locations = data.custom_locations || {};
+                selected_locations = _.compact(selected_locations);
+
+                store.set('custom_locations', custom_locations);
+                store.set('selected_locations',selected_locations);
+
+                configureCustomLocations();
+                updateSelectedLocations();
+
+            },error: function(){
+
+                ladda.ladda( 'stop' );
+
+            }
+        });
+
+    });
+
+
+
+
+
+
 
 
     //**************************************************************************
