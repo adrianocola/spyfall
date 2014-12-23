@@ -223,3 +223,7 @@ input[type="checkbox"].location_config_check{
   box-sizing: border-box;
   width: 100%;
 }
+
+#locations_back {
+  margin-top: 20px;
+}
