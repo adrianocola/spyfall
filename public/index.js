@@ -960,8 +960,8 @@ $(function(){
         $("#game_controls").fadeOut();
 
         $("#timer_control_container").remove();
-        $("#timer_watch_container").removeClass('medium-3 medium-pull-3');
-        $("#timer_watch_container").addClass('medium-offset-3');
+        $("#timer_watch_container").removeClass('small-6 medium-3 medium-pull-3');
+        $("#timer_watch_container").addClass('small-12 medium-offset-3');
 
         $("#room_controls").fadeOut(function(){
             $("#room_join").fadeIn();
