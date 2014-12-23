@@ -48,9 +48,7 @@ app.post('/export_custom_locations',function(req,res){
 
     var id = makeid(4);
 
-    custom_locations[id] = req.param("custom_locations");
-
-    console.log(custom_locations[id]);
+    custom_locations[id] = req.param("custom_locations") || {};
 
     //save for 1 day
     setTimeout(function(){
@@ -66,7 +64,7 @@ app.get('/import_custom_locations',function(req,res){
     var custom_loc = custom_locations[req.param("id")];
 
     if(!custom_loc){
-        return res.status(400).json(false);;
+        return res.status(400).json(false);
     }
 
     res.json({custom_locations: custom_loc});
