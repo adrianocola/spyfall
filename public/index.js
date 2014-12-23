@@ -180,7 +180,7 @@ $(function(){
 
         for(var i=1; i<=7; i++){
 
-            var role = getLocationRole(location,i);
+            var role = getLocationRole(location,i) || "";
 
             roles_list.append(
                 '<div class="location_config_role">' +
@@ -206,6 +206,24 @@ $(function(){
             var name = config.find('.location_config_name_input').val();
             var id = config.find('.location_config_id').val();
 
+            if(!id){
+                id = makeid(10);
+
+                config.find('.location_config_id').val(id);
+
+                custom_locations[id] = {
+                    name: "",
+                    role1: "",
+                    role2: "",
+                    role3: "",
+                    role4: "",
+                    role5: "",
+                    role6: "",
+                    role7: ""
+                }
+
+            }
+
             var location = custom_locations[id];
 
             config.find('.location_config_title').html(name);
@@ -216,6 +234,23 @@ $(function(){
             });
 
             store.set('custom_locations', custom_locations);
+
+            setup.slideUp();
+
+            return false;
+        });
+
+        config.find('.location_config_delete').click(function(){
+
+            var id = config.find('.location_config_id').val();
+
+            delete custom_locations[id];
+
+            store.set('custom_locations', custom_locations);
+
+            config.fadeOut(function(){
+                config.remove();
+            });
 
             return false;
         });
@@ -248,22 +283,7 @@ $(function(){
 
         //creating new location
         if(!location){
-            var id = makeid(10);
-            config.find('.location_config_id').val(id);
-
-            custom_locations[id] = {
-                name: "",
-                role1: "",
-                role2: "",
-                role3: "",
-                role4: "",
-                role5: "",
-                role6: "",
-                role7: ""
-            }
-
             config.addClass('custom');
-
         }
 
         if(custom){
@@ -675,7 +695,7 @@ $(function(){
     });
 
     $("#add_location").click(function(){
-        addConfigLocation();
+        addConfigLocation(undefined,true);
     });
 
     $("#locations_filter").keyup(function(){
