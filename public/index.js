@@ -176,14 +176,14 @@ $(function(){
                 '<div class="location_config_setup">' +
                     '<div class="location_config_roles">' +
                         '<div class="location_config_name">' +
-                            '<span class="location_config_name_label">location:</span>' +
-                            '<input class="location_config_name_input" placeholder="location" value="' + location_name + '">' +
+                            '<span class="location_config_name_label"><span data-i18n="location"></span>:</span>' +
+                            '<input class="location_config_name_input" value="' + location_name + '">' +
                             '<input class="location_config_id" type="hidden">' +
                         '</div>' +
 
                     '</div>' +
-                    '<a href="#" class="location_config_save">Save</a>' +
-                    '<a href="#" class="location_config_delete">Delete</a>' +
+                    '<a href="#" class="location_config_save" data-i18n="save"></a>' +
+                    '<a href="#" class="location_config_delete" data-i18n="delete"></a>' +
                 '</div>' +
 
             '</div>'
@@ -199,8 +199,8 @@ $(function(){
 
             roles_list.append(
                 '<div class="location_config_role">' +
-                    '<span class="location_config_role_label">role ' + i +':</span>' +
-                    '<input class="location_config_role_input" placeholder="role ' + i + '" value="' + role + '">' +
+                    '<span class="location_config_role_label"><span data-i18n="role"></span><span> ' + i + '</span>:</span>' +
+                    '<input class="location_config_role_input" value="' + role + '">' +
                 '</div>'
             );
 
@@ -324,6 +324,7 @@ $(function(){
         }
 
         updateSelectedLocations();
+        updateInterface();
 
     }
 

@@ -168,7 +168,7 @@ html,body {
 }
 
 .location_config_role_input:disabled, .location_config_name_input:disabled {
-  color: #aaaaaa;
+  color: #777777;
 }
 
 .location_config_item.custom .location_config_title {

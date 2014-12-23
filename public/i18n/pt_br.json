@@ -26,6 +26,8 @@
   "interface.error_room_invalid_player": "Peça ao dono da sala para criar um jogador com o seu nome!",
   "interface.add_location": "Adicionar Local Personalizado",
   "interface.back_to_game": "Voltar para o Jogo",
+  "interface.save": "Salvar",
+  "interface.delete": "Deletar",
   "interface.export_locations": "Exportar Locais",
   "interface.import_locations": "Importar Locais",
   "interface.export_id": "Id de Exportação",
