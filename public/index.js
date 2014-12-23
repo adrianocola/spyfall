@@ -851,18 +851,11 @@ $(function(){
 
                 ladda.ladda( 'stop' );
 
-                for(var id in custom_locations){
-                    selected_locations = _.without(selected_locations,id);
-                }
-
-                custom_locations = data.custom_locations || {};
-                selected_locations = _.compact(selected_locations);
+                custom_locations = _.extend(custom_locations, data.custom_locations || {});
 
                 store.set('custom_locations', custom_locations);
-                store.set('selected_locations',selected_locations);
 
                 configureCustomLocations();
-                updateSelectedLocations();
 
                 $("#locations_import_button").html(i18n['interface.done']);
 
