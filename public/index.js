@@ -1046,6 +1046,7 @@ $(function(){
         socket = io();
 
         socket.on('connect', function () {
+            console.log(socket);
             socket.emit('join_room',room_id,player_name);
         });
 
@@ -1152,12 +1153,22 @@ $(function(){
         });
 
         function onError(msg){
+
+            if(socket.connected){
+                setTimeout(function(){
+                    console.log("RETRY");
+                    socket.emit('join_room',room_id,player_name);
+                },3000);
+            }
+
             if($("#room_game_data").hasClass('alert')) return;
             ladda.ladda('stop');
             $("#room_game").fadeIn();
             $("#room_game_data").html(msg);
             $("#room_game_data").removeClass('disabled secondary success');
             $("#room_game_data").addClass('alert');
+
+
         }
     });
 
