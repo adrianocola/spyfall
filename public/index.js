@@ -1148,7 +1148,11 @@ $(function(){
         });
 
         socket.on('invalid_room',function(data){
-            onError(i18n["interface.error_room_connection"]);
+            if(room_id){
+                onError(i18n["interface.error_room_connection"],true);
+            }else{
+                onError(i18n["interface.error_room_connection"]);
+            }
         });
 
         socket.on('disconnected',function(){
