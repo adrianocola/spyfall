@@ -199,7 +199,7 @@ $(function(){
 
             roles_list.append(
                 '<div class="location_config_role">' +
-                    '<span class="location_config_role_label"><span data-i18n="role"></span><span> ' + i + '</span>:</span>' +
+                    '<div class="location_config_role_label"><span data-i18n="role"></span><span> ' + i + '</span>:</div>' +
                     '<input class="location_config_role_input" value="' + role + '">' +
                 '</div>'
             );

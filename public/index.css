@@ -160,10 +160,11 @@ html,body {
 
 .location_config_role_label, .location_config_name_label {
   padding-right: 3%;
+  display: inline-block;
 }
 
 .location_config_role_input, .location_config_name_input {
-  width: 65%;
+  width: 60%;
   margin-right: 5%;
 }
 
