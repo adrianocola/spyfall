@@ -111,7 +111,7 @@ io.on('connection', function (socket) {
 
         rooms[room][player] = socket;
 
-        socket.emit('joined_room');
+        socket.emit('joined_room', room, player);
 
     });
 
@@ -119,16 +119,18 @@ io.on('connection', function (socket) {
 
         data = data?data:to;
 
-        if(player){
-            sockets[room].emit('data',data);
-        }else{
+        if(sockets[room]){
 
-            if(rooms[room] && rooms[room][to]){
-                rooms[room][to].emit('data',data);
-            }else{
-                socket.emit('invalid_socket');
+            if(player){
+                return sockets[room].emit('data',data);
+            }
+
+            if(rooms[room][to]){
+                return rooms[room][to].emit('data',data);
             }
         }
+
+        socket.emit('invalid_socket');
 
     });
 

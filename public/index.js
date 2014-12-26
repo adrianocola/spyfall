@@ -365,7 +365,7 @@ $(function(){
     function checkAddRem(){
         if($("#players .player_data").length >= 8){
             $("#add_player").addClass("disabled secondary");
-        }else if($("#players .player_data").length <= 1){
+        }else if($("#players .player_data").length <= 3){
             $("#rem_player").removeClass("alert");
             $("#rem_player").addClass("disabled secondary");
         }else{
@@ -650,6 +650,14 @@ $(function(){
         for(var i=0;i<playersCount;i++){
             configurePlayer(i+1,location,assignedPlayersRoles[i],selected_custom_locations);
         }
+
+        var players = [];
+
+        $(".player_input").each(function(){
+            players.push($(this).val());
+        });
+
+        store.set('players',players);
 
         game_info.state = "running";
         game_info.location = location;
@@ -943,13 +951,14 @@ $(function(){
         socket = io();
 
         socket.on('connect', function () {
-            socket.emit('create_room', game_info.room);
+            socket.emit('create_room', game_info.room || $.cookie("created_room"));
 
             $('.player_remote').fadeOut();
             players = {};
         });
 
         socket.on('created_room',function(room){
+            $.cookie("created_room",room);
             game_info.room = room;
 
             $("#room_id").html(game_info.room);
@@ -1034,8 +1043,7 @@ $(function(){
 
     $("#room_join_button").click(function(){
 
-        var room_id = $("#room_join_id").val().toUpperCase();
-        var player_name = $("#room_join_name").val().toUpperCase();
+        var room_id, player_name;
 
         var ladda = $("#room_join_button").ladda();
 
@@ -1043,13 +1051,20 @@ $(function(){
 
         $("#room_game").fadeOut();
 
-        socket = io();
+        if(!socket){
+            socket = io();
 
-        socket.on('connect', function () {
-            socket.emit('join_room',room_id,player_name);
-        });
+            socket.on('connect', function () {
+                socket.emit('join_room', $("#room_join_id").val().toUpperCase(), $("#room_join_name").val().toUpperCase());
+            });
+        }else{
+            return socket.emit('join_room', $("#room_join_id").val().toUpperCase(), $("#room_join_name").val().toUpperCase());
+        }
 
-        socket.on('joined_room', function () {
+        socket.on('joined_room', function (_room, _player) {
+
+            room_id = _room;
+            player_name = _player;
 
             game_info.room = room_id;
 
@@ -1123,13 +1138,13 @@ $(function(){
 
 
             }else if(data.type === "DISCONNECTED"){
-                onError(i18n["interface.error_room_connection"]);
+                onError(i18n["interface.error_room_connection"], true);
             }
 
         });
 
         socket.on('invalid_socket',function(data){
-            onError(i18n["interface.error_room_connection"]);
+            onError(i18n["interface.error_room_connection"], true);
         });
 
         socket.on('invalid_room',function(data){
@@ -1137,26 +1152,25 @@ $(function(){
         });
 
         socket.on('disconnected',function(){
-            onError(i18n["interface.error_room_connection"]);
+            onError(i18n["interface.error_room_connection"], true);
         });
 
         socket.on('disconnect',function(){
-            onError(i18n["interface.error_room_connection"]);
+            onError(i18n["interface.error_room_connection"], true);
         });
 
         socket.on('error',function(){
-            onError(i18n["interface.error_room_connection"]);
+            onError(i18n["interface.error_room_connection"], true);
         });
 
-        function onError(msg){
+        function onError(msg, retry){
 
-            if(socket.connected){
+            if(retry && socket.connected){
                 setTimeout(function(){
                     socket.emit('join_room',room_id,player_name);
                 },3000);
             }
 
-            if($("#room_game_data").hasClass('alert')) return;
             ladda.ladda('stop');
             $("#room_game").fadeIn();
             $("#room_game_data").html(msg);
@@ -1167,8 +1181,18 @@ $(function(){
         }
     });
 
-    //start with one player
-    addPlayer("p1");
+    var starting_players = store.get('players') || [];
+
+    if(starting_players.length){
+        for(var i=0; i<starting_players.length; i++){
+            addPlayer(starting_players[i]);
+        }
+    }else{
+        //start with 3 players
+        addPlayer("p1");
+        addPlayer("p2");
+        addPlayer("p3");
+    }
 
     //set game initial state/layout
     endGame();
