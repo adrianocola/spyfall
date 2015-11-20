@@ -4,6 +4,8 @@ $(function(){
     var socket;
     var i18n = {};
     var players = {};
+    //variable used to make less likelly a player be spy twice in a row
+    var last_spy;
     //variable used to prevent selecting the same location twice in a row
     var last_location;
     var game_info = {
@@ -499,7 +501,7 @@ $(function(){
 
     window.spyfallTest = function(){
 
-        var tests = 1000; //per player count
+        var tests = 10000; //per player count
 
         //for each range of player count
         for(var p = 3; p<=8; p++){
@@ -537,6 +539,7 @@ $(function(){
 
             console.log(playerCount + " players:");
             console.log(spyDist);
+            console.log("Std: " + Math.round(math.std(_.values(spyDist))));
 
         }
 
@@ -549,6 +552,7 @@ $(function(){
 
         console.log(_.size(locationsDist) + " locations!");
         console.log(locationsDist);
+        console.log("Std: " + Math.round(math.std(_.values(locationsDist))));
 
         return "OK!"
 
@@ -640,6 +644,13 @@ $(function(){
         var availableRoles = getAvailableRoles(playersCount,allRoles);
         var assignedPlayersRoles = assignPlayersRoles(playersCount,availableRoles);
 
+        //diminish the chances of the same spy twice in a row
+        if(assignedPlayersRoles[last_spy] === 0){
+            allRoles = getAllRoles();
+            availableRoles = getAvailableRoles(playersCount,allRoles);
+            assignedPlayersRoles = assignPlayersRoles(playersCount,availableRoles);
+        }
+
         $("#players .player_input").hide();
         $("#players .player_button").show();
 
@@ -648,6 +659,7 @@ $(function(){
 
         //assign to each player a random role from the available roles
         for(var i=0;i<playersCount;i++){
+            if(assignedPlayersRoles[i] === 0 ) last_spy = i;
             configurePlayer(i+1,location,assignedPlayersRoles[i],selected_custom_locations);
         }
 
