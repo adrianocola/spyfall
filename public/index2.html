@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+    <head lang="en">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <title>SpyFall</title>
+
+        <link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.0/css/normalize.min.css'>
+        <link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.0/css/foundation.min.css'>
+        <link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/jquery-countdown/2.0.1/jquery.countdown.min.css'>
+        <link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/Ladda/0.9.4/ladda-themeless.min.css'>
+
+        <link rel='stylesheet' href='index.css'>
+
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
+
+    </head>
+
+    <body>
+
+        <link href='http://fonts.googleapis.com/css?family=Inconsolata:700' rel='stylesheet' type='text/css'>
+
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-countdown/2.0.1/jquery.plugin.min.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-countdown/2.0.1/jquery.countdown.min.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.3/fastclick.min.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/beepjs/0.0.1/beep.min.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/Ladda/0.9.4/spin.min.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/Ladda/0.9.4/ladda.min.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/Ladda/0.9.4/ladda.jquery.min.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/store.js/1.3.14/store.min.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.0/js/foundation.min.js"></script>
+
+        <script src="//cdn.socket.io/socket.io-1.2.1.js"></script>
+
+        <script type="text/javascript" src="room.js"></script>
+
+        <script type="text/javascript">
+
+            var room = new Room();
+            //room._debug = true;
+            var now = new Date().getTime();
+            room.join('p'+now,'5LLC',function(){
+                room._set('chave',now);
+                room._update();
+                room.on('player_add',function(data){
+                    console.log("PLAYER ADD: " + data);
+                });
+                //console.log(room._get('groselha'));
+            });
+
+
+
+
+        </script>
+
+
+    </body>
+</html>

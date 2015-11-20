@@ -75,7 +75,6 @@ app.get('/import_custom_locations',function(req,res){
 // SOCKET.io
 //**********
 
-var sockets = {};
 var rooms = {};
 
 
@@ -86,73 +85,86 @@ io.on('connection', function (socket) {
     var room;
     var player;
 
-    socket.on('create_room',function(_room){
+    var original_on = socket.on;
 
-        if(!_room || sockets[_room]){
+    socket.on = function(event,callback){
+        original_on.call(socket,event,function(){
+            if(arguments.length && typeof arguments[arguments.length-1] === 'string' && arguments[arguments.length-1].indexOf('cb_') === 0){
+                var cb_number = arguments[arguments.length-1];
+                arguments[arguments.length-1] = function(err,data){
+                    socket.emit(cb_number,err,data);
+                };
+            }
+            callback.apply(socket,arguments);
+        });
+    };
+
+    var broadcast = function(){
+        console.log('BROADCAST ' + arguments[0]);
+        for(var p in rooms[room].players){
+            if(p !== player){
+                var socket = rooms[room].players[p];
+                socket.emit.apply(socket,arguments);
+            }
+        }
+    };
+
+    socket.on('join_room',function(_room,_player,cb){
+
+        if(!_room){
             room = genRoom();
         }else{
             room = _room;
         }
 
-        sockets[room] = socket;
-
-        rooms[room] = {};
-
-        socket.emit('created_room',room);
-
-    });
-
-    socket.on('join_room',function(_room,_player){
-
-        room = _room;
-        player = _player;
-
-        if(!rooms[room]) return socket.emit("invalid_room");
-
-        rooms[room][player] = socket;
-
-        socket.emit('joined_room', room, player);
-
-    });
-
-    socket.on('data',function(to,data){
-
-        data = data?data:to;
-
-        if(sockets[room]){
-
-            if(player){
-                return sockets[room].emit('data',data);
-            }
-
-            if(rooms[room][to]){
-                return rooms[room][to].emit('data',data);
-            }
+        if(!rooms[room]){
+            rooms[room] = {
+                players: {},
+                data: {
+                    manager: _player,
+                    state: 'STOPPED',
+                    createdAt: new Date()
+                }
+            };
         }
 
-        socket.emit('invalid_socket');
+        player = _player;
+
+        rooms[room].players[player] = socket;
+
+        cb(null,{
+            room: room,
+            player: player,
+            data: rooms[room].data
+        });
 
     });
 
-    socket.on('broadcast',function(data){
+    socket.on('update',function(data){
 
-        if(player) return;
+        if(!player) return;
 
         if(!rooms[room]) return;
 
-        for(var p in rooms[room]){
-            rooms[room][p].emit('data',data);
-        }
+        rooms[room].data = _.merge(rooms[room].data,data || {});
 
+        broadcast('update',data);
+
+    });
+
+    socket.on('event',function(event,data){
+
+        if(!player) return;
+
+        if(!rooms[room]) return;
+
+        broadcast('event',event,data);
 
     });
 
     socket.on('disconnect',function(){
 
         if(player){
-            if(sockets[room]){
-                sockets[room].emit('data',{type: "PLAYER_LEFT", name: player});
-            }
 
             if(rooms[room]){
                 delete rooms[room][player];
@@ -164,8 +176,6 @@ io.on('connection', function (socket) {
             for(var p in rooms[room]){
                 rooms[room][p].emit('data',{type: "DISCONNECTED"});
             }
-
-            delete sockets[room];
             delete rooms[room];
         }
 
@@ -180,8 +190,8 @@ io.on('connection', function (socket) {
 
 server.listen(4000, function () {
 
-    var host = server.address().address
-    var port = server.address().port
+    var host = server.address().address;
+    var port = server.address().port;
 
     console.log('Spyfall listening at http://%s:%s', host, port);
 
