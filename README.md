@@ -9,7 +9,7 @@ Feel free to fork this project and add new languages! Follow this steps:
 * Translate the file (see others translations for examples)
 * Add the new locale to the languages combobox in the file **public/index.html**
 * Create the pull request
-* 
+
 ### Running locally
 * Install [node.js](http://nodejs.org/)
 * Clone this repo
