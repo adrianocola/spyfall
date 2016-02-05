@@ -9,3 +9,19 @@ Feel free to fork this project and add new languages! Follow this steps:
 * Translate the file (see others translations for examples)
 * Add the new locale to the languages combobox in the file **public/index.html**
 * Create the pull request
+* 
+### Running locally
+* Install [node.js](http://nodejs.org/)
+* Clone this repo
+```bash
+    $ git clone https://github.com/adrianocola/spyfall.git
+```
+* Entre the directory and install dependencies
+```bash
+    $ cd spyfall
+    $ npm install
+```
+* Run
+```bash
+    $ node app.js
+```
