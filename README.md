@@ -16,7 +16,7 @@ Feel free to fork this project and add new languages! Follow this steps:
 ```bash
     $ git clone https://github.com/adrianocola/spyfall.git
 ```
-* Entre the directory and install dependencies
+* Enter the directory and install dependencies
 ```bash
     $ cd spyfall
     $ npm install
@@ -25,3 +25,4 @@ Feel free to fork this project and add new languages! Follow this steps:
 ```bash
     $ node app.js
 ```
+* The app will be available at http://localhost:4000
