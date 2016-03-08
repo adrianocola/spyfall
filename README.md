@@ -11,7 +11,7 @@ Feel free to fork this project and add new languages! Follow this steps:
 * Create the pull request
 
 ### Running locally
-* Install [node.js](http://nodejs.org/)
+* Install [node.js](http://nodejs.org/) and [redis](http://redis.io/)
 * Clone this repo
 ```bash
     $ git clone https://github.com/adrianocola/spyfall.git

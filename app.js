@@ -6,6 +6,15 @@ var express = require('express');
 var app = express();
 var server = require('http').Server(app);
 var _ = require('lodash');
+var redis = require("redis").createClient();
+
+redis.on("error", function (err) {
+    console.log("Redis Error " + err);
+});
+
+redis.on("connect", function () {
+    console.log("Connected to Redis!");
+});
 
 function makeid(size){
     var text = "";
@@ -47,27 +56,32 @@ var custom_locations = {};
 app.post('/export_custom_locations',function(req,res){
 
     var id = makeid(4);
+    var locations = req.param("custom_locations") || {};
 
-    custom_locations[id] = req.param("custom_locations") || {};
+    var multi = redis.multi();
+    multi.set(id, JSON.stringify(locations));
+    multi.expire(id, 24*60*60*7); //7 days
 
-    //save for 1 day
-    setTimeout(function(){
-        delete custom_locations[id];
-    },24*60*60*1000); //1 day
+    multi.exec(function (err, replies) {
 
-    res.json({id: id});
+        if(err) return res.status(400).json(false);
+
+        res.json({id: id});
+    });
 
 });
 
 app.get('/import_custom_locations',function(req,res){
 
-    var custom_loc = custom_locations[req.param("id")];
+    redis.get(req.param("id"), function(err,value){
 
-    if(!custom_loc){
-        return res.status(400).json(false);
-    }
+        if(err || !value) return res.status(400).json(false);
 
-    res.json({custom_locations: custom_loc});
+        var custom_loc = JSON.parse(value);
+
+        res.json({custom_locations: custom_loc});
+
+    });
 
 });
 
@@ -180,8 +194,8 @@ io.on('connection', function (socket) {
 
 server.listen(4000, function () {
 
-    var host = server.address().address
-    var port = server.address().port
+    var host = server.address().address;
+    var port = server.address().port;
 
     console.log('Spyfall listening at http://%s:%s', host, port);
 
