@@ -7,7 +7,7 @@
   "interface.role": "Role",
   "interface.add_player": "Přidat hráče",
   "interface.rem_player": "Odebrat hráče",
-  "interface.start_game": "Začít hru",
+  "interface.start_game": "Spustit hru",
   "interface.end_game": "Ukončit hru",
   "interface.is_the_spy": "je špión!",
   "interface.game_information": "Informace o hře",
