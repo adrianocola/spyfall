@@ -10,6 +10,11 @@ html,body {
 
 #header {
   padding-top: 40px;
+  padding-bottom: 20px;
+}
+
+#languages {
+  margin: 0;
 }
 
 #container{
@@ -58,8 +63,16 @@ html,body {
   margin: 10px 0;
 }
 
+.spy_count{
+  margin-right: 10px;
+}
+
 #timer_container {
   margin: 40px 0 20px 0;
+}
+
+#timer_control{
+  margin: 0;
 }
 
 #room_controls {
@@ -68,7 +81,7 @@ html,body {
 
 #room_create {
   margin: 40px 0 0 0;
-  display: none;
+  /*display: none;*/
 }
 
 #room_id {
@@ -79,12 +92,14 @@ html,body {
 
 #room_join {
   margin: 0;
-  display: none;
 }
 
 #room_info {
   margin: 0;
-  display: none;
+}
+
+#room_join_button {
+  margin: 0;
 }
 
 #room_locations {
@@ -113,6 +128,18 @@ html,body {
   margin-top: 10px;
 }
 
+#game_options{
+  margin: 5px 0 0 0;
+}
+
+#two_spies{
+  margin: 0 5px 0 5px;
+}
+
+#selected_duration{
+  margin: 0;
+}
+
 .footer {
   margin-top: 20px;
   margin-bottom: 30px;
@@ -128,14 +155,13 @@ html,body {
   padding-right: 0;
 }
 
-
-#locations_config {
-  display: none;
-}
-
 #locations_filter {
   width: 100%;
   margin: 10px 0;
+}
+
+.location_title{
+  margin-top: 20px;
 }
 
 .location_config_item {
@@ -146,11 +172,6 @@ html,body {
 
 .location_config_check {
   left: 0;
-}
-
-.location_config_details {
-  right: 20px;
-  position: absolute;
 }
 
 .location_config_role, .location_config_title, .location_config_name {
@@ -203,10 +224,6 @@ input[type="checkbox"].location_config_check{
   margin: 30px 0;
 }
 
-#locations_exported_container, #locations_importing {
-  display: none;
-}
-
 #locations_exported_help {
   font-size: 12px;
 }
@@ -215,6 +232,10 @@ input[type="checkbox"].location_config_check{
   letter-spacing: 2px;
   font-weight: 700;
   font-family: 'Inconsolata', Consolas, monaco, monospace;
+}
+
+#locations_import_button{
+  margin: 0;
 }
 
 #locations_import_id {
@@ -227,4 +248,27 @@ input[type="checkbox"].location_config_check{
 
 #locations_back {
   margin-top: 20px;
+}
+
+.cross{
+  text-decoration: line-through;
+}
+
+.check_all{
+  margin: 0 1px 0 1px;
+}
+
+.location_select{
+  cursor: pointer;
+  border: 1px solid #f0f0f0;
+  padding: 3px 5px 5px 5px;
+}
+
+.location_select input{
+  cursor: pointer !important;
+  pointer-events: none;
+}
+
+.button.secondary.hollow.disabled{
+  opacity: 0.7 !important;
 }

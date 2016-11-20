@@ -11,6 +11,7 @@
   "interface.end_game": "Terminar Jogo",
   "interface.is_the_spy": "é o espião!",
   "interface.game_information": "Informação do Jogo",
+  "interface.timer": "Tempo",
   "interface.start_timer": "Iniciar Cronómetro",
   "interface.pause_timer": "Pausar Cronómetro",
   "interface.create_room": "Criar Sala",

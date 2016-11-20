@@ -1,8 +1,11 @@
 $(function(){
-
-    var countdown = 480; //8 minutes
+    const MIN_PLAYERS = 3;
+    const MAX_PLAYERS = 12;
+    var countdown = store.get('duration') || 8*60; //8 minutes
+    var spies = store.get('number_of_spies') || 1;
     var socket;
     var i18n = {};
+    var i18n_en = {};
     var players = {};
     //variable used to make less likelly a player be spy twice in a row
     var last_spy;
@@ -11,43 +14,75 @@ $(function(){
     var game_info = {
         state: 'stopped',
         timer: 'stopped',
-        spy: -1,
+        spy: undefined,
+        spy2: undefined,
         location: 'none'
     };
 
-    var locations  = [
-        "airplane",
-        "bank",
-        "beach",
-        "broadway_theater",
-        "casino",
-        "cathedral",
-        "circus_tent",
-        "corporate_party",
-        "crusader_army",
-        "day_spa",
-        "embassy",
-        "hospital",
-        "hotel",
-        "military_base",
-        "movie_studio",
-        "ocean_liner",
-        "passenger_train",
-        "pirate_ship",
-        "polar_station",
-        "police_station",
-        "restaurant",
-        "school",
-        "service_station",
-        "space_station",
-        "submarine",
-        "supermarket",
-        "university"
-    ];
+    var locations  = {
+        //spyfall 1
+        "airplane":1,
+        "bank":1,
+        "beach":1,
+        "broadway_theater":1,
+        "casino":1,
+        "cathedral":1,
+        "circus_tent":1,
+        "corporate_party":1,
+        "crusader_army":1,
+        "day_spa":1,
+        "embassy":1,
+        "hospital":1,
+        "hotel":1,
+        "military_base":1,
+        "movie_studio":1,
+        "ocean_liner":1,
+        "passenger_train":1,
+        "pirate_ship":1,
+        "polar_station":1,
+        "police_station":1,
+        "restaurant":1,
+        "school":1,
+        "service_station":1,
+        "space_station":1,
+        "submarine":1,
+        "supermarket":1,
+        "university":1,
+        //spyfall 2
+        "amusement_park":2,
+        "art_museum":2,
+        "candy_factory":2,
+        "carnival":2,
+        "cat_show":2,
+        "cemetery":2,
+        "coal_mine":2,
+        "construction_site":2,
+        "gaming_convention":2,
+        "gas_station":2,
+        "harbor_docks":2,
+        "ice_hockey_stadium":2,
+        "jail":2,
+        "jazz_club":2,
+        "library":2,
+        "night_club":2,
+        "race_track":2,
+        "retirement_home":2,
+        "rock_concert":2,
+        "sightseeing_bus":2,
+        "stadium":2,
+        "subway":2,
+        "the_un":2,
+        "theater":2,
+        "vineyard":2,
+        "wedding":2,
+        "zoo":2
+    };
+
+    var locations_keys = _.keys(locations);
 
     var custom_locations = store.get('custom_locations') || {};
 
-    var selected_locations = store.get('selected_locations') || locations.slice(0);
+    var selected_locations = store.get('selected_locations') || _.compact(_.map(locations, function(ver,loc){ return ver===1?loc:null }));
 
     function getSelectedCustomLocations(){
         var selected_custom_locations = {};
@@ -63,11 +98,10 @@ $(function(){
     }
 
     function getLocation(location){
-
         if(custom_locations[location]){
             return custom_locations[location].name;
         }else{
-            return i18n['location.' + location];
+            return tt('location.' + location);
         }
 
     }
@@ -77,7 +111,7 @@ $(function(){
         if(custom_locations[location]){
             return custom_locations[location]["role" + roleNum];
         }else{
-            return i18n['location.' + location + '.role' + roleNum];
+            return tt('location.' + location + '.role' + roleNum);
         }
 
     }
@@ -90,6 +124,10 @@ $(function(){
             text += possible.charAt(Math.floor(Math.random() * possible.length));
 
         return text;
+    }
+
+    function tt(exp){
+        return i18n[exp] || i18n_en[exp];
     }
 
     function changeLanguage(lang){
@@ -111,12 +149,12 @@ $(function(){
 
         $('*[data-i18n]').each(function(){
             var element = $(this);
-            element.html(i18n["interface." + element.attr("data-i18n")]);
+            element.html(tt("interface." + element.attr("data-i18n")));
         });
 
         $('*[data-i18n-ph]').each(function(){
             var element = $(this);
-            element.attr("placeholder",i18n["interface." + element.attr("data-i18n-ph")]);
+            element.attr("placeholder",tt("interface." + element.attr("data-i18n-ph")));
         });
 
     }
@@ -129,26 +167,30 @@ $(function(){
         $(".locations_list").html("");
 
         var all_locations = [];
+        var map = {};
 
         for(var i=0; i < selected_locations.length; i++){
-            var location = getLocation(selected_locations[i]);
+            var rawLoc = selected_locations[i];
+            var location = getLocation(rawLoc);
+            map[location] = rawLoc;
             all_locations.push(location);
-
         }
+
         all_locations.sort();
 
         for(var i=0; i < selected_locations.length; i++){
+            var loc = all_locations[i];
             if(i < (selected_locations.length/2)){
-                $(".locations_left").append('<div class="location_item">' + all_locations[i] + '</div>');
+                $(".locations_left").append('<div class="location_item loc_' + map[loc] + '">' + loc + '</div>');
             }else{
-                $(".locations_right").append('<div class="location_item">' + all_locations[i] + '</div>');
+                $(".locations_right").append('<div class="location_item loc_' + map[loc] + '">' + loc + '</div>');
             }
         }
 
         all_locations = [];
 
-        for(var i=0; i < locations.length; i++){
-            all_locations.push(locations[i]);
+        for(var i=0; i < locations_keys.length; i++){
+            all_locations.push(locations_keys[i]);
         }
 
         for(var i=0; i < all_locations.length; i++){
@@ -163,14 +205,13 @@ $(function(){
         if(location){
             var location_name = getLocation(location);
         }else{
-            var location_name = i18n["interface.location"];
+            var location_name = tt("interface.location");
         }
 
         var config = $(
-            '<div class="location_config_item">' +
-                '<input class="location_config_check" type="checkbox">' +
-                '<span class="location_config_title">' + location_name + '</span>' +
-                '<a class="location_config_details" href="#">' +
+            '<div class="location_config_item text-left">' +
+                '<input id="checkbox_' + location + '" class="location_config_check" type="checkbox"><label class="location_config_title" for="checkbox_' + location + '">' + location_name + '</label>' +
+                '<a class="location_config_details float-right" href="#">' +
                     '<img src="../cog.png" width="20">' +
                 '</a>' +
                 '<a href=""></a>' +
@@ -195,7 +236,7 @@ $(function(){
         var roles_list = config.find('.location_config_roles');
         var check = config.find('.location_config_check');
 
-        for(var i=1; i<=7; i++){
+        for(var i=1; i<=10; i++){
 
             var role = getLocationRole(location,i) || "";
 
@@ -237,7 +278,10 @@ $(function(){
                     role4: "",
                     role5: "",
                     role6: "",
-                    role7: ""
+                    role7: "",
+                    role9: "",
+                    role9: "",
+                    role10: ""
                 }
 
             }
@@ -289,6 +333,9 @@ $(function(){
         check.change(function(){
 
             if(check.is(":checked")){
+                if(_.contains(selected_locations,location)){
+                    return;
+                }
                 selected_locations.push(location);
             }else{
                 selected_locations = _.without(selected_locations,location);
@@ -309,7 +356,7 @@ $(function(){
         }
 
         //if a default location, prevent editing
-        if(_.contains(locations,location)){
+        if(_.contains(locations_keys,location)){
             config.find('.location_config_save').hide();
             config.find('.location_config_delete').hide();
             config.find('.location_config_name_input, .location_config_role_input').attr('disabled','disabled');
@@ -327,8 +374,10 @@ $(function(){
             $(".custom_locations_list").append(config);
             config.addClass('custom');
             config.find('.location_config_id').val(location);
-        }else{
-            $(".locations_list").append(config);
+        }else if(locations[location] === 1){
+            $(".locations_list_one").append(config);
+        }else if(locations[location] === 2){
+            $(".locations_list_two").append(config);
         }
 
         updateSelectedLocations();
@@ -354,25 +403,25 @@ $(function(){
 
     function updateSelectedLocations(){
 
-        var total = locations.length + _.size(custom_locations);
+        var total = locations_keys.length + _.size(custom_locations);
         var selected = selected_locations.length;
 
-        $("#locations_selected").html(selected);
-        $("#locations_total").html(total);
+        $(".locations_selected").html(selected);
+        $(".locations_total").html(total);
 
     }
 
     configureCustomLocations();
 
     function checkAddRem(){
-        if($("#players .player_data").length >= 8){
-            $("#add_player").addClass("disabled secondary");
-        }else if($("#players .player_data").length <= 3){
+        if($("#players .player_data").length >= MAX_PLAYERS){
+            $("#add_player").addClass("disabled secondary hollow");
+        }else if($("#players .player_data").length <= MIN_PLAYERS){
             $("#rem_player").removeClass("alert");
-            $("#rem_player").addClass("disabled secondary");
+            $("#rem_player").addClass("disabled secondary hollow");
         }else{
-            $("#add_player").removeClass("disabled secondary");
-            $("#rem_player").removeClass("disabled secondary");
+            $("#add_player").removeClass("disabled secondary hollow");
+            $("#rem_player").removeClass("disabled secondary hollow");
             $("#rem_player").addClass("alert");
         }
     }
@@ -392,14 +441,16 @@ $(function(){
         $("#players").append(
             '<div id="p' + playerNum + '" class="player_data ' + playerName + '">' +
                 '<input class="player_input uppercase" data-i18n-ph="player_name" value=' + playerName + '>' +
-                '<a class="button success expand player_button" href="#" data-reveal-id="modal' + playerNum + '">' + playerName + '</a>' +
+                '<a class="button success expand player_button" href="#" data-open="modal' + playerNum + '">' + playerName + '</a>' +
                 '<div class="player_remote">*</div>' +
-                '<div id="modal' + playerNum + '" class="reveal-modal small text-center" data-reveal>' +
+                '<div id="modal' + playerNum + '" class="reveal small text-center" data-animation-in="slide-in-down" data-animation-out="slide-out-up" data-reset-on-close="true" data-reveal>' +
                     '<h2 class="player_title"> ' + playerName + '</h2>' +
                     '<h4><strong><span data-i18n="location"></span>: </strong><span class="player_location">' + playerNum + '</span></h4>'+
                     '<h4><strong><span data-i18n="role"></span>: </strong><span class="player_role">' + playerNum + '</span></h4>'+
-                    '<a class="close-reveal-modal">&#215;</a>' +
-                    '<a class="button alert close-modal" data-i18n="close"></a>' +
+                    '<a class="button alert close-modal" data-close data-i18n="close"></a>' +
+                    '<button class="close-button" data-close aria-label="Close modal" type="button">' +
+                        '<span aria-hidden="true">&times;</span>' +
+                    '</button>' +
                 '</div>' +
             '</div>');
 
@@ -462,16 +513,51 @@ $(function(){
         checkAddRem();
     }
 
+    function selectedTwoSpies(){
+
+        spies = 2;
+        store.set('number_of_spies',spies);
+        $("#spy_count").html("");
+        $("#spy_count").append('<img src="../spy.png" width="20"/>');
+        $("#spy_count").append(' ');
+        $("#spy_count").append('<img src="../spy.png" width="20"/>');
+    }
+
+    function selectedOneSpy(){
+
+        spies = 1;
+        store.set('number_of_spies',spies);
+        $("#spy_count").html("");
+        $("#spy_count").append('<img src="../spy.png" width="20"/>');
+
+    }
+
+    function changedDuration(){
+
+        countdown = 60 * $(this).val();
+        store.set('duration',countdown);
+
+    }
+
     function configurePlayer(playerNum, location, role, selected_custom_locations){
         var player = $("#p" + playerNum);
         var playerName = $("#p" + playerNum + " .player_input").val().toUpperCase();
-        var playerLocation = $("#p" + playerNum + " .player_location");
-        var playerRole = $("#p" + playerNum + " .player_role");
+        var playerLocation = $("#modal" + playerNum + " .player_location");
+        var playerRole = $("#modal" + playerNum + " .player_role");
 
         if(socket){
 
             if(players[playerName]){
-                socket.emit('data',playerName,{type: "GAME_START", role: role, location: location, selected_locations: selected_locations, custom_locations: selected_custom_locations});
+                socket.emit('data',playerName,{
+                    type: "GAME_START",
+                    role: role,
+                    location: location,
+                    selected_locations: selected_locations,
+                    custom_locations: selected_custom_locations,
+                    last_location: last_location,
+                    spies: spies,
+                    countdown: countdown
+                });
 
                 //if is a remote player, prevent manager looking at his role
                 var button = $("#p" + playerNum + " .player_button");
@@ -485,31 +571,33 @@ $(function(){
 
         //is spy?
         if(role===0){
-            game_info.spy = playerName;
+            if(!game_info.spy){
+                game_info.spy = playerName;
+            }else{
+                game_info.spy2 = playerName;
+            }
             playerLocation.html("???");
-            playerRole.html('<img src="../spy.png" width=20>' + i18n["spy"]);
-            $("#game_result_text").html("");
-            $("#game_result_text").append('<div><span data-i18n="location"></span>: ' + getLocation(location) + '</div>');
-            $("#game_result_text").append('<div>' + playerName + ' <span data-i18n="is_the_spy"></span></div>');
+            playerRole.html('<img src="../spy.png" width=20>');
         }else{
             playerLocation.html(getLocation(location));
             playerRole.html(getLocationRole(location,role));
         }
 
+        return playerName;
 
     }
 
-    window.spyfallTest = function(){
+    window.spyfallTest = function(count){
 
-        var tests = 10000; //per player count
+        var tests = count || 1000; //per player count
 
         //for each range of player count
-        for(var p = 3; p<=8; p++){
+        for(var p = MIN_PLAYERS; p<=MAX_PLAYERS; p++){
 
             var spyDist = {};
 
             for(var i=0; i< tests; i++){
-                var allRoles = getAllRoles();
+                var allRoles = getAllRoles(playerCount,'airplane');
                 var playerCount = p;
                 var availableRoles = getAvailableRoles(playerCount,allRoles);
 
@@ -546,7 +634,7 @@ $(function(){
         var locationsDist = {};
 
         for(var i=0; i< tests; i++){
-            var location = locations[_.random(locations.length-1)];
+            var location = locations[_.random(locations_keys.length-1)];
             locationsDist[location] = (locationsDist[location] || 0) +1;
         }
 
@@ -559,11 +647,19 @@ $(function(){
 
     }
 
-    function getAllRoles(){
+    function getAllRoles(playerCount,location){
 
-        //all remaining roles (1 to 7, because 0 is the spy)
+        var is_spyfall2 = locations[location] === 2;
+
+        var max = MAX_PLAYERS-spies;
+
+        if(playerCount <= 8 && !is_spyfall2){
+            max = 8-spies;
+        }
+
+        //all remaining roles (0 is the spy)
         var allRoles = [];
-        for(var i=1;i<=7;i++){
+        for(var i=1;i<=max;i++){
             allRoles.push(i);
         }
 
@@ -572,14 +668,17 @@ $(function(){
     }
 
     function getAvailableRoles(playersCount, allRoles){
-        //populate a array of with random roles
+        //populate a array with random roles
         // make sure there is always a spy (role 0)
         var availableRoles = [];
         for(var i=0;i<playersCount;i++){
             //always have a spy
             if(i===0){
                 availableRoles.push(0);
-                //get a random role from the roles available
+            //if playing with two spies add another one
+            }else if(i===1 && spies===2){
+                availableRoles.push(0);
+            //get a random role from the roles available
             }else{
                 var rolePos = _.random(0,allRoles.length-1);
                 var role = allRoles[rolePos];
@@ -631,22 +730,22 @@ $(function(){
 
     function startGame(){
 
+        game_info.spy = undefined;
+        game_info.spy2 = undefined;
 
         var location = randomLocation();
         var playersCount = $("#players .player_data").length;
         var selected_custom_locations = getSelectedCustomLocations();
 
-        last_location = location;
-
         ga('send', 'event', 'Game', 'Start');
 
-        var allRoles = getAllRoles();
+        var allRoles = getAllRoles(playersCount,location);
         var availableRoles = getAvailableRoles(playersCount,allRoles);
         var assignedPlayersRoles = assignPlayersRoles(playersCount,availableRoles);
 
-        //diminish the chances of the same spy twice in a row
-        if(assignedPlayersRoles[last_spy] === 0){
-            allRoles = getAllRoles();
+        //diminish the chances of the same spy twice in a row (if playing with 1 spy)
+        if(spies === 1 && assignedPlayersRoles[last_spy] === 0){
+            allRoles = getAllRoles(playersCount,location);
             availableRoles = getAvailableRoles(playersCount,allRoles);
             assignedPlayersRoles = assignPlayersRoles(playersCount,availableRoles);
         }
@@ -658,9 +757,15 @@ $(function(){
         $("#players .player_button").addClass('success');
 
         //assign to each player a random role from the available roles
+        $("#game_result_text").html("");
+        $("#game_result_text").append('<div><span data-i18n="location"></span>: ' + getLocation(location) + '</div>');
+
         for(var i=0;i<playersCount;i++){
-            if(assignedPlayersRoles[i] === 0 ) last_spy = i;
-            configurePlayer(i+1,location,assignedPlayersRoles[i],selected_custom_locations);
+            var name = configurePlayer(i+1,location,assignedPlayersRoles[i],selected_custom_locations);
+            if(assignedPlayersRoles[i] === 0 ){
+                last_spy = i;
+                $("#game_result_text").append('<div> <img src="../spy.png" width="20"/></span>: ' + name + '</div>');
+            }
         }
 
         var players = [];
@@ -674,12 +779,20 @@ $(function(){
         game_info.state = "running";
         game_info.location = location;
 
+        $(".location_item").removeClass('cross');
+        if(last_location){
+            $(".location_item.loc_" + last_location).addClass('cross');
+        }
+
+        last_location = location;
+
         $("#languages").attr("disabled","disabled");
         $("#game_result").hide();
         $("#start_game").fadeOut();
         $("#room_controls").fadeOut();
         $("#room_create").fadeOut();
         $("#header_locations").fadeOut();
+        $("#game_options").fadeOut();
 
         $("#players_controls").fadeOut(function(){
             $("#end_game").fadeIn();
@@ -688,7 +801,7 @@ $(function(){
         });
 
         $("#timer_control").addClass('success');
-        $("#timer_control").html(i18n["interface.start_timer"]);
+        $("#timer_control").html(tt("interface.start_timer"));
 
         $("#timer").countdown({until: countdown, compact: true, description: '', format: 'M:S',onExpiry: function(){ beep(3); }});
         $('#timer').countdown('pause');
@@ -708,9 +821,16 @@ $(function(){
         $("#players_controls").show();
         $("#start_game").show();
         $("#end_game").hide();
+        $("#room_create").hide();
+        $("#room_join").hide();
+        $("#locations_exported_container").hide();
+        $("#locations_importing").hide();
+        $("#locations_config").hide();
         $("#timer_container").hide();
+        $("#game_options").show();
         $("#game_result").show();
         $("#game_locations").hide();
+        $("#room_info").hide();
         $("#header_locations").show();
 
 
@@ -726,7 +846,7 @@ $(function(){
         game_info.state = "stopped";
 
         if(socket){
-            socket.emit('broadcast',{type: "GAME_END", location: game_info.location, spy: game_info.spy});
+            socket.emit('broadcast',{type: "GAME_END", location: game_info.location, spy: game_info.spy, spy2: game_info.spy2});
         }
 
     }
@@ -746,6 +866,12 @@ $(function(){
     $("#add_player").click(addPlayer);
 
     $("#rem_player").click(remPlayer);
+
+    $("#one_spy").change(selectedOneSpy);
+
+    $("#two_spies").change(selectedTwoSpies);
+
+    $("#selected_duration").change(changedDuration);
 
     $("#start_game").click(startGame);
 
@@ -768,15 +894,17 @@ $(function(){
 
         if($("#timer_control").hasClass("success")){
             $("#timer_control").removeClass('success');
-            $("#timer_control").html(i18n["interface.pause_timer"]);
+            $("#timer_control").html(tt("interface.pause_timer"));
 
             var until = $.countdown.periodsToSeconds($('#timer').countdown("getTimes"));
 
-            socket.emit('broadcast',{type: "TIMER_START", time: new Date(), until: until});
+            if(socket){
+                socket.emit('broadcast',{type: "TIMER_START", time: new Date(), until: until});
+            }
             game_info.timer = "running";
         }else{
             $("#timer_control").addClass('success');
-            $("#timer_control").html(i18n["interface.start_timer"]);
+            $("#timer_control").html(tt("interface.start_timer"));
             if(socket){
                 var until = $.countdown.periodsToSeconds($('#timer').countdown("getTimes"));
                 socket.emit('broadcast',{type: "TIMER_STOP", until: until});
@@ -795,8 +923,19 @@ $(function(){
 
         $("#container").fadeOut(function(){
             $("#locations_config").fadeIn();
+            $("#locations_share").show();
+            $("#locations_exported_container").hide();
+            $("#locations_importing").hide();
         });
 
+    });
+
+    $(".location_select_all").click(function(){
+        $(this).closest(".locations_container").find(".location_config_check").prop('checked', true).change();
+    });
+
+    $(".location_deselect_all").click(function(){
+        $(this).closest(".locations_container").find(".location_config_check").prop('checked', false).change();
     });
 
     $("#add_location").click(function(){
@@ -805,10 +944,14 @@ $(function(){
 
     $("#locations_back").click(function(){
 
+        var ladda = $("#locations_back").ladda();
+        ladda.ladda( 'start' );
+
         updateLocations();
 
         $("#locations_config").fadeOut(function(){
             $("#container").fadeIn();
+            ladda.ladda( 'stop' );
         });
 
     });
@@ -850,6 +993,7 @@ $(function(){
 
 
                 $("#locations_exported_id").html(data.id);
+                ladda.ladda( 'stop' );
             }
         });
 
@@ -884,10 +1028,10 @@ $(function(){
 
                 configureCustomLocations();
 
-                $("#locations_import_button").html(i18n['interface.done']);
+                $("#locations_import_button").html(tt('interface.done'));
 
                 setTimeout(function(){
-                    $("#locations_import_button").html(i18n['interface.import']);
+                    $("#locations_import_button").html(tt('interface.import'));
                 },5000);
 
             },error: function(){
@@ -895,12 +1039,12 @@ $(function(){
                 ladda.ladda( 'stop' );
 
 
-                $("#locations_import_button").html(i18n['interface.error']);
+                $("#locations_import_button").html(tt('interface.error'));
                 $("#locations_import_button").removeClass('success');
                 $("#locations_import_button").addClass('alert');
 
                 setTimeout(function(){
-                    $("#locations_import_button").html(i18n['interface.import']);
+                    $("#locations_import_button").html(tt('interface.import'));
                     $("#locations_import_button").removeClass('alert');
                     $("#locations_import_button").addClass('success');
                 },5000);
@@ -929,15 +1073,28 @@ $(function(){
         custom_locations = data.custom_locations;
 
         $('#timer').countdown('destroy');
-        $("#timer").countdown({until: countdown, compact: true, description: '', format: 'M:S',onExpiry: function(){ beep(3); }});
+        $("#timer").countdown({until: data.countdown || countdown, compact: true, description: '', format: 'M:S',onExpiry: function(){ beep(3); }});
         $('#timer').countdown('pause');
 
         if(data.role===0){
             $("#room_game_location").html("???");
-            $("#room_game_role").html('<img src="../spy.png" width=20>' + i18n["spy"]);
+            $("#room_game_role").html('<img src="../spy.png" width=20>');
         }else{
             $("#room_game_location").html(getLocation(data.location));
             $("#room_game_role").html(getLocationRole(data.location,data.role));
+        }
+
+        if(data.last_location){
+            $(".location_item").removeClass('cross');
+            if(data.last_location){
+                $(".location_item.loc_" + data.last_location).addClass('cross');
+            }
+        }
+
+        if(data.spies === 1){
+            $("#one_spy").prop("checked",true).change();
+        }else{
+            $("#two_spies").prop("checked",true).change();
         }
 
         updateLocations();
@@ -955,6 +1112,7 @@ $(function(){
 
     }
 
+    //room host communication
     $("#create_room").click(function(){
 
         var ladda = $("#create_room").ladda();
@@ -1013,7 +1171,10 @@ $(function(){
                             selected_locations: selected_locations,
                             custom_locations: getSelectedCustomLocations(),
                             time: time,
-                            until: until
+                            until: until,
+                            last_location: last_location,
+                            spies: spies,
+                            countdown: countdown
                         });
                     }
                 }
@@ -1041,11 +1202,13 @@ $(function(){
 
         $("#header_locations").fadeOut();
         $("#players_container").fadeOut();
+        $("#players_controls").fadeOut();
         $("#game_controls").fadeOut();
+        $("#game_options").fadeOut();
 
         $("#timer_control_container").remove();
-        $("#timer_watch_container").removeClass('small-6 medium-3 medium-pull-3');
-        $("#timer_watch_container").addClass('small-12 medium-6 medium-offset-3');
+        $("#timer_watch_container").removeClass('small-6');
+        $("#timer_watch_container").addClass('small-12');
 
         $("#room_controls").fadeOut(function(){
             $("#room_join").fadeIn();
@@ -1053,6 +1216,7 @@ $(function(){
 
     });
 
+    //room guest communication
     $("#room_join_button").click(function(){
 
         var room_id, player_name;
@@ -1090,10 +1254,10 @@ $(function(){
         socket.on('data',function(data){
 
             if(data.type === "INVALID_PLAYER"){
-                onError(i18n["interface.error_room_invalid_player"]);
+                onError(tt("interface.error_room_invalid_player"));
             }else if(data.type === "CONNECTED"){
 
-                $("#room_game_data").html(i18n["interface.game_connected"]);
+                $("#room_game_data").html(tt("interface.game_connected"));
                 $("#room_game_data").removeClass('alert');
                 $("#room_game_data").addClass('disabled secondary');
 
@@ -1120,10 +1284,14 @@ $(function(){
 
             }else if(data.type === "GAME_START"){
 
-                $("#room_game_data").html(i18n["interface.show_my_role"]);
+                $("#room_game_data").html(tt("interface.show_my_role"));
                 $("#room_game_data").removeClass('disabled secondary');
                 $("#room_game_data").addClass('success');
-                $("#room_game_data").attr("data-reveal-id","room_game_me");
+
+                $("#room_game_data").off("click");
+                $("#room_game_data").click(function(){
+                    $("#room_game_me").foundation('open');
+                });
 
                 configureRemotePlayer(data);
 
@@ -1134,10 +1302,24 @@ $(function(){
                 updateLocations();
 
             }else if(data.type === "GAME_END"){
-                $("#room_game_data").html(i18n["interface.game_stopped"]);
+
+                $("#game_result_text").html("");
+                $("#game_result_text").append('<div></span>' + getLocation(data.location) + '</div>');
+
+                $("#game_result_text").append('<div> <img src="../spy.png" width="20"/></span>: ' + data.spy + '</div>');
+                if(data.spy2){
+                    $("#game_result_text").append('<div> <img src="../spy.png" width="20"/></span>: ' + data.spy2 + '</div>');
+                }
+
+                $("#room_game_data").html(tt("interface.game_stopped"));
                 $("#room_game_data").removeClass('success');
-                $("#room_game_data").addClass('disabled secondary');
-                $("#room_game_data").attr("data-reveal-id","game_result");
+                $("#room_game_data").addClass('warning');
+                $("#room_game_data").removeAttr("data-open");
+
+                $("#room_game_data").off("click");
+                $("#room_game_data").click(function(){
+                    $("#game_result").foundation('open');
+                });
 
             }else if(data.type === "TIMER_START"){
 
@@ -1150,33 +1332,33 @@ $(function(){
 
 
             }else if(data.type === "DISCONNECTED"){
-                onError(i18n["interface.error_room_connection"], true);
+                onError(tt("interface.error_room_connection"), true);
             }
 
         });
 
         socket.on('invalid_socket',function(data){
-            onError(i18n["interface.error_room_connection"], true);
+            onError(tt("interface.error_room_connection"), true);
         });
 
         socket.on('invalid_room',function(data){
             if(room_id){
-                onError(i18n["interface.error_room_connection"],true);
+                onError(tt("interface.error_room_connection"),true);
             }else{
-                onError(i18n["interface.error_room_connection"]);
+                onError(tt("interface.error_room_connection"));
             }
         });
 
         socket.on('disconnected',function(){
-            onError(i18n["interface.error_room_connection"], true);
+            onError(tt("interface.error_room_connection"), true);
         });
 
         socket.on('disconnect',function(){
-            onError(i18n["interface.error_room_connection"], true);
+            onError(tt("interface.error_room_connection"), true);
         });
 
         socket.on('error',function(){
-            onError(i18n["interface.error_room_connection"], true);
+            onError(tt("interface.error_room_connection"), true);
         });
 
         function onError(msg, retry){
@@ -1204,17 +1386,32 @@ $(function(){
             addPlayer(starting_players[i]);
         }
     }else{
-        //start with 3 players
-        addPlayer("p1");
-        addPlayer("p2");
-        addPlayer("p3");
+        //start with the minimal number of players
+        for(var i=1;i<=MIN_PLAYERS;i++){
+            addPlayer("p"+ i);
+        }
     }
+
+    //set initial configuration for number of spies
+    if(spies === 1){
+        $("#one_spy").prop("checked",true).change();
+    }else{
+        $("#two_spies").prop("checked",true).change();
+    }
+
+
+    //set initial configuration for game duration
+    $("#selected_duration").val(countdown/60);
 
     //set game initial state/layout
     endGame();
 
     //load the english language
-    changeLanguage($.cookie("locale") || "en");
+    $.getJSON('i18n/en.json',function(data){
+        i18n_en = data;
+        //load user language
+        changeLanguage($.cookie("locale") || "en");
+    });
 
     $(document).foundation();
 
