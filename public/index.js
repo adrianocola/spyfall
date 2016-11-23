@@ -596,7 +596,7 @@ $(function(){
 
     window.spyfallTest = function(count){
 
-        var tests = count || 1000; //per player count
+        var tests = count || 10000; //per player count
 
         //for each range of player count
         for(var p = MIN_PLAYERS; p<=MAX_PLAYERS; p++){
@@ -605,12 +605,14 @@ $(function(){
 
             for(var i=0; i< tests; i++){
                 var playerCount = p;
-                var availableRoles = getAvailableRoles(playerCount,'airplane');
+                var location = locations_keys[_.random(locations_keys.length-1)];
+                var isSpyfall2 = locations[location] === 2;
+                var availableRoles = getAvailableRoles(playerCount,location);
 
                 if(!_.contains(availableRoles,0)){
                     return "Missing spy in available roles with " + playerCount + " players! Available roles: " +  availableRoles;
                 }
-                if(_.uniq(availableRoles).length != availableRoles.length && playerCount<=8){
+                if(_.uniq(availableRoles).length != availableRoles.length && playerCount<=8 && !isSpyfall2){
                     return "Available roles array have duplicates: " + availableRoles;
                 }
                 if(availableRoles.length != playerCount){
@@ -622,7 +624,7 @@ $(function(){
                 if(assignedPlayersRoles.length != playerCount){
                     return "Didn't assigned the number os roles for the total number of players! Players: " + playerCount + ", Assigned Roles: " + assignedPlayersRoles.length;
                 }
-                if(_.uniq(assignedPlayersRoles).length != assignedPlayersRoles.length && playerCount<=8){
+                if(_.uniq(assignedPlayersRoles).length != assignedPlayersRoles.length && playerCount<=8 && !isSpyfall2){
                     return "Assigned players roles array have duplicates: " + assignedPlayersRoles;
                 }
 
@@ -640,7 +642,7 @@ $(function(){
         var locationsDist = {};
 
         for(var i=0; i< tests; i++){
-            var location = locations[_.random(locations_keys.length-1)];
+            var location = locations_keys[_.random(locations_keys.length-1)];
             locationsDist[location] = (locationsDist[location] || 0) +1;
         }
 
