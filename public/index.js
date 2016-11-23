@@ -446,7 +446,7 @@ $(function(){
                 '<div id="modal' + playerNum + '" class="reveal small text-center" data-animation-in="slide-in-down" data-animation-out="slide-out-up" data-reset-on-close="true" data-reveal>' +
                     '<h2 class="player_title"> ' + playerName + '</h2>' +
                     '<h4><strong><span data-i18n="location"></span>: </strong><span class="player_location">' + playerNum + '</span></h4>'+
-                    '<h4><strong><span data-i18n="role"></span>: </strong><span class="player_role">' + playerNum + '</span></h4>'+
+                    '<h4 class="role_container"><strong><span data-i18n="role"></span>: </strong><span class="player_role">' + playerNum + '</span></h4>'+
                     '<a class="button alert close-modal" data-close data-i18n="close"></a>' +
                     '<button class="close-button" data-close aria-label="Close modal" type="button">' +
                         '<span aria-hidden="true">&times;</span>' +
@@ -543,6 +543,7 @@ $(function(){
         var player = $("#p" + playerNum);
         var playerName = $("#p" + playerNum + " .player_input").val().toUpperCase();
         var playerLocation = $("#modal" + playerNum + " .player_location");
+        var playerRoleContainer = $("#modal" + playerNum + " .role_container");
         var playerRole = $("#modal" + playerNum + " .player_role");
 
         if(socket){
@@ -579,8 +580,14 @@ $(function(){
             playerLocation.html("???");
             playerRole.html('<img src="../spy.png" width=20>');
         }else{
+            var role = getLocationRole(location,role);
             playerLocation.html(getLocation(location));
-            playerRole.html(getLocationRole(location,role));
+            if(role){
+                playerRole.html(role);
+                playerRoleContainer.show();
+            }else{
+                playerRoleContainer.hide();
+            }
         }
 
         return playerName;
@@ -597,14 +604,13 @@ $(function(){
             var spyDist = {};
 
             for(var i=0; i< tests; i++){
-                var allRoles = getAllRoles(playerCount,'airplane');
                 var playerCount = p;
-                var availableRoles = getAvailableRoles(playerCount,allRoles);
+                var availableRoles = getAvailableRoles(playerCount,'airplane');
 
                 if(!_.contains(availableRoles,0)){
                     return "Missing spy in available roles with " + playerCount + " players! Available roles: " +  availableRoles;
                 }
-                if(_.uniq(availableRoles).length != availableRoles.length){
+                if(_.uniq(availableRoles).length != availableRoles.length && playerCount<=8){
                     return "Available roles array have duplicates: " + availableRoles;
                 }
                 if(availableRoles.length != playerCount){
@@ -616,7 +622,7 @@ $(function(){
                 if(assignedPlayersRoles.length != playerCount){
                     return "Didn't assigned the number os roles for the total number of players! Players: " + playerCount + ", Assigned Roles: " + assignedPlayersRoles.length;
                 }
-                if(_.uniq(assignedPlayersRoles).length != assignedPlayersRoles.length){
+                if(_.uniq(assignedPlayersRoles).length != assignedPlayersRoles.length && playerCount<=8){
                     return "Assigned players roles array have duplicates: " + assignedPlayersRoles;
                 }
 
@@ -645,31 +651,29 @@ $(function(){
         return "OK!"
 
 
-    }
+    };
 
-    function getAllRoles(playerCount,location){
+    function getLocationRolesAvailable(location){
 
-        var is_spyfall2 = locations[location] === 2;
+        var roles_numbers = [];
 
-        var max = MAX_PLAYERS-spies;
-
-        if(playerCount <= 8 && !is_spyfall2){
-            max = 8-spies;
+        for(var i=1; i<=MAX_PLAYERS;i++){
+            if(getLocationRole(location,i)){
+                roles_numbers.push(i);
+            }
         }
 
-        //all remaining roles (0 is the spy)
-        var allRoles = [];
-        for(var i=1;i<=max;i++){
-            allRoles.push(i);
-        }
+        return roles_numbers;
 
-        return allRoles;
+    };
 
-    }
+    //populate a array with random roles
+    // make sure there is always a spy (role 0)
+    function getAvailableRoles(playersCount, location){
 
-    function getAvailableRoles(playersCount, allRoles){
-        //populate a array with random roles
-        // make sure there is always a spy (role 0)
+        var originalAllRoles = getLocationRolesAvailable(location);
+        var allRoles = originalAllRoles.slice(0);
+
         var availableRoles = [];
         for(var i=0;i<playersCount;i++){
             //always have a spy
@@ -680,10 +684,16 @@ $(function(){
                 availableRoles.push(0);
             //get a random role from the roles available
             }else{
-                var rolePos = _.random(0,allRoles.length-1);
-                var role = allRoles[rolePos];
-                allRoles.splice(rolePos,1);
-                availableRoles.push(role);
+                if(allRoles.length===0){
+                    var rolePos = _.random(0,originalAllRoles.length-1);
+                    var role = originalAllRoles[rolePos];
+                    availableRoles.push(role);
+                }else{
+                    var rolePos = _.random(0,allRoles.length-1);
+                    var role = allRoles[rolePos];
+                    allRoles.splice(rolePos,1);
+                    availableRoles.push(role);
+                }
             }
         }
 
@@ -739,14 +749,12 @@ $(function(){
 
         ga('send', 'event', 'Game', 'Start');
 
-        var allRoles = getAllRoles(playersCount,location);
-        var availableRoles = getAvailableRoles(playersCount,allRoles);
+        var availableRoles = getAvailableRoles(playersCount,location);
         var assignedPlayersRoles = assignPlayersRoles(playersCount,availableRoles);
 
         //diminish the chances of the same spy twice in a row (if playing with 1 spy)
         if(spies === 1 && assignedPlayersRoles[last_spy] === 0){
-            allRoles = getAllRoles(playersCount,location);
-            availableRoles = getAvailableRoles(playersCount,allRoles);
+            availableRoles = getAvailableRoles(playersCount,location);
             assignedPlayersRoles = assignPlayersRoles(playersCount,availableRoles);
         }
 
