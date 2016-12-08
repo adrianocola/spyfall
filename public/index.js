@@ -385,6 +385,13 @@ $(function(){
 
     }
 
+    function sanitizePlayerName(playerName){
+        var p = playerName.toUpperCase();
+        p = p.replace(' ','_');
+        return p;
+    }
+
+
     function configureCustomLocations(){
 
         $(".custom_locations_list").html("");
@@ -435,11 +442,12 @@ $(function(){
 
         var playerNum = $("#players .player_data").length+1;
         var playerName = name?name:"p" + playerNum;
+        var sanitizedPlayerName = sanitizePlayerName(playerName);
 
         playerName = playerName.toUpperCase();
 
         $("#players").append(
-            '<div id="p' + playerNum + '" class="player_data ' + playerName + '">' +
+            '<div id="p' + playerNum + '" class="player_data ' + sanitizedPlayerName + '">' +
                 '<input class="player_input uppercase" data-i18n-ph="player_name" value=' + playerName + '>' +
                 '<a class="button success expand player_button" href="#" data-open="modal' + playerNum + '">' + playerName + '</a>' +
                 '<div class="player_remote">*</div>' +
@@ -465,13 +473,14 @@ $(function(){
         //changed name
         input.change(function(){
 
-            player.removeClass(playerName);
+            player.removeClass(sanitizedPlayerName);
 
             playerName = input.val().toUpperCase();
+            sanitizedPlayerName = sanitizePlayerName(playerName);
             button.html(playerName);
             title.html(playerName);
 
-            player.addClass(playerName);
+            player.addClass(sanitizedPlayerName);
         });
 
         //want to view role
@@ -1153,19 +1162,22 @@ $(function(){
 
         socket.on('data',function(data){
 
+            var playerName = data.name;
+            var sanitizedPlayer = sanitizePlayerName(playerName);
+
             if(data.type === "PLAYER_JOIN"){
 
-                var player = $('.player_data.' + data.name);
+                var player = $('.player_data.' + sanitizedPlayer);
 
                 //check if exists player with this name
-                if($('.player_data.' + data.name).length===0){
-                    socket.emit('data',data.name,{type: "INVALID_PLAYER"});
+                if($('.player_data.' + sanitizedPlayer).length===0){
+                    socket.emit('data',playerName,{type: "INVALID_PLAYER"});
                 }else{
-                    players[data.name] = true;
+                    players[playerName] = true;
 
-                    $('.player_data.' + data.name + ' .player_remote').fadeIn();
+                    $('.player_data.' + sanitizedPlayer + ' .player_remote').fadeIn();
 
-                    socket.emit('data',data.name,{type: "CONNECTED", selected_locations: selected_locations, custom_locations: getSelectedCustomLocations()});
+                    socket.emit('data',playerName,{type: "CONNECTED", selected_locations: selected_locations, custom_locations: getSelectedCustomLocations()});
 
                     if(game_info.state === "running"){
 
@@ -1174,7 +1186,7 @@ $(function(){
                             var time = new Date();
                         }
 
-                        socket.emit('data',data.name,{
+                        socket.emit('data',playerName,{
                             type: "GAME_START",
                             role: player.data("role"),
                             location: player.data("location"),
@@ -1191,9 +1203,9 @@ $(function(){
 
             }else if(data.type === "PLAYER_LEFT"){
 
-                delete players[data.name];
+                delete players[playerName];
 
-                $('.player_data.' + data.name + ' .player_remote').fadeOut();
+                $('.player_data.' + sanitizedPlayer + ' .player_remote').fadeOut();
 
             }
 
@@ -1251,6 +1263,7 @@ $(function(){
 
             room_id = _room;
             player_name = _player;
+            console.log(_player);
 
             game_info.room = room_id;
 
