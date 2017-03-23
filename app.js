@@ -56,7 +56,10 @@ var custom_locations = {};
 app.post('/export_custom_locations',function(req,res){
 
     var id = makeid(4);
-    var locations = req.param("custom_locations") || {};
+    var locations = {
+        custom_locations: req.param("custom_locations") || {},
+        selected_locations: req.param("selected_locations") || {}
+    };
 
     var multi = redis.multi();
     multi.set(id, JSON.stringify(locations));
@@ -77,9 +80,12 @@ app.get('/import_custom_locations',function(req,res){
 
         if(err || !value) return res.status(400).json(false);
 
-        var custom_loc = JSON.parse(value);
+        var locations = JSON.parse(value);
 
-        res.json({custom_locations: custom_loc});
+        res.json({
+            custom_locations: locations.custom_locations,
+            selected_locations: locations.selected_locations,
+        });
 
     });
 
