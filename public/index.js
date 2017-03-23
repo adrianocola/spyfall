@@ -1002,7 +1002,8 @@ $(function(){
             url: "/export_custom_locations",
             type: "POST",
             data: {
-                custom_locations: custom_locations || {}
+                custom_locations: custom_locations || {},
+                selected_locations: selected_locations || {},
             },
             success: function(data){
 
@@ -1042,10 +1043,12 @@ $(function(){
                 ladda.ladda( 'stop' );
 
                 custom_locations = _.extend(custom_locations, data.custom_locations || {});
+                selected_locations = data.selected_locations || selected_locations || {};
 
                 store.set('custom_locations', custom_locations);
 
                 configureCustomLocations();
+                updateLocations();
 
                 $("#locations_import_button").html(tt('interface.done'));
 
