@@ -1,0 +1,3 @@
+files:
+  - source: /public/source.json
+    translation: /public/i18n/%two_letters_code%.json
