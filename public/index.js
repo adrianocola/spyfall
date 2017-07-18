@@ -141,7 +141,7 @@ $(function(){
                 $("#container").fadeIn();
             }
         }).fail(function(){
-            changeLanguage('en');
+            changeLanguage("en-US");
         });
     }
 
@@ -1433,10 +1433,10 @@ $(function(){
     endGame();
 
     //load the english language
-    $.getJSON('i18n/en.json',function(data){
+    $.getJSON('i18n/en-US.json',function(data){
         i18n_en = data;
         //load user language
-        changeLanguage($.cookie("locale") || "en");
+        changeLanguage($.cookie("locale") || "en-US");
     });
 
     $(document).foundation();
