@@ -52,7 +52,6 @@ $(function(){
         "amusement_park":2,
         "art_museum":2,
         "candy_factory":2,
-        "carnival":2,
         "cat_show":2,
         "cemetery":2,
         "coal_mine":2,
@@ -72,7 +71,6 @@ $(function(){
         "stadium":2,
         "subway":2,
         "the_un":2,
-        "theater":2,
         "vineyard":2,
         "wedding":2,
         "zoo":2
