@@ -52,7 +52,6 @@ $(function(){
         "amusement_park":2,
         "art_museum":2,
         "candy_factory":2,
-        "carnival":2,
         "cat_show":2,
         "cemetery":2,
         "coal_mine":2,
@@ -72,7 +71,6 @@ $(function(){
         "stadium":2,
         "subway":2,
         "the_un":2,
-        "theater":2,
         "vineyard":2,
         "wedding":2,
         "zoo":2
@@ -141,7 +139,7 @@ $(function(){
                 $("#container").fadeIn();
             }
         }).fail(function(){
-            changeLanguage('en');
+            changeLanguage("en-US");
         });
     }
 
@@ -1433,10 +1431,10 @@ $(function(){
     endGame();
 
     //load the english language
-    $.getJSON('i18n/en.json',function(data){
+    $.getJSON('i18n/en-US.json',function(data){
         i18n_en = data;
         //load user language
-        changeLanguage($.cookie("locale") || "en");
+        changeLanguage($.cookie("locale") || "en-US");
     });
 
     $(document).foundation();
