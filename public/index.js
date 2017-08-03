@@ -684,7 +684,7 @@ $(function(){
 		// Clear out the role tracking if we inserted all possible roles for the location.
 		if (rolesUsed.length == roles.length){
 			// Pick your poison...
-			//rolesUsed.length = 0;
+			//rolesUsed.length = 0;			
 			rolesUsed.splice(0, rolesUsed.length);
 		}		
 		
@@ -696,6 +696,9 @@ $(function(){
 		do{
 			rolePos = _.random(0, roles.length-1);
 		}while(rolesUsed.includes(rolePos));
+		
+		// Make sure we keep track of the role we're about to return.
+		rolesUsed.push(rolePos);
 		
 		return rolePos;
 	}
