@@ -675,14 +675,43 @@ $(function(){
         return roles_numbers;
 
     };
+	
+	function findNextRandomRole(rolesUsed, roles){
+		// So to fix the "random" part giving us the same role over and over again
+		// Track which roles have been given out so far. When we fill every role, clear the list and start over.
+		// This ensures we always have the "most unique" roles we can get.
+
+		// Clear out the role tracking if we inserted all possible roles for the location.
+		if (rolesUsed.length == roles.length){
+			// Pick your poison...
+			//rolesUsed.length = 0;			
+			rolesUsed.splice(0, rolesUsed.length);
+		}		
+		
+		var rolePos = -1;
+		
+		// Keep getting a new role position until we get one that isn't in the list.
+		// This may not be the most efficient way to do this, but in our case, optimizing it isn't worth the trouble.
+		// The data sets are tiny, so there's no real reason to make this any faster.
+		do{
+			rolePos = _.random(0, roles.length-1);
+		}while(rolesUsed.includes(rolePos));
+		
+		// Make sure we keep track of the role we're about to return.
+		rolesUsed.push(rolePos);
+		
+		return rolePos;
+	}
 
     //populate a array with random roles
     // make sure there is always a spy (role 0)
     function getAvailableRoles(playersCount, location){
 
         var originalAllRoles = getLocationRolesAvailable(location);
-        var allRoles = originalAllRoles.slice(0);
-
+		
+		// Used to keep track of which roles have been assigned before we need to assign duplicate roles.
+		// This keeps the randomization as "unique" as possible. People will only get duplicate roles when there are enough players to cause it.
+		var rolesUsed = []; 
         var availableRoles = [];
         for(var i=0;i<playersCount;i++){
             //always have a spy
@@ -692,17 +721,10 @@ $(function(){
             }else if(i===1 && spies===2){
                 availableRoles.push(0);
             //get a random role from the roles available
-            }else{
-                if(allRoles.length===0){
-                    var rolePos = _.random(0,originalAllRoles.length-1);
-                    var role = originalAllRoles[rolePos];
-                    availableRoles.push(role);
-                }else{
-                    var rolePos = _.random(0,allRoles.length-1);
-                    var role = allRoles[rolePos];
-                    allRoles.splice(rolePos,1);
-                    availableRoles.push(role);
-                }
+            }else{				
+				var rolePos = findNextRandomRole(rolesUsed, originalAllRoles);					
+				var role = originalAllRoles[rolePos];
+				availableRoles.push(role);
             }
         }
 
