@@ -82,6 +82,9 @@ $(function(){
 
     var selected_locations = store.get('selected_locations') || _.compact(_.map(locations, function(ver,loc){ return ver===1?loc:null }));
 
+    // force the removal of deleted locations
+    selected_locations = _.without(selected_locations, 'carnival', 'theater');
+
     function getSelectedCustomLocations(){
         var selected_custom_locations = {};
 
@@ -653,12 +656,12 @@ $(function(){
             locationsDist[location] = (locationsDist[location] || 0) +1;
         }
 
+        console.log('');
         console.log(_.size(locationsDist) + " locations!");
         console.log(locationsDist);
         console.log("Std: " + Math.round(math.std(_.values(locationsDist))));
 
-        return "OK!"
-
+        return "OK!";
 
     };
 
@@ -693,16 +696,15 @@ $(function(){
                 availableRoles.push(0);
             //get a random role from the roles available
             }else{
+                // if there are no more roles, reset the roles list, to pick roles again
                 if(allRoles.length===0){
-                    var rolePos = _.random(0,originalAllRoles.length-1);
-                    var role = originalAllRoles[rolePos];
-                    availableRoles.push(role);
-                }else{
-                    var rolePos = _.random(0,allRoles.length-1);
-                    var role = allRoles[rolePos];
-                    allRoles.splice(rolePos,1);
-                    availableRoles.push(role);
+                    allRoles = originalAllRoles.slice(0);
                 }
+
+                var rolePos = _.random(0,allRoles.length-1);
+                var role = allRoles[rolePos];
+                allRoles.splice(rolePos,1);
+                availableRoles.push(role);
             }
         }
 
