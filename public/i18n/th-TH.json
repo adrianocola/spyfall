@@ -1,6 +1,6 @@
 {
-  "spy":"Spy",
-  "interface.spy":"Spy",
+  "spy":"สายลับ",
+  "interface.spy":"สายลับ",
   "interface.close":"Close",
   "interface.location":"Location",
   "interface.game_locations":"Game Locations",
