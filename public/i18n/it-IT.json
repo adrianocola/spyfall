@@ -2,7 +2,7 @@
   "spy":"Spia",
   "interface.spy":"Spia",
   "interface.close":"Chiudi",
-  "interface.location":"Luogo",
+  "interface.location":"Scenario",
   "interface.game_locations":"Luoghi del Gioco",
   "interface.game_locations_custom":"Luoghi Personalizzati",
   "interface.role":"Ruolo",
