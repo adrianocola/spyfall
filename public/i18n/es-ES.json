@@ -18,7 +18,7 @@
   "interface.create_room":"Create Room",
   "interface.join_room":"Join Room",
   "interface.room":"Room",
-  "interface.player":"Player",
+  "interface.player":"Jugador",
   "interface.room_help":"Ask your players to join with the same player name you defined above!",
   "interface.join":"Join",
   "interface.game_connected":"Connected to Game",
