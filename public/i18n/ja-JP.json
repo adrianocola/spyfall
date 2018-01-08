@@ -10,7 +10,7 @@
   "interface.rem_player": "Remove Player",
   "interface.start_game": "ゲームを始める",
   "interface.end_game": "ゲームを終了する",
-  "interface.is_the_spy": "is the spy!",
+  "interface.is_the_spy": "間諜ですが",
   "interface.game_information": "Game Information",
   "interface.timer": "Timer",
   "interface.start_timer": "Start Timer",
