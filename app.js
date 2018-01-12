@@ -9,7 +9,7 @@ var server = require('http').Server(app);
 var _ = require('lodash');
 var async = require('async');
 var request = require('request');
-var secret = require('secret.json');
+var secret = require('./secret.json');
 var redis = require("redis").createClient();
 
 var languagesMap = {
