@@ -8,7 +8,47 @@ var app = express();
 var server = require('http').Server(app);
 var _ = require('lodash');
 var async = require('async');
+var request = require('request');
+var secret = require('secret.json');
 var redis = require("redis").createClient();
+
+var languagesMap = {
+    'af': 'af-ZA',
+    'ar': 'ar-SA',
+    'ca': 'ca-ES',
+    'zh-CN': 'zh-CN',
+    'zh-TW': 'zh-TW',
+    'cs': 'cs-CZ',
+    'da': 'da-DK',
+    'nl': 'nl-NL',
+    'en': 'en-US',
+    'en-GB': 'en-GB',
+    'fi': 'fi-FI',
+    'fr': 'fr-FR',
+    'de': 'de-DE',
+    'el': 'el-GR',
+    'he': 'he-IL',
+    'hu': 'hu-HU',
+    'id': 'id-ID',
+    'it': 'it-IT',
+    'ja': 'ja-JP',
+    'ko': 'ko-KR',
+    'no': 'no-NO',
+    'fa': 'fa-IR',
+    'pl': 'pl-PL',
+    'pt-PT': 'pt-PT',
+    'pt-BR': 'pt-BR',
+    'ro': 'ro-RO',
+    'ru': 'ru-RU',
+    'sr': 'sr-SP',
+    'sr-CS': 'sr-CS',
+    'es-ES': 'es-ES',
+    'sv-SE': 'sv-SE',
+    'th': 'th-TH',
+    'tr': 'tr-TR',
+    'uk': 'uk-UA',
+    'vi': 'vi-VN',
+};
 
 redis.on("error", function (err) {
     console.log("Redis Error " + err);
@@ -36,27 +76,16 @@ function genRoom(){
 }
 
 function updateLocalizationStatus(){
-    fs.readFile('./public/source.json', {encoding: 'utf8'}, function(err, sourceData){
-        const source = JSON.parse(sourceData);
-        const status = {};
-        const total = _.size(source);
+    const status = {};
 
-        fs.readdir('./public/i18n', function(err, translations){
-            async.each(translations, (name, cb) => {
-                fs.readFile('./public/i18n/' + name, {encoding: 'utf8'}, function(err, translationData){
-                    const translation = JSON.parse(translationData);
-                    let count = 0;
-                    _.each(source, (value, key) => {
-                        if(translation[key] !== value) count++;
-                    });
-                    status[name.replace('.json', '')] = Math.round(100 * count/total);
-                    cb();
-                });
-            }, function(){
-                fs.writeFileSync('./public/status.json', JSON.stringify(status, null, 2));
-            });
+    request('https://api.crowdin.com/api/project/adrianocola-spyfall/status?key=' + secret.CROWDIN_API + '&json\n', function (error, response, body) {
+        if(error) return console.log(error);
+        const translations = JSON.parse(body);
+        _.each(translations, function(translation) {
+            const code = languagesMap[translation.code];
+            status[code] = Math.round(100 * translation.approved / translation.phrases);
         });
-
+        fs.writeFileSync('./public/status.json', JSON.stringify(status, null, 2));
     });
 }
 setInterval(updateLocalizationStatus, 1000 * 60 * 60 * 6); //every 6 hours
