@@ -2,10 +2,12 @@
 //**********
 // APP
 //**********
+var fs = require('fs');
 var express = require('express');
 var app = express();
 var server = require('http').Server(app);
 var _ = require('lodash');
+var async = require('async');
 var redis = require("redis").createClient();
 
 redis.on("error", function (err) {
@@ -32,6 +34,33 @@ function genRoom(){
         if(!rooms[room]) return room;
     }
 }
+
+function updateLocalizationStatus(){
+    fs.readFile('./public/source.json', {encoding: 'utf8'}, function(err, sourceData){
+        const source = JSON.parse(sourceData);
+        const status = {};
+        const total = _.size(source);
+
+        fs.readdir('./public/i18n', function(err, translations){
+            async.each(translations, (name, cb) => {
+                fs.readFile('./public/i18n/' + name, {encoding: 'utf8'}, function(err, translationData){
+                    const translation = JSON.parse(translationData);
+                    let count = 0;
+                    _.each(source, (value, key) => {
+                        if(translation[key] !== value) count++;
+                    });
+                    status[name.replace('.json', '')] = Math.round(100 * count/total);
+                    cb();
+                });
+            }, function(){
+                fs.writeFileSync('./public/status.json', JSON.stringify(status, null, 2));
+            });
+        });
+
+    });
+}
+setInterval(updateLocalizationStatus, 1000 * 60 * 60 * 6); //every 6 hours
+updateLocalizationStatus();
 
 //**********
 //  EXPRESS

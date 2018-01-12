@@ -1439,6 +1439,13 @@ $(function(){
         changeLanguage($.cookie("locale") || "en-US");
     });
 
+    //load localization status
+    $.getJSON('status.json',function(data){
+        $('#languages option').each(function(){
+            $(this).html($(this).html() + ' - ' + data[this.value] + '%');
+        });
+    });
+
     $(document).foundation();
 
 });
