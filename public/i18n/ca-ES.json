@@ -525,8 +525,8 @@
   "location.zoo.role4": "Nen",
   "location.zoo.role5": "Veterinari",
   "location.zoo.role6": "Turista",
-  "location.zoo.role7": "Food Vendor",
-  "location.zoo.role8": "Cashier",
-  "location.zoo.role9": "Zookeeper",
-  "location.zoo.role10": "Researcher"
+  "location.zoo.role7": "Venedor de menjar",
+  "location.zoo.role8": "Taquiller",
+  "location.zoo.role9": "Guarda del zoològic",
+  "location.zoo.role10": "Investigador"
 }
