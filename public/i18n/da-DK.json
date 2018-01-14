@@ -1,7 +1,7 @@
 {
   "spy": "Spion",
   "interface.spy": "Spion",
-  "interface.close": "Close",
+  "interface.close": "Luk",
   "interface.location": "Lokation",
   "interface.game_locations": "Spil lokationer",
   "interface.game_locations_custom": "Brugerdefinerede Lokationer",
