@@ -33,6 +33,8 @@
   "interface.filter": "Filter",
   "interface.export_locations": "Export Locaties",
   "interface.import_locations": "Import Locaties",
+  "interface.download_locations": "Download Locations",
+  "interface.upload_locations": "Upload Locations",
   "interface.export_id": "Export Id",
   "interface.import": "Import",
   "interface.export_help": "Gebruik de ID om de custom locaties in een ander device te laden",
