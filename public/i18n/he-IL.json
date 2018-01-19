@@ -33,6 +33,8 @@
   "interface.filter": "מסנן",
   "interface.export_locations": "ייצוא מקומות",
   "interface.import_locations": "ייבוא מקומות",
+  "interface.download_locations": "Download Locations",
+  "interface.upload_locations": "Upload Locations",
   "interface.export_id": "ייצוא Id",
   "interface.import": "ייבוא",
   "interface.export_help": "השתמש\/י ב-ID שנוצר בכדי לייבא את המקומות הנוספים למכשיר נוסף",
