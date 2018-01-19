@@ -33,6 +33,8 @@
   "interface.filter": "Filtrar",
   "interface.export_locations": "Exportar llocs",
   "interface.import_locations": "Importar llocs",
+  "interface.download_locations": "Download Locations",
+  "interface.upload_locations": "Upload Locations",
   "interface.export_id": "Exportar Id",
   "interface.import": "Importar",
   "interface.export_help": "Utilitza la ID generada per importar els teus llocs a mida a un altre dispositiu",

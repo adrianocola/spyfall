@@ -33,6 +33,8 @@
   "interface.filter":"Filtrele",
   "interface.export_locations":"Konumları Dışarı Aktar",
   "interface.import_locations":"Konumları İçeri Aktar",
+  "interface.download_locations": "Download Locations",
+  "interface.upload_locations": "Upload Locations",
   "interface.export_id":"Dışarı Aktarım Id",
   "interface.import":"İçeri Aktarım",
   "interface.export_help":"Yarattığınız özel konumlarınızı başka cihazlara aktarmak için üretilen ID'yi kullanın",

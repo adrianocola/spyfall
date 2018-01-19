@@ -33,6 +33,8 @@
   "interface.filter": "筛选",
   "interface.export_locations": "汇出地点",
   "interface.import_locations": "汇入地点",
+  "interface.download_locations": "Download Locations",
+  "interface.upload_locations": "Upload Locations",
   "interface.export_id": "汇出地点码",
   "interface.import": "汇入",
   "interface.export_help": "利用产生的地点码来汇入你的自建地点至别的装置",

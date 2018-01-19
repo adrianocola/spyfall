@@ -33,6 +33,8 @@
   "interface.filter": "Филтер",
   "interface.export_locations": "Извези локације",
   "interface.import_locations": "Увези локације",
+  "interface.download_locations": "Download Locations",
+  "interface.upload_locations": "Upload Locations",
   "interface.export_id": "Извези ID",
   "interface.import": "Увези",
   "interface.export_help": "Користи генерисан ID да увезеш своју локацију по жељи на други уређај",

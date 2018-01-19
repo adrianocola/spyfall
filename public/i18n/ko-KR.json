@@ -33,6 +33,8 @@
   "interface.filter":"필터",
   "interface.export_locations":"장소목록 내보내기",
   "interface.import_locations":"장소목록 가져오기",
+  "interface.download_locations": "Download Locations",
+  "interface.upload_locations": "Upload Locations",
   "interface.export_id":"내보내기 ID",
   "interface.import":"가져오기",
   "interface.export_help":"생성된 내보내기 ID를 사용하여 다른 기계에서 장소목록을 가져오시면 됩니다.",

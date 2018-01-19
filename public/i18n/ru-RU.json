@@ -33,6 +33,8 @@
   "interface.filter": "Фильтр по имени",
   "interface.export_locations": "Экспортировать локации",
   "interface.import_locations": "Импортировать локации",
+  "interface.download_locations": "Download Locations",
+  "interface.upload_locations": "Upload Locations",
   "interface.export_id": "Код экспортирования",
   "interface.import": "Импортировать",
   "interface.export_help": "Вы можете импортировать ваши локации на другом устройстве с помощью этого кода",

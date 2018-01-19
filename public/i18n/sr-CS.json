@@ -33,6 +33,8 @@
   "interface.filter":"Filtriraj",
   "interface.export_locations":"Izvezi lokacije",
   "interface.import_locations":"Uvezi lokacije",
+  "interface.download_locations": "Download Locations",
+  "interface.upload_locations": "Upload Locations",
   "interface.export_id":"Izvezi Id",
   "interface.import":"Uvoz",
   "interface.export_help":"Iskoristi generisani ID da bi uvezao svoje lokacije na drugi uređaj",

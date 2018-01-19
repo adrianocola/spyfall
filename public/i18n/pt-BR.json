@@ -33,6 +33,8 @@
   "interface.filter":"Filtro",
   "interface.export_locations":"Exportar Locais",
   "interface.import_locations":"Importar Locais",
+  "interface.download_locations": "Baixar Locais",
+  "interface.upload_locations": "Carregar Locais",
   "interface.export_id":"Id de Exportação",
   "interface.import":"Importar",
   "interface.export_help":"Use o ID gerado para importar suas localidades personalizadas em outro dispositivo",
