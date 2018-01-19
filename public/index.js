@@ -1027,6 +1027,54 @@ $(function(){
 
     });
 
+    $("#locations_download").click(function(){
+
+        var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({custom_locations: custom_locations || {}, selected_locations: selected_locations || {}}, null, 2));
+        var downloadAnchorNode = document.createElement('a');
+        downloadAnchorNode.setAttribute("href",     dataStr);
+        downloadAnchorNode.setAttribute("download", "spyfall.json");
+        downloadAnchorNode.click();
+        downloadAnchorNode.remove();
+
+    });
+
+    $("#locations_upload").click(function(e){
+
+        $("#upload_error").hide();
+        e.preventDefault();
+        $("#upload_input").trigger('click');
+
+    });
+
+    $("#upload_input").change(function() {
+        var input = this;
+        var reader = new FileReader();
+
+        var onError = function(err){
+            $("#upload_error").html();
+            $("#upload_error").show();
+        };
+
+        reader.onload = function (e) {
+            try{
+                var data = JSON.parse(e.target.result);
+                if(!data || !data.custom_locations || !data.selected_locations){
+                    return onError();
+                }
+                custom_locations = data.custom_locations;
+                selected_locations = data.selected_locations;
+
+                store.set('custom_locations', custom_locations);
+
+                configureCustomLocations();
+                updateLocations();
+            }catch(e){
+                onError();
+            }
+        };
+        reader.readAsText(input.files[0]);
+    });
+
     $("#locations_import_button").click(function(){
 
         var ladda = $("#locations_import_button").ladda();
