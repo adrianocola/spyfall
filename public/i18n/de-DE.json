@@ -33,6 +33,8 @@
   "interface.filter": "Filter",
   "interface.export_locations": "Orte exportieren",
   "interface.import_locations": "Orte importieren",
+  "interface.download_locations": "Download Locations",
+  "interface.upload_locations": "Upload Locations",
   "interface.export_id": "ID exportieren",
   "interface.import": "Importieren",
   "interface.export_help": "Nutze die generierte ID, um deine benutzerdefinierten Orte auf einem anderen Gerät zu importieren",
