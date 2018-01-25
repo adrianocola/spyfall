@@ -272,3 +272,12 @@ input[type="checkbox"].location_config_check{
 .button.secondary.hollow.disabled{
   opacity: 0.7 !important;
 }
+
+#upload_error{
+  color: #cf2a0e;
+  display: none;
+}
+
+#upload_input{
+  display: none;
+}

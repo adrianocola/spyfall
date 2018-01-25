@@ -82,6 +82,9 @@ $(function(){
 
     var selected_locations = store.get('selected_locations') || _.compact(_.map(locations, function(ver,loc){ return ver===1?loc:null }));
 
+    // force the removal of deleted locations
+    selected_locations = _.without(selected_locations, 'carnival', 'theater');
+
     function getSelectedCustomLocations(){
         var selected_custom_locations = {};
 
@@ -653,12 +656,12 @@ $(function(){
             locationsDist[location] = (locationsDist[location] || 0) +1;
         }
 
+        console.log('');
         console.log(_.size(locationsDist) + " locations!");
         console.log(locationsDist);
         console.log("Std: " + Math.round(math.std(_.values(locationsDist))));
 
-        return "OK!"
-
+        return "OK!";
 
     };
 
@@ -693,16 +696,15 @@ $(function(){
                 availableRoles.push(0);
             //get a random role from the roles available
             }else{
+                // if there are no more roles, reset the roles list, to pick roles again
                 if(allRoles.length===0){
-                    var rolePos = _.random(0,originalAllRoles.length-1);
-                    var role = originalAllRoles[rolePos];
-                    availableRoles.push(role);
-                }else{
-                    var rolePos = _.random(0,allRoles.length-1);
-                    var role = allRoles[rolePos];
-                    allRoles.splice(rolePos,1);
-                    availableRoles.push(role);
+                    allRoles = originalAllRoles.slice(0);
                 }
+
+                var rolePos = _.random(0,allRoles.length-1);
+                var role = allRoles[rolePos];
+                allRoles.splice(rolePos,1);
+                availableRoles.push(role);
             }
         }
 
@@ -1023,6 +1025,54 @@ $(function(){
             $("#locations_importing").fadeIn();
         });
 
+    });
+
+    $("#locations_download").click(function(){
+
+        var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({custom_locations: custom_locations || {}, selected_locations: selected_locations || {}}, null, 2));
+        var downloadAnchorNode = document.createElement('a');
+        downloadAnchorNode.setAttribute("href",     dataStr);
+        downloadAnchorNode.setAttribute("download", "spyfall.json");
+        downloadAnchorNode.click();
+        downloadAnchorNode.remove();
+
+    });
+
+    $("#locations_upload").click(function(e){
+
+        $("#upload_error").hide();
+        e.preventDefault();
+        $("#upload_input").trigger('click');
+
+    });
+
+    $("#upload_input").change(function() {
+        var input = this;
+        var reader = new FileReader();
+
+        var onError = function(err){
+            $("#upload_error").html();
+            $("#upload_error").show();
+        };
+
+        reader.onload = function (e) {
+            try{
+                var data = JSON.parse(e.target.result);
+                if(!data || !data.custom_locations || !data.selected_locations){
+                    return onError();
+                }
+                custom_locations = data.custom_locations;
+                selected_locations = data.selected_locations;
+
+                store.set('custom_locations', custom_locations);
+
+                configureCustomLocations();
+                updateLocations();
+            }catch(e){
+                onError();
+            }
+        };
+        reader.readAsText(input.files[0]);
     });
 
     $("#locations_import_button").click(function(){
@@ -1435,6 +1485,13 @@ $(function(){
         i18n_en = data;
         //load user language
         changeLanguage($.cookie("locale") || "en-US");
+    });
+
+    //load localization status
+    $.getJSON('status.json',function(data){
+        $('#languages option').each(function(){
+            $(this).html($(this).html() + ' - ' + data[this.value] + '%');
+        });
     });
 
     $(document).foundation();
