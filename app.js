@@ -15,6 +15,7 @@ var redis = require("redis").createClient();
 var languagesMap = {
     'af': 'af-ZA',
     'ar': 'ar-SA',
+    'bg': 'bg-BG',
     'ca': 'ca-ES',
     'zh-CN': 'zh-CN',
     'zh-TW': 'zh-TW',
