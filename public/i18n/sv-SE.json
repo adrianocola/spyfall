@@ -3,7 +3,7 @@
   "interface.spy": "Spion",
   "interface.close": "Stäng",
   "interface.location": "Plats",
-  "interface.game_locations": "Spelets Plats",
+  "interface.game_locations": "Spelplatser",
   "interface.game_locations_custom": "Anpassade platser",
   "interface.role": "Roll",
   "interface.add_player": "Lägg till spelare",
