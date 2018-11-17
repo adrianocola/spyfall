@@ -20,7 +20,7 @@
   "interface.room": "اتاق",
   "interface.player": "بازیکن",
   "interface.room_help": "به دوستات بگو وارد اتاقی با همون اسم بشن!",
-  "interface.join": "وارد شدن",
+  "interface.join": "ورود",
   "interface.game_connected": "وارد اتاق شوید",
   "interface.game_stopped": "بازی متوقف شد",
   "interface.show_my_role": "نشان دادن نقش شما",
