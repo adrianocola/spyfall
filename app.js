@@ -34,6 +34,7 @@ var languagesMap = {
     'it': 'it-IT',
     'ja': 'ja-JP',
     'ko': 'ko-KR',
+    'lv': 'lv-LV',
     'no': 'no-NO',
     'fa': 'fa-IR',
     'pl': 'pl-PL',
