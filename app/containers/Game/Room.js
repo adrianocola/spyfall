@@ -1,70 +1,62 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { css } from 'emotion';
-import { observer, inject } from 'mobx-react';
 import { Row, Col, Button } from 'reactstrap';
-import { firestore, firestoreServerTimestamp } from 'services/firebase';
+import { connect } from 'react-redux';
 import {SHADES} from 'styles/consts';
 import { Link } from 'react-router-dom';
+import { setRoomConnectedAction } from 'actions/session';
+import ButtonWithLoading from 'components/ButtonWithLoading/ButtonWithLoading';
 import Localized from 'components/Localized/Localized';
+import { resetGame } from 'services/game';
 
-@inject('rootStore', 'configStore', 'gameStore')
-@observer
-export default class Game extends React.Component{
-  onCreateRoom = async () => {
-    const {
-      rootStore: {roomId, userUID},
-      gameStore: { time, spies, setRoom },
-      configStore: { gameLocations },
-    } = this.props;
-    await firestore.collection('rooms').doc(roomId).set({
-      owner: userUID,
-      createdAt: firestoreServerTimestamp,
-      updatedAt: firestoreServerTimestamp,
-      time,
-      spies,
-      locations: gameLocations,
-      state: 'new',
-    });
-    setRoom(roomId);
+export const Room = (props) => {
+  const { roomId, roomConnected, setRoomConnected } = props;
+
+  const [loading, setLoading] = useState(false);
+
+  const onCreateRoom = async () => {
+    setLoading(true);
+    setRoomConnected(true);
+
+    await resetGame(null);
+
+    setLoading(false);
   };
 
-  render() {
-    const { rootStore: { roomId }, gameStore: { room } } = this.props;
-    if(room){
-      return (
-        <Row className={styles.roomControllerContainer}>
-          <Col xs={12} sm={5}>
-            <Button outline color="secondary" block disabled className={styles.roomId}>
-              <Localized name="interface.room" />
-              {': '}
-              {roomId}
-            </Button>
-          </Col>
-          <Col xs={12} sm={7} className={styles.roomHelp}>
-            <Localized name="interface.room_help" />
-          </Col>
-        </Row>
-      );
-    }
-
+  if(roomConnected){
     return (
       <Row className={styles.roomControllerContainer}>
-        <Col>
-          <Button color="primary" block onClick={this.onCreateRoom}>
-            <Localized name="interface.create_room" />
+        <Col xs={12} sm={5}>
+          <Button outline color="secondary" block disabled className={styles.roomId}>
+            <Localized name="interface.room" />
+            {': '}
+            {roomId}
           </Button>
         </Col>
-        <Col>
-          <Link to="/join">
-            <Button color="primary" block onClick={this.onJoinRoom}>
-              <Localized name="interface.join_room" />
-            </Button>
-          </Link>
+        <Col xs={12} sm={7} className={styles.roomHelp}>
+          <Localized name="interface.room_help" />
         </Col>
       </Row>
     );
   }
-}
+
+  return (
+    <Row className={styles.roomControllerContainer}>
+      <Col>
+        <ButtonWithLoading color="primary" block loading={loading} onClick={onCreateRoom}>
+          <Localized name="interface.create_room" />
+        </ButtonWithLoading>
+      </Col>
+      <Col>
+        <Link to="/join">
+          <Button color="primary" block>
+            <Localized name="interface.join_room" />
+          </Button>
+        </Link>
+      </Col>
+    </Row>
+  );
+};
 
 const styles = {
   roomControllerContainer: css({
@@ -83,3 +75,15 @@ const styles = {
     textAlign: 'center',
   }),
 };
+
+const mapStateToProps = (state) => ({
+  roomId: state.room.id,
+  roomConnected: state.session.roomConnected,
+  userId: state.root.userId,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  setRoomConnected: (connected) => dispatch(setRoomConnectedAction(connected)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Room);

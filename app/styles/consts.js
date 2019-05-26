@@ -2,14 +2,14 @@ export const COLORS = {
   red: '#FF4752',
   yellow: '#FFCF85',
   blue: '#479EFF',
-  green: '#6BE993',
+  green: '#25c049',
 };
 
 export const DARK_COLORS = {
   red: '#D82832',
   yellow: '#D2A560',
   blue: '#3E76B4',
-  green: '#69B882',
+  green: '#218838',
 };
 
 export const SHADES = {

@@ -1,5 +1,4 @@
 import firebase from 'firebase/app';
-import { initFirestorter } from 'firestorter';
 import 'firebase/database';
 import 'firebase/firestore';
 import 'firebase/storage';
@@ -17,8 +16,6 @@ const config = {
 };
 firebase.initializeApp(config);
 
-initFirestorter({firebase});
-
 export const database = firebase.database();
 export const firestore = firebase.firestore();
 firestore.settings({timestampsInSnapshots: true});
@@ -27,3 +24,4 @@ export const auth = firebase.auth();
 export const functions = firebase.functions();
 
 export const firestoreServerTimestamp = firebase.firestore.FieldValue.serverTimestamp();
+export const databaseServerTimestamp = firebase.database.ServerValue.TIMESTAMP;

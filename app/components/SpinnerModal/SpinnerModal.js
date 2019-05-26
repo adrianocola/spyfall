@@ -18,7 +18,7 @@ const modalStyle = css({
   background: 'rgba(0, 0, 0, 0.6)',
 });
 
-const SpinnerModal = (props) => (
+const SpinnerModal = () => (
   <Animated
     animationIn="fadeIn"
     animationOut="fadeOut"

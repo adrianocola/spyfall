@@ -1,13 +1,14 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
-import DevTools from 'mobx-react-devtools';
+import { connect } from 'react-redux';
 import {Switch, Route, Link} from 'react-router-dom';
 import {css} from 'emotion';
+import i18n from 'i18n';
 import {MEDIA, SHADES} from 'styles/consts';
 import Loadable from 'react-loadable';
 import { Container, Row, Col, Input } from 'reactstrap';
-import {inject, observer} from 'mobx-react';
 import { auth } from 'services/firebase';
+import { setUserIdAction, setLanguageAction } from 'actions/root';
 
 import SpinnerModal from 'components/SpinnerModal/SpinnerModal';
 import SpyIcon from 'components/SpyIcon/SpyIcon';
@@ -16,21 +17,24 @@ const LoadableSettings = Loadable({loader: () => import('../Settings/Settings'),
 const LoadableGame = Loadable({loader: () => import('../Game/Game'), loading: SpinnerModal});
 const LoadableJoinRoom = Loadable({loader: () => import('../JoinRoom/JoinRoom'), loading: SpinnerModal});
 
-@inject('rootStore')
-@observer
-export default class App extends React.Component{
+export class App extends React.Component{
   componentDidMount() {
+    const { setUserId } = this.props;
     auth.signInAnonymously().then((authUser) => {
-      this.props.rootStore.setUserUID(authUser.user.uid);
+      setUserId(authUser.user.uid);
     });
   }
 
-  render() {
-    const { rootStore: {language, setLanguage} } = this.props;
+  setLanguage = (language) => {
+    const { setLanguage } = this.props;
+    i18n.changeLanguage(language);
+    setLanguage(language);
+  };
 
+  render() {
+    const { language } = this.props;
     return (
       <Container className={styles.container}>
-        <DevTools />
         <Helmet
           defaultTitle="Spyfall"
         >
@@ -46,7 +50,7 @@ export default class App extends React.Component{
                 </Link>
               </Col>
               <Col xs="12" sm="8" className={`${styles.languageSelector} text-center`}>
-                <Input type="select" name="languages" id="languages" value={language} onChange={(evt) => setLanguage(evt.target.value)}>
+                <Input type="select" name="languages" id="languages" value={language} onChange={(evt) => this.setLanguage(evt.target.value)}>
                   <option value="af-ZA">Afrikaans</option>
                   <option value="ar-SA">العربية</option>
                   <option value="bg-BG">Български</option>
@@ -148,3 +152,14 @@ const styles = {
     color: SHADES.light,
   }),
 };
+
+const mapStateToProps = (state) => ({
+  language: state.root.language,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  setUserId: (userId) => dispatch(setUserIdAction(userId)),
+  setLanguage: (language) => dispatch(setLanguageAction(language)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

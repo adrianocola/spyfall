@@ -1,32 +1,28 @@
 import React from 'react';
-import { observer } from 'mobx-react';
 import { Container, Row, Col } from 'reactstrap';
 import ReactHtmlParser from 'react-html-parser';
 import {css} from 'emotion';
-import { SHADES } from 'styles/consts';
+import {DARK_COLORS, SHADES} from 'styles/consts';
 import { withNamespaces } from 'react-i18next';
 import { DEFAULT_LOCATIONS } from 'consts';
 
-@observer
-export class Locations extends React.Component{
-  render() {
-    const { t, locations = {} } = this.props;
-    return (
-      <Container>
-        <Row>
-          {Object.entries(locations).map(([locationId, location]) =>
-            <Col xs={6} key={locationId}>
-              <div className={styles.location}>
-                {ReactHtmlParser(DEFAULT_LOCATIONS[locationId] ? t(`location.${locationId}`) : location.name)}
-              </div>
-            </Col>
-          )}
-        </Row>
+export const Locations = (props) => {
+  const { t, location, locations = {}, prevLocation } = props;
+  return (
+    <Container>
+      <Row>
+        {Object.entries(locations).map(([locationId, locationObj]) =>
+          <Col xs={6} key={locationId}>
+            <div className={`${styles.location} ${prevLocation === locationId ? styles.prevLocation : ''} ${location === locationId ? styles.highlight : ''}`}>
+              {ReactHtmlParser(DEFAULT_LOCATIONS[locationId] ? t(`location.${locationId}`) : locationObj.name)}
+            </div>
+          </Col>
+        )}
+      </Row>
 
-      </Container>
-    );
-  }
-}
+    </Container>
+  );
+};
 
 const styles = {
   location: css({
@@ -34,6 +30,13 @@ const styles = {
     textAlign: 'center',
     paddingLeft: 10,
     paddingRight: 10,
+  }),
+  prevLocation: css({
+    textDecoration: 'line-through',
+  }),
+  highlight: css({
+    fontWeight: 'bold',
+    color: DARK_COLORS.red,
   }),
 };
 

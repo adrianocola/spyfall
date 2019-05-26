@@ -3,20 +3,18 @@ import { css } from 'emotion';
 import { Row, Col } from 'reactstrap';
 import {SHADES} from 'styles/consts';
 
-export default class SelectAll extends React.Component{
-  render() {
-    const { checked, onClick } = this.props;
-    return (
-      <Row className="justify-content-center align-items-center">
-        <Col xs="auto" className={styles.checksContainer} onClick={onClick}>
-          <input type="checkbox" checked={checked} disabled className={styles.checkbox} />
-          <input type="checkbox" checked={checked} disabled className={styles.checkbox} />
-          <input type="checkbox" checked={checked} disabled className={styles.checkbox} />
-        </Col>
-      </Row>
-    );
-  }
-}
+export default (props) => {
+  const { checked, onClick } = props;
+  return (
+    <Row className="justify-content-center align-items-center">
+      <Col xs="auto" className={styles.checksContainer} onClick={onClick}>
+        <input type="checkbox" checked={checked} disabled className={styles.checkbox} />
+        <input type="checkbox" checked={checked} disabled className={styles.checkbox} />
+        <input type="checkbox" checked={checked} disabled className={styles.checkbox} />
+      </Col>
+    </Row>
+  );
+};
 
 const styles = {
   checksContainer: css({

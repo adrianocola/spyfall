@@ -1,31 +1,51 @@
 import React from 'react';
-import { observer } from 'mobx-react';
-import { SHADES } from 'styles/consts';
-import { Modal, ModalHeader, ModalBody } from 'reactstrap';
+import { Row, Col, Modal, ModalHeader, ModalBody } from 'reactstrap';
 import {css} from 'emotion';
+import SpyIcon from 'components/SpyIcon/SpyIcon';
+import Localized from 'components/Localized/Localized';
+import LocalizedLocation from 'components/LocalizedLocation/LocalizedLocation';
+import LocalizedRole from 'components/LocalizedRole/LocalizedRole';
+import { SPY_ROLE } from 'consts';
 
-@observer
-export default class RolePopup extends React.Component{
-  render() {
-    const { isOpen, toggle, player, role } = this.props;
-    return (
-      <Modal centered isOpen={isOpen} toggle={toggle}>
-        <ModalHeader tag="h3" toggle={toggle} className={`${styles.header} justify-content-center`} close={<button type="button" className="close" onClick={toggle}>&times;</button>}>
-          {player}
-        </ModalHeader>
-        <ModalBody className={styles.body}>
-          {role}
-        </ModalBody>
-      </Modal>
-    );
-  }
-}
+export default (props) => {
+  const { isOpen, toggle, player, location, role, customLocations } = props;
+  return (
+    <Modal centered isOpen={isOpen} toggle={toggle}>
+      <ModalHeader tag="h3" toggle={toggle} className={`${styles.header} justify-content-center`} close={<button type="button" className="close" onClick={toggle}>&times;</button>}>
+        {player}
+      </ModalHeader>
+      <ModalBody className={styles.body}>
+        <Row className={styles.roleLine}>
+          <Col className="text-center">
+            <span className={styles.label}><Localized name="interface.location" />: </span>
+            <span className={styles.value}>
+              {role === SPY_ROLE ? '???' : <LocalizedLocation location={location} customLocations={customLocations} />}
+            </span>
+          </Col>
+        </Row>
+        <Row className={styles.roleLine}>
+          <Col className="text-center">
+            <span className={styles.label}><Localized name="interface.role" />: </span>
+            <span className={styles.value}>
+              {role === SPY_ROLE ? <SpyIcon /> : <LocalizedRole role={role} location={location} customLocations={customLocations} />}
+            </span>
+          </Col>
+        </Row>
+      </ModalBody>
+    </Modal>
+  );
+};
 
 const styles = {
-  location: css({
-    borderBottom: `1px solid ${SHADES.lighter}`,
-    textAlign: 'center',
-    paddingLeft: 10,
-    paddingRight: 10,
+  roleLine: css({
+    marginTop: 10,
+    marginBottom: 10,
+  }),
+  label: css({
+    fontWeight: 'bold',
+    fontSize: '1.5rem',
+  }),
+  value: css({
+    fontSize: '1.4rem',
   }),
 };

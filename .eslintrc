@@ -10,7 +10,8 @@
   "plugins": [
     "react",
     "jsx-a11y",
-    "emotion"
+    "emotion",
+    "react-hooks"
   ],
   "parserOptions": {
     "ecmaVersion": 6,
@@ -21,6 +22,7 @@
     }
   },
   "rules": {
+    "react-hooks/rules-of-hooks": "error",
     "semi": ["error", "always", { "omitLastInOneLineBlock": true}],
     "emotion/syntax-preference": [2, "object"],
     "lines-between-class-members": "off",

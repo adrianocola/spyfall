@@ -1,136 +1,120 @@
-import React from 'react';
+import _ from 'lodash';
+import React, { useState, useEffect } from 'react';
 import { css } from 'emotion';
-import { observer, inject } from 'mobx-react';
-import { observable, computed } from 'mobx';
 import { Link } from 'react-router-dom';
-import {MAX_PLAYERS, MIN_PLAYERS} from 'consts';
+import { connect } from 'react-redux';
 import { Row, Col, Button, Input } from 'reactstrap';
 import Localized from 'components/Localized/Localized';
-import LocationsPopup from 'containers/LocationsPopup/LocationsPopup';
-import {firestore, firestoreServerTimestamp} from 'services/firebase';
+import LocationsCount from 'components/LocationsCount/LocationsCount';
 import Locations from 'components/Locations/Locations';
+import { database } from 'services/firebase';
+import { addPlayerAction, remPlayerAction, updatePlayerAction, setTimeAction, setSpyCountAction } from 'actions/config';
+import gameLocationsSelector from 'selectors/gameLocations';
+import selectedLocationsCountSelector from 'selectors/selectedLocationsCount';
 
 import SpyIcon from 'components/SpyIcon/SpyIcon';
 import CogIcon from 'components/CogIcon/CogIcon';
 
+import LocationsPopup from './LocationsPopup';
+import GameManager from './GameManager';
 import Player from './Player';
+import TimerManager from './TimerManager';
+import RemotePlayer from './RemotePlayer';
 import Room from './Room';
 
-@inject('rootStore', 'configStore', 'gameStore')
-@observer
-export default class Game extends React.Component{
-  @observable showLocationsPopup = false;
+export const Game = (props) => {
+  const {
+    gameLocations,
+    roomId, roomConnected,
+    time, setTime,
+    spyCount, setSpyCount,
+    playersCount, updatePlayer,
+    state, prevLocation,
+    canAddPlayers, canRemovePlayers,
+    addPlayer, remPlayer,
+    selectedLocationsCount,
+  } = props;
 
-  @computed get canAddPlayers(){
-    const { gameStore: { playersCount } } = this.props;
-    return playersCount < MAX_PLAYERS;
-  }
-  @computed get canRemovePlayers(){
-    const { gameStore: { playersCount } } = this.props;
-    return playersCount > MIN_PLAYERS;
-  }
+  const [room, setRoom] = useState();
+  const [showLocationsPopup, setShowLocationsPopup] = useState(false);
 
-  onStartGame = async () => {
-    const {
-      rootStore: { roomId },
-      gameStore: { room, players, time, spies, setState, setPlayersRoles },
-      configStore: { gameLocations },
-    } = this.props;
-    const state = 'started';
-    const playersRoles = players.reduce((obj, playerName) => {obj[playerName] = 'spy'; return obj}, {});
-
-    setState(state);
-    setPlayersRoles(playersRoles);
-
-    if(room){
-      await firestore.collection('rooms').doc(roomId).update({
-        updatedAt: firestoreServerTimestamp,
-        time,
-        spies,
-        locations: gameLocations,
-        state,
-        playersRoles,
-        startedAt: new Date(),
+  useEffect(() => {
+    if(roomConnected){
+      const roomRef = database.ref(`/rooms/${roomId}`);
+      roomRef.on('value', (roomSnapshot) => {
+        setRoom(roomSnapshot.val());
       });
+
+      return () => roomRef.off();
     }
+  }, [roomConnected]);
+
+  const onPlayerChange = (playerIndex, player) => {
+    updatePlayer(playerIndex, player);
   };
 
-  onEndGame = async () => {
-    const {
-      rootStore: { roomId },
-      gameStore: {setState },
-    } = this.props;
+  const started = state === 'started';
 
-    const state = 'stopped';
-
-    setState(state);
-
-    await firestore.collection('rooms').doc(roomId).update({
-      updatedAt: firestoreServerTimestamp,
-      state,
-      stoppedAt: new Date(),
-    });
-  };
-
-  onPlayerNameChange = (playerIndex, playerName) => {
-    const { gameStore: { updatePlayerName } } = this.props;
-    updatePlayerName(playerIndex, playerName);
-  };
-
-  render() {
-    const {
-      gameStore: { room, started, players, playersRoles, spies, time, addPlayer, removePlayer, setTime, setSpies },
-      configStore: { selectedLocationsLength, totalLocationsLength, gameLocations },
-    } = this.props;
-
-    const playersStatus = room ? room.data.playersStatus || {} : {};
-
-    return (
-      <div className={styles.container}>
-        {!started &&
-          <Row className={styles.locationsContainer}>
-            <Col className="text-center">
-              <a href="#" onClick={() => {this.showLocationsPopup = true}}><Localized name="interface.game_locations" /> ({selectedLocationsLength}/{totalLocationsLength})</a>
-              <Link to="/settings"><CogIcon className={styles.cogIcon} /></Link>
-            </Col>
-          </Row>
-        }
-        {players.map((player, index) =>
-          <Player key={index} started={started} index={index} player={player} role={playersRoles[player]} remotePlayer={playersStatus[player]} onPlayerNameChange={this.onPlayerNameChange} />
-        )}
-        {!started &&
-          <Row className={styles.playersControllerContainer}>
-            <Col>
-              <Button color={this.canAddPlayers ? 'primary' : 'secondary'} block onClick={addPlayer} disabled={!this.canAddPlayers} outline={!this.canAddPlayers}>
-                <Localized name="interface.add_player" />
-              </Button>
-            </Col>
-            <Col>
-              <Button color={this.canRemovePlayers ? 'danger' : 'secondary'} block onClick={() => removePlayer()} disabled={!this.canRemovePlayers} outline={!this.canRemovePlayers}>
-                <Localized name="interface.rem_player" />
-              </Button>
-            </Col>
-          </Row>
-        }
-        {started &&
-          <Row className={styles.locationsContainer}>
-            <Col className="text-center">
-              <h4><Localized name="interface.game_locations" /> ({selectedLocationsLength})</h4>
-            </Col>
-          </Row>
-        }
-        {started &&
-          <Locations locations={gameLocations} />
-        }
+  return (
+    <div className={styles.container}>
+      {!started &&
+      <Row className={styles.locationsContainer}>
+        <Col className="text-center">
+          <a href="#" onClick={() => {setShowLocationsPopup(true)}}><Localized name="interface.game_locations" /> (<LocationsCount />)</a>
+          <Link to="/settings"><CogIcon className={styles.cogIcon} /></Link>
+        </Col>
+      </Row>
+      }
+      {room && _.map(room.remotePlayers, (player, playerUserId) =>
+        <RemotePlayer key={playerUserId} roomId={roomId} playerUserId={playerUserId} remotePlayer={player} />
+      )}
+      {_.times(playersCount).map((index) =>
+        <Player key={index} started={started} index={index} onPlayerChange={onPlayerChange} />
+      )}
+      {!started &&
+      <Row className={styles.playersControllerContainer}>
+        <Col>
+          <Button color={canAddPlayers ? 'primary' : 'secondary'} block onClick={() => addPlayer()} disabled={!canAddPlayers} outline={!canAddPlayers}>
+            <Localized name="interface.add_player" />
+          </Button>
+        </Col>
+        <Col>
+          <Button color={canRemovePlayers ? 'danger' : 'secondary'} block onClick={() => remPlayer()} disabled={!canRemovePlayers} outline={!canRemovePlayers}>
+            <Localized name="interface.rem_player" />
+          </Button>
+        </Col>
+      </Row>
+      }
+      {started &&
+        <Row className={styles.spiesCountContainer}>
+          <Col className="text-center">
+            {_.times(spyCount).map((i) => <SpyIcon key={i} />)}
+          </Col>
+        </Row>
+      }
+      {started &&
+        <Row className={styles.locationsContainer}>
+          <Col className="text-center">
+            <h4><Localized name="interface.game_locations" /> ({selectedLocationsCount})</h4>
+          </Col>
+        </Row>
+      }
+      {started &&
+        <Locations locations={gameLocations} prevLocation={prevLocation} />
+      }
+      {started &&
+        <TimerManager />
+      }
+      {!started &&
         <Row className={`${styles.settingsContainer} align-items-center justify-content-center`}>
           <Col>
             <Row className=" align-items-center justify-content-center text-center">
               <Col xs="auto">
-                <Input type="radio" name="single" checked={spies === 1} onChange={() => setSpies(1)} />
+                <Input type="radio" name="single" checked={spyCount === 1} onChange={() => setSpyCount(1)} />
                 <SpyIcon />
               </Col>
               <Col xs="auto">
-                <Input type="radio" name="double" checked={spies === 2} onChange={() => setSpies(2)} />
+                <Input type="radio" name="double" checked={spyCount === 2} onChange={() => setSpyCount(2)} />
                 <SpyIcon />
                 <SpyIcon />
               </Col>
@@ -153,33 +137,19 @@ export default class Game extends React.Component{
             </Row>
           </Col>
         </Row>
-        {!started &&
-          <Row className={styles.gameControllerContainer}>
-            <Col>
-              <Button color="success" block onClick={this.onStartGame}>
-                <Localized name="interface.start_game" />
-              </Button>
-            </Col>
-          </Row>
-        }
-        {started &&
-          <Row className={styles.gameControllerContainer}>
-            <Col>
-              <Button color="danger" block onClick={this.onEndGame}>
-                <Localized name="interface.end_game" />
-              </Button>
-            </Col>
-          </Row>
-        }
-        <Room />
-        <LocationsPopup isOpen={this.showLocationsPopup} toggle={() => {this.showLocationsPopup = false}} />
-      </div>
-    );
-  }
-}
+      }
+      <GameManager room={room} />
+      <Room />
+      <LocationsPopup isOpen={showLocationsPopup} toggle={() => setShowLocationsPopup(false)} />
+    </div>
+  );
+};
 
 const styles = {
   container: css({
+    marginTop: 20,
+  }),
+  spiesCountContainer: css({
     marginTop: 20,
   }),
   locationsContainer: css({
@@ -198,3 +168,27 @@ const styles = {
     marginTop: 20,
   }),
 };
+
+const mapStateToProps = (state) => ({
+  roomId: state.room.id,
+  roomConnected: state.session.roomConnected,
+  state: state.game.state,
+  gameLocations: gameLocationsSelector(state),
+  selectedLocationsCount: selectedLocationsCountSelector(state),
+  playersCount: state.config.players.length,
+  canAddPlayers: state.config.canAddPlayers,
+  canRemovePlayers: state.config.canRemovePlayers,
+  time: state.config.time,
+  spyCount: state.config.spyCount,
+  prevLocation: state.game.prevLocation,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  addPlayer: () => dispatch(addPlayerAction()),
+  remPlayer: () => dispatch(remPlayerAction()),
+  updatePlayer: (playerIndex, player) => dispatch(updatePlayerAction(playerIndex, player)),
+  setTime: (time) => dispatch(setTimeAction(time)),
+  setSpyCount: (spyCount) => dispatch(setSpyCountAction(spyCount)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Game);

@@ -1,115 +1,106 @@
-import React from 'react';
-import {inject, observer} from 'mobx-react';
+import React, { useState } from 'react';
 import { css } from 'emotion';
 import { Row, Col, Collapse, Input } from 'reactstrap';
-import { observable } from 'mobx';
 import { MAX_ROLES_ARRAY } from 'consts';
+import { connect } from 'react-redux';
 import CogIcon from 'components/CogIcon/CogIcon';
 import ReactHtmlParser from 'react-html-parser';
 import { withNamespaces } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { SHADES, COLORS } from 'styles/consts';
+import { selectLocationAction, deselectLocationAction, saveCustomLocationAction, remCustomLocationAction } from 'actions/config';
 
-@inject('configStore')
-@observer
-export class Location extends React.Component{
-  @observable isOpen = false;
-  @observable location = {};
+export const Location = (props) => {
+  const { t, locationId, disabled, selected = false, selectLocation, deselectLocation } = props;
 
-  constructor(props) {
-    super(props);
+  const [isOpen, setIsOpen] = useState(false);
+  const [location, setLocation] = useState(props.location);
 
-    if(!props.disabled){
-      const { location } = props;
-      this.location = { ...location };
-    }
-  }
-
-  toggle = () => {
-    this.isOpen = !this.isOpen;
+  const toggle = () => {
+    setIsOpen(true);
   };
 
-  onSave = (evt) => {
+  const updateLocation = (field, value) => {
+    setLocation({
+      ...location,
+      [field]: value,
+    });
+  };
+
+  const onSave = (evt) => {
     evt.preventDefault();
-    const { locationId, configStore } = this.props;
-    configStore.saveCustomLocation(locationId, this.location);
-    this.isOpen = false;
+    props.saveCustomLocation(locationId, location);
+    setIsOpen(false);
   };
 
-  onDelete = (evt) => {
+  const onDelete = (evt) => {
     evt.preventDefault();
-    const { locationId, configStore } = this.props;
-    configStore.removeCustomLocation(locationId);
-    this.isOpen = false;
+    props.remCustomLocation(locationId);
+    setIsOpen(false);
   };
 
-  render() {
-    const { t, locationId, location, configStore, disabled } = this.props;
-    const { selectedLocations } = configStore;
-    const checked = !!selectedLocations[locationId];
-    return (
-      <Row className={`${styles.container} justify-content-center`}>
-        <Col xs={10}>
-          <Row className="justify-content-between">
-            <Col xs="auto">
-              <Input type="checkbox" checked={checked} onChange={checked ? () => configStore.removeFromSelectedLocations(locationId) : () => configStore.addToSelectedLocations(locationId)} />
-              {disabled ? ReactHtmlParser(t(`location.${locationId}`)) : location.name}
-            </Col>
-            <Col xs="auto" onClick={this.toggle}>
-              <CogIcon />
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={11}>
-              <Collapse isOpen={this.isOpen}>
-                <Row className={`${styles.fields} align-items-center justify-content-center`}>
+  return (
+    <Row className={`${styles.container} justify-content-center`}>
+      <Col xs={10}>
+        <Row className="justify-content-between">
+          <Col xs="auto">
+            <Input type="checkbox" checked={selected} onChange={selected ? () => deselectLocation(locationId) : () => selectLocation(locationId)} />
+            {disabled ? ReactHtmlParser(t(`location.${locationId}`)) : props.location.name}
+          </Col>
+          <Col xs="auto" onClick={toggle}>
+            <CogIcon />
+          </Col>
+        </Row>
+        <Row>
+          <Col xs={11}>
+            <Collapse isOpen={isOpen}>
+              <Row className={`${styles.fields} align-items-center justify-content-center`}>
+                <Col xs={4} className="text-right">
+                  Location:
+                </Col>
+                <Col xs={8}>
+                  <Input
+                    bsSize="sm"
+                    className={styles.input}
+                    value={disabled ? ReactHtmlParser(t(`location.${locationId}`, ' ')) : location.name}
+                    onChange={(evt) => updateLocation('name', evt.target.value)}
+                    disabled={disabled}
+                  />
+                </Col>
+              </Row>
+              { MAX_ROLES_ARRAY.map((r, index) =>
+                <Row key={index} className={`${styles.fields} align-items-center justify-content-center`}>
                   <Col xs={4} className="text-right">
-                    Location:
+                    Role {index + 1}:
                   </Col>
                   <Col xs={8}>
                     <Input
                       bsSize="sm"
                       className={styles.input}
-                      value={disabled ? ReactHtmlParser(t(`location.${locationId}`, ' ')) : this.location.name}
-                      onChange={(evt) => {this.location.name = evt.target.value}}
+                      value={disabled ? ReactHtmlParser(t(`location.${locationId}.role${index + 1}`, ' ')) : location[`role${index + 1}`] || ''}
+                      onChange={(evt) => updateLocation(`role${index + 1}`, evt.target.value)}
                       disabled={disabled}
                     />
                   </Col>
                 </Row>
-                { MAX_ROLES_ARRAY.map((r, index) =>
-                  <Row key={index} className={`${styles.fields} align-items-center justify-content-center`}>
-                    <Col xs={4} className="text-right">
-                      Role {index + 1}:
-                    </Col>
-                    <Col xs={8}>
-                      <Input
-                        bsSize="sm"
-                        className={styles.input}
-                        value={disabled ? ReactHtmlParser(t(`location.${locationId}.role${index + 1}`, ' ')) : this.location[`role${index + 1}`]}
-                        onChange={(evt) => {this.location[`role${index + 1}`] = evt.target.value}}
-                        disabled={disabled}
-                      />
-                    </Col>
-                  </Row>
-                )}
-                {!disabled &&
-                  <Row className={`${styles.linksContainer} justify-content-center text-center`}>
-                    <Col xs={6}>
-                      <Link to="#" onClick={this.onSave}>Save</Link>
-                    </Col>
-                    <Col xs={6}>
-                      <Link className={styles.deleteLocation} to="#" onClick={this.onDelete}>Delete</Link>
-                    </Col>
-                  </Row>
-                }
-              </Collapse>
-            </Col>
-          </Row>
-        </Col>
-      </Row>
-    );
-  }
-}
+              )}
+              {!disabled &&
+              <Row className={`${styles.linksContainer} justify-content-center text-center`}>
+                <Col xs={6}>
+                  <Link to="#" onClick={onSave}>Save</Link>
+                </Col>
+                <Col xs={6}>
+                  <Link className={styles.deleteLocation} to="#" onClick={onDelete}>Delete</Link>
+                </Col>
+              </Row>
+              }
+            </Collapse>
+          </Col>
+        </Row>
+      </Col>
+    </Row>
+  );
+};
 
 const styles = {
   container: css({
@@ -132,4 +123,17 @@ const styles = {
   }),
 };
 
-export default withNamespaces()(Location);
+const mapStateToProps = (state, ownProps) => ({
+  selected: state.config.selectedLocations[ownProps.locationId],
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  selectLocation: (locationId) => dispatch(selectLocationAction(locationId)),
+  deselectLocation: (locationId) => dispatch(deselectLocationAction(locationId)),
+  saveCustomLocation: (locationId, location) => dispatch(saveCustomLocationAction(locationId, location)),
+  remCustomLocation: (locationId) => dispatch(remCustomLocationAction(locationId)),
+});
+
+export default withNamespaces()(
+  connect(mapStateToProps, mapDispatchToProps)(Location),
+);

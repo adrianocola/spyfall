@@ -35,14 +35,9 @@ openSansObserver.load().then(() => {
 });
 
 import history from './browserHistory';
+import { store, persistor } from './store';
 
-const MOUNT_NODE = document.getElementById('app');
-
-const render = () => {
-  ReactDOM.render(
-    <EntryPoint history={history} />,
-    MOUNT_NODE
-  );
-};
-
-render();
+ReactDOM.render(
+  <EntryPoint store={store} persistor={persistor} history={history} />,
+  document.getElementById('app')
+);
