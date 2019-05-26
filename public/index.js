@@ -160,7 +160,7 @@ $(function(){
 
     }
 
-    function updateLocations(){
+    function updateLocations(last_location){
 
         //update locations
         $(".locations_left").html("");
@@ -555,6 +555,8 @@ $(function(){
         var playerLocation = $("#modal" + playerNum + " .player_location");
         var playerRoleContainer = $("#modal" + playerNum + " .role_container");
         var playerRole = $("#modal" + playerNum + " .player_role");
+
+        console.log('last_location', last_location);
 
         if(socket){
 
@@ -1138,6 +1140,7 @@ $(function(){
     //**************************************************************************
 
     function configureRemotePlayer(data){
+        console.log('configureRemotePlayer', data.last_location, data);
 
         selected_locations = data.selected_locations;
         custom_locations = data.custom_locations;
@@ -1154,13 +1157,6 @@ $(function(){
             $("#room_game_role").html(getLocationRole(data.location,data.role));
         }
 
-        if(data.last_location){
-            $(".location_item").removeClass('cross');
-            if(data.last_location){
-                $(".location_item.loc_" + data.last_location).addClass('cross');
-            }
-        }
-
         if(data.spies === 1){
             $("#one_spy").prop("checked",true).change();
         }else{
@@ -1168,6 +1164,12 @@ $(function(){
         }
 
         updateLocations();
+
+        if(data.last_location){
+            $(".location_item").removeClass('cross');
+            $(".location_item.loc_" + data.last_location).addClass('cross');
+            last_location = data.last_location;
+        }
 
     }
 
@@ -1354,8 +1356,6 @@ $(function(){
 
                 ga('send', 'event', 'Room', 'Joined');
 
-                updateLocations();
-
             }else if(data.type === "GAME_START"){
 
                 $("#room_game_data").html(tt("interface.show_my_role"));
@@ -1372,8 +1372,6 @@ $(function(){
                 if(data.time && data.until){
                     startRemoteTimer(data.time, data.until);
                 }
-
-                updateLocations();
 
             }else if(data.type === "GAME_END"){
 
