@@ -1,4 +1,5 @@
-import React from 'react';
+import _ from 'lodash';
+import React, { useMemo } from 'react';
 import { Container, Row, Col } from 'reactstrap';
 import ReactHtmlParser from 'react-html-parser';
 import {css} from 'emotion';
@@ -8,16 +9,51 @@ import { DEFAULT_LOCATIONS } from 'consts';
 
 export const Locations = (props) => {
   const { t, location, locations = {}, prevLocation } = props;
+
+  const sortedLocations = useMemo(() => {
+    const locationsArray = _.map(locations, (locationObj, locationId) => ({
+      ...locationObj,
+      name: DEFAULT_LOCATIONS[locationId] ? t(`location.${locationId}`) : locationObj.name,
+      locationId,
+    }));
+    return _.orderBy(locationsArray, 'name');
+  }, [locations, t]);
+
+  const locationsChunks = useMemo(() => {
+    const chunkLength = Math.ceil(Math.max(sortedLocations.length / 2, 1));
+    return [
+      sortedLocations.slice(0, chunkLength),
+      sortedLocations.slice(chunkLength),
+    ];
+  }, [sortedLocations]);
+  const locationsLeft = useMemo(() => locationsChunks[0], [locationsChunks]);
+  const locationsRight = useMemo(() => locationsChunks[1], [locationsChunks]);
+
   return (
     <Container>
       <Row>
-        {Object.entries(locations).map(([locationId, locationObj]) =>
-          <Col xs={6} key={locationId}>
-            <div className={`${styles.location} ${prevLocation === locationId ? styles.prevLocation : ''} ${location === locationId ? styles.highlight : ''}`}>
-              {ReactHtmlParser(DEFAULT_LOCATIONS[locationId] ? t(`location.${locationId}`) : locationObj.name)}
-            </div>
-          </Col>
-        )}
+        <Col xs={6}>
+          {locationsLeft.map((locationObj) =>
+            <Row key={locationObj.locationId}>
+              <Col>
+                <div className={`${styles.location} ${prevLocation === locationObj.locationId ? styles.prevLocation : ''} ${location === locationObj.locationId ? styles.highlight : ''}`}>
+                  {ReactHtmlParser(locationObj.name)}
+                </div>
+              </Col>
+            </Row>
+          )}
+        </Col>
+        <Col xs={6}>
+          {locationsRight.map((locationObj) =>
+            <Row key={locationObj.locationId}>
+              <Col>
+                <div className={`${styles.location} ${prevLocation === locationObj.locationId ? styles.prevLocation : ''} ${location === locationObj.locationId ? styles.highlight : ''}`}>
+                  {ReactHtmlParser(locationObj.name)}
+                </div>
+              </Col>
+            </Row>
+          )}
+        </Col>
       </Row>
 
     </Container>

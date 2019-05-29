@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { css } from 'emotion';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -11,6 +11,7 @@ import { database } from 'services/firebase';
 import { addPlayerAction, remPlayerAction, updatePlayerAction, setTimeAction, setSpyCountAction } from 'actions/config';
 import gameLocationsSelector from 'selectors/gameLocations';
 import selectedLocationsCountSelector from 'selectors/selectedLocationsCount';
+import {MAX_PLAYERS, MIN_PLAYERS} from 'consts';
 
 import SpyIcon from 'components/SpyIcon/SpyIcon';
 import CogIcon from 'components/CogIcon/CogIcon';
@@ -30,12 +31,15 @@ export const Game = (props) => {
     spyCount, setSpyCount,
     playersCount, updatePlayer,
     state, prevLocation,
-    canAddPlayers, canRemovePlayers,
     addPlayer, remPlayer,
     selectedLocationsCount,
   } = props;
 
   const [room, setRoom] = useState();
+  const totalNumberOfPlayers = useMemo(() => playersCount + _.size(room?.remotePlayers), [playersCount, room]);
+  const canAddPlayers = useMemo(() => totalNumberOfPlayers < MAX_PLAYERS, [totalNumberOfPlayers]);
+  const canRemovePlayers = useMemo(() => totalNumberOfPlayers > MIN_PLAYERS, [totalNumberOfPlayers]);
+  const canStartGame = useMemo(() => totalNumberOfPlayers >= MIN_PLAYERS && totalNumberOfPlayers <= MAX_PLAYERS, [totalNumberOfPlayers]);
   const [showLocationsPopup, setShowLocationsPopup] = useState(false);
 
   useEffect(() => {
@@ -138,7 +142,7 @@ export const Game = (props) => {
           </Col>
         </Row>
       }
-      <GameManager room={room} />
+      <GameManager room={room} canStartGame={canStartGame} />
       <Room />
       <LocationsPopup isOpen={showLocationsPopup} toggle={() => setShowLocationsPopup(false)} />
     </div>
@@ -176,8 +180,6 @@ const mapStateToProps = (state) => ({
   gameLocations: gameLocationsSelector(state),
   selectedLocationsCount: selectedLocationsCountSelector(state),
   playersCount: state.config.players.length,
-  canAddPlayers: state.config.canAddPlayers,
-  canRemovePlayers: state.config.canRemovePlayers,
   time: state.config.time,
   spyCount: state.config.spyCount,
   prevLocation: state.game.prevLocation,

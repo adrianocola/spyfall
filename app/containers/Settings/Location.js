@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { css } from 'emotion';
-import { Row, Col, Collapse, Input } from 'reactstrap';
+import { Row, Col, Collapse, Input, Label } from 'reactstrap';
 import { MAX_ROLES_ARRAY } from 'consts';
 import { connect } from 'react-redux';
 import CogIcon from 'components/CogIcon/CogIcon';
@@ -17,7 +17,7 @@ export const Location = (props) => {
   const [location, setLocation] = useState(props.location);
 
   const toggle = () => {
-    setIsOpen(true);
+    setIsOpen((prevIsOpen) => !prevIsOpen);
   };
 
   const updateLocation = (field, value) => {
@@ -44,8 +44,10 @@ export const Location = (props) => {
       <Col xs={10}>
         <Row className="justify-content-between">
           <Col xs="auto">
-            <Input type="checkbox" checked={selected} onChange={selected ? () => deselectLocation(locationId) : () => selectLocation(locationId)} />
-            {disabled ? ReactHtmlParser(t(`location.${locationId}`)) : props.location.name}
+            <Label check className={styles.check}>
+              <Input type="checkbox" checked={selected} onChange={selected ? () => deselectLocation(locationId) : () => selectLocation(locationId)} />
+              {disabled ? ReactHtmlParser(t(`location.${locationId}`)) : props.location.name}
+            </Label>
           </Col>
           <Col xs="auto" onClick={toggle}>
             <CogIcon />
@@ -111,6 +113,9 @@ const styles = {
   fields: css({
     marginTop: 3,
     fontSize: '0.9rem',
+  }),
+  check: css({
+    cursor: 'pointer',
   }),
   input: css({
     height: 25,

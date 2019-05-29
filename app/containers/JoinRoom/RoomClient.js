@@ -12,6 +12,7 @@ import {database, databaseServerTimestamp} from 'services/firebase';
 import {setJoinedRoomAction} from 'actions/session';
 import SpyIcon from 'components/SpyIcon/SpyIcon';
 import Timer from 'components/Timer/Timer';
+import Spinner from 'components/Spinner/Spinner';
 
 const isOfflineForDatabase = {
   online: false,
@@ -72,7 +73,7 @@ export const RoomClient = (props) => {
     setJoinedRoom(false);
   };
 
-  if(!room) return <div>LOADING...</div>;
+  if(!room) return <Row><Col className="text-center"><div className={styles.loading}><Spinner /></div></Col></Row>;
 
   if(!room.online) {
     return (
@@ -138,9 +139,15 @@ export const RoomClient = (props) => {
 };
 
 const styles = {
+  loading: css({
+    marginTop: 30,
+    marginBottom: 30,
+    display: 'inline-block',
+  }),
   container: css({
     marginTop: 50,
     marginBottom: 50,
+    display: 'inline-block',
   }),
   stateContainer: css({
     marginBottom: 20,

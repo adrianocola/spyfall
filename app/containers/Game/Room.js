@@ -34,7 +34,7 @@ export const Room = (props) => {
           </Button>
         </Col>
         <Col xs={12} sm={7} className={styles.roomHelp}>
-          <Localized name="interface.room_help" />
+          <Localized name="interface.room_instructions" />
         </Col>
       </Row>
     );
@@ -61,6 +61,7 @@ export const Room = (props) => {
 const styles = {
   roomControllerContainer: css({
     marginTop: 40,
+    alignItems: 'center',
   }),
   roomId: css({
     letterSpacing: 2,

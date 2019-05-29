@@ -35,7 +35,7 @@ const getPlayerRoles = (allPlayers, availableRoles) => {
 
 export const GameManager = (props) => {
   const {
-    t,
+    t, canStartGame,
     room, roomId, roomConnected,
     gameLocations, customLocations,
     location,
@@ -137,7 +137,7 @@ export const GameManager = (props) => {
       {!started &&
       <Row className={styles.gameManagerContainer}>
         <Col>
-          <Button color="success" block onClick={onStartGame}>
+          <Button color={canStartGame ? 'primary' : 'secondary'} block disabled={!canStartGame} outline={!canStartGame} onClick={onStartGame}>
             <Localized name="interface.start_game" />
           </Button>
         </Col>

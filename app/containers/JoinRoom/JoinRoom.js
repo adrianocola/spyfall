@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useMemo} from 'react';
 import { css } from 'emotion';
 import { connect } from 'react-redux';
 import {Row, Col, Input, Button, Container} from 'reactstrap';
@@ -21,6 +21,7 @@ export const JoinRoom = (props) => {
   } = props;
 
   const [loading, setLoading] = useState(false);
+  const canJoin = useMemo(() => joinRoomId && joinPlayer, [joinRoomId, joinPlayer]);
 
   const onJoinRoom = async () => {
     setLoading(true);
@@ -51,7 +52,7 @@ export const JoinRoom = (props) => {
           <Input type="text" placeholder={t('interface.player')} value={joinPlayer} onChange={(evt) => setJoinPlayer(evt.target.value)} />
         </Col>
         <Col xs={12} md={4}>
-          <ButtonWithLoading color="success" block onClick={onJoinRoom} loading={loading}><Localized name="interface.join" /></ButtonWithLoading>
+          <ButtonWithLoading color="success" block onClick={onJoinRoom} loading={loading} disabled={!canJoin}><Localized name="interface.join" /></ButtonWithLoading>
         </Col>
       </Row>
       <Row className={`${styles.container} justify-content-center`}>
