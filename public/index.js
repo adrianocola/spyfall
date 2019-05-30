@@ -556,8 +556,6 @@ $(function(){
         var playerRoleContainer = $("#modal" + playerNum + " .role_container");
         var playerRole = $("#modal" + playerNum + " .player_role");
 
-        console.log('last_location', last_location);
-
         if(socket){
 
             if(players[playerName]){
@@ -756,6 +754,8 @@ $(function(){
         game_info.spy = undefined;
         game_info.spy2 = undefined;
 
+        last_location = game_info.location;
+
         var location = randomLocation();
         var playersCount = $("#players .player_data").length;
         var selected_custom_locations = getSelectedCustomLocations();
@@ -804,8 +804,6 @@ $(function(){
         if(last_location){
             $(".location_item.loc_" + last_location).addClass('cross');
         }
-
-        last_location = location;
 
         $("#languages").attr("disabled","disabled");
         $("#game_result").hide();
@@ -1140,8 +1138,6 @@ $(function(){
     //**************************************************************************
 
     function configureRemotePlayer(data){
-        console.log('configureRemotePlayer', data.last_location, data);
-
         selected_locations = data.selected_locations;
         custom_locations = data.custom_locations;
 
@@ -1230,7 +1226,12 @@ $(function(){
 
                     $('.player_data.' + sanitizedPlayer + ' .player_remote').fadeIn();
 
-                    socket.emit('data',playerName,{type: "CONNECTED", selected_locations: selected_locations, custom_locations: getSelectedCustomLocations()});
+                    socket.emit('data',playerName, {
+                        type: "CONNECTED",
+                        selected_locations: selected_locations,
+                        custom_locations: getSelectedCustomLocations(),
+                        last_location: last_location,
+                    });
 
                     if(game_info.state === "running"){
 
@@ -1316,7 +1317,6 @@ $(function(){
 
             room_id = _room;
             player_name = _player;
-            console.log(_player);
 
             game_info.room = room_id;
 
