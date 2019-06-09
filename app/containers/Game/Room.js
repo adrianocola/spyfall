@@ -4,6 +4,7 @@ import { Row, Col, Button } from 'reactstrap';
 import { connect } from 'react-redux';
 import {SHADES} from 'styles/consts';
 import { Link } from 'react-router-dom';
+import { GoClippy } from 'react-icons/go';
 import { setRoomConnectedAction } from 'actions/session';
 import ButtonWithLoading from 'components/ButtonWithLoading/ButtonWithLoading';
 import Localized from 'components/Localized/Localized';
@@ -23,14 +24,31 @@ export const Room = (props) => {
     setLoading(false);
   };
 
+  const onCopyToClipboard = () => {
+    const textArea = document.createElement('textarea');
+    textArea.value = roomId;
+    document.body.appendChild(textArea);
+    textArea.select();
+
+    try {
+      document.execCommand('copy');
+    } catch (err) {
+      console.log('Oops, unable to copy');
+    }
+
+    document.body.removeChild(textArea);
+  };
+
   if(roomConnected){
     return (
       <Row className={styles.roomControllerContainer}>
         <Col xs={12} sm={5}>
-          <Button outline color="secondary" block disabled className={styles.roomId}>
+          <Button outline color="secondary" block className={styles.roomId} onClick={onCopyToClipboard}>
             <Localized name="interface.room" />
             {': '}
-            {roomId}
+            <span>{roomId}</span>
+            {'   '}
+            <GoClippy className={styles.copy} />
           </Button>
         </Col>
         <Col xs={12} sm={7} className={styles.roomHelp}>
@@ -74,6 +92,10 @@ const styles = {
     fontSize: '0.7rem',
     color: SHADES.light,
     textAlign: 'center',
+  }),
+  copy: css({
+    fontSize: '1rem',
+    marginBottom: 5,
   }),
 };
 
