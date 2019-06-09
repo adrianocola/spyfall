@@ -13,6 +13,7 @@ export const DARK_COLORS = {
 };
 
 export const SHADES = {
+  darker: '#252525',
   dark: '#454545',
   light: '#7a7a7a',
   lighter: '#E4E4E4',

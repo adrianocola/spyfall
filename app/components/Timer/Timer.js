@@ -1,7 +1,9 @@
 import _ from 'lodash';
 import React, { useState, useRef, useEffect } from 'react';
+import { css } from 'emotion';
 import { Button } from 'reactstrap';
 import beep from 'services/beep';
+import {SHADES} from '../../styles/consts';
 
 export default (props) => {
   const {initialValue, running, onComplete} = props;
@@ -41,9 +43,15 @@ export default (props) => {
   }, [time]);
 
   return (
-    <Button color="secondary" disabled block>
+    <Button color="secondary" disabled outline block className={styles.timer}>
       {!finishedRunning && <span>{Math.floor(time / 60)}:{_.padStart(time % 60, 2, '0')}</span>}
       {finishedRunning && <span>--:--</span>}
     </Button>
   );
+};
+
+const styles = {
+  timer: css({
+    color: `${SHADES.darker} !important`,
+  }),
 };

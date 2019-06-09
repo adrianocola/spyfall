@@ -9,7 +9,8 @@ import { ToastContainer } from 'react-toastify';
 import Loadable from 'react-loadable';
 import { Container, Row, Col, Input } from 'reactstrap';
 import { auth } from 'services/firebase';
-import { setUserIdAction, setLanguageAction } from 'actions/root';
+import { setUserIdAction, setLanguageAction, setImportedLegacy } from 'actions/root';
+import { setSelectedLocations, setCustomLocations } from 'actions/config';
 
 import SpinnerModal from 'components/SpinnerModal/SpinnerModal';
 import SpyIcon from 'components/SpyIcon/SpyIcon';
@@ -20,11 +21,33 @@ const LoadableJoinRoom = Loadable({loader: () => import('../JoinRoom/JoinRoom'),
 
 export class App extends React.Component{
   componentDidMount() {
-    const { setUserId } = this.props;
+    const { setUserId, importedLegacy } = this.props;
     auth.signInAnonymously().then((authUser) => {
       setUserId(authUser.user.uid);
     });
+    if(!importedLegacy) this.importLegacy();
   }
+
+  importLegacy = () => {
+    try{
+      const customLocations = window.store.get('custom_locations');
+      const selectedLocations = window.store.get('selected_locations');
+      if(customLocations){
+        this.props.setCustomLocations(customLocations);
+      }
+      if(selectedLocations){
+        const selectedLocationsMap = {};
+        selectedLocations.forEach((location) => {
+          selectedLocationsMap[location] = true;
+        });
+        this.props.setSelectedLocations(selectedLocationsMap);
+      }
+    }catch(err){
+      console.error(err); // eslint-disable-line no-console
+    }
+
+    this.props.setImportedLegacy(true);
+  };
 
   setLanguage = (language) => {
     const { setLanguage } = this.props;
@@ -157,11 +180,15 @@ const styles = {
 
 const mapStateToProps = (state) => ({
   language: state.root.language,
+  importedLegacy: state.root.importedLegacy,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   setUserId: (userId) => dispatch(setUserIdAction(userId)),
   setLanguage: (language) => dispatch(setLanguageAction(language)),
+  setImportedLegacy: (importedLegacy) => dispatch(setImportedLegacy(importedLegacy)),
+  setSelectedLocations: (selectedLocations) => dispatch(setSelectedLocations(selectedLocations)),
+  setCustomLocations: (customLocations) => dispatch(setCustomLocations(customLocations)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
