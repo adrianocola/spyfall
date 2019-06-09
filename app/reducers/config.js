@@ -10,6 +10,8 @@ import {
   REM_CUSTOM_LOCATION,
   REM_PLAYER,
   SAVE_CUSTOM_LOCATION,
+  SET_CUSTOM_LOCATIONS,
+  SET_SELECTED_LOCATIONS,
   SELECT_ALL_LOCATIONS,
   SELECT_LOCATION,
   SET_SPY_COUNT,
@@ -74,6 +76,16 @@ export default (state = initialState, action) => {
           ...state.customLocations,
           [action.payload.id]: action.payload.location,
         },
+      };
+    case SET_CUSTOM_LOCATIONS:
+      return {
+        ...state,
+        customLocations: action.payload,
+      };
+    case SET_SELECTED_LOCATIONS:
+      return {
+        ...state,
+        selectedLocations: action.payload,
       };
     case REM_CUSTOM_LOCATION: {
       const customLocations = {...state.customLocations};

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import {Row, Col, Input, Button, Container} from 'reactstrap';
 import Localized from 'components/Localized/Localized';
 import ButtonWithLoading from 'components/ButtonWithLoading/ButtonWithLoading';
-import { withNamespaces } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import {database, databaseServerTimestamp} from 'services/firebase';
 import { setJoinRoomIdAction, setJoinPlayerAction } from 'actions/joinRoom';
@@ -14,11 +14,13 @@ import RoomClient from './RoomClient';
 
 export const JoinRoom = (props) => {
   const {
-    t, userId,
+    userId,
     joinRoomId, setJoinRoomId,
     joinPlayer, setJoinPlayer,
     joinedRoom, setJoinedRoom,
   } = props;
+
+  const [t] = useTranslation();
 
   const [loading, setLoading] = useState(false);
   const canJoin = useMemo(() => joinRoomId && joinPlayer, [joinRoomId, joinPlayer]);
@@ -92,6 +94,4 @@ const mapDispatchToProps = (dispatch) => ({
   setJoinedRoom: (joined) => dispatch(setJoinedRoomAction(joined)),
 });
 
-export default withNamespaces()(
-  connect(mapStateToProps, mapDispatchToProps)(JoinRoom)
-);
+export default connect(mapStateToProps, mapDispatchToProps)(JoinRoom);

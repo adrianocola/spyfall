@@ -4,11 +4,13 @@ import { Container, Row, Col } from 'reactstrap';
 import ReactHtmlParser from 'react-html-parser';
 import {css} from 'emotion';
 import {DARK_COLORS, SHADES} from 'styles/consts';
-import { withNamespaces } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { DEFAULT_LOCATIONS } from 'consts';
 
 export const Locations = (props) => {
-  const { t, location, locations = {}, prevLocation } = props;
+  const { location, locations = {}, prevLocation } = props;
+
+  const [t] = useTranslation();
 
   const sortedLocations = useMemo(() => {
     const locationsArray = _.map(locations, (locationObj, locationId) => ({
@@ -76,4 +78,4 @@ const styles = {
   }),
 };
 
-export default withNamespaces()(Locations);
+export default Locations;

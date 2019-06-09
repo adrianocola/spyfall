@@ -11,6 +11,12 @@
           }
         }
       }
+    },
+    "exports": {
+      "$exportId": {
+        ".read": true,
+        ".write": "!data.exists() || data.child('owner').val() === auth.uid"
+      }
     }
   }
 }

@@ -5,6 +5,7 @@ import {Switch, Route, Link} from 'react-router-dom';
 import {css} from 'emotion';
 import i18n from 'i18n';
 import {MEDIA, SHADES} from 'styles/consts';
+import { ToastContainer } from 'react-toastify';
 import Loadable from 'react-loadable';
 import { Container, Row, Col, Input } from 'reactstrap';
 import { auth } from 'services/firebase';
@@ -124,6 +125,7 @@ export class App extends React.Component{
             </Row>
           </Col>
         </Row>
+        <ToastContainer />
       </Container>
     );
   }

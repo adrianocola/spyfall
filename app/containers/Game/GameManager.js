@@ -4,7 +4,7 @@ import { css } from 'emotion';
 import { connect } from 'react-redux';
 import { Row, Col, Button } from 'reactstrap';
 import Localized from 'components/Localized/Localized';
-import { withNamespaces } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import gameLocationsSelector from 'selectors/gameLocations';
 import { DEFAULT_LOCATIONS, MAX_ROLES, SPY_ROLE } from 'consts';
 import {database, databaseServerTimestamp} from 'services/firebase';
@@ -35,7 +35,7 @@ const getPlayerRoles = (allPlayers, availableRoles) => {
 
 export const GameManager = (props) => {
   const {
-    t, canStartGame,
+    canStartGame,
     room, roomId, roomConnected,
     gameLocations, customLocations,
     location,
@@ -44,6 +44,7 @@ export const GameManager = (props) => {
     players, spies,
   } = props;
 
+  const [t] = useTranslation();
   const [showResultPopup, setShowResultPopup] = useState(false);
 
   const onStartGame = async () => {
@@ -176,6 +177,4 @@ const mapStateToProps = (state) => ({
   roomConnected: state.session.roomConnected,
 });
 
-export default withNamespaces()(
-  connect(mapStateToProps)(GameManager)
-);
+export default connect(mapStateToProps)(GameManager);

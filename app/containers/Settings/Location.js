@@ -5,14 +5,15 @@ import { MAX_ROLES_ARRAY } from 'consts';
 import { connect } from 'react-redux';
 import CogIcon from 'components/CogIcon/CogIcon';
 import ReactHtmlParser from 'react-html-parser';
-import { withNamespaces } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { SHADES, COLORS } from 'styles/consts';
 import { selectLocationAction, deselectLocationAction, saveCustomLocationAction, remCustomLocationAction } from 'actions/config';
 
 export const Location = (props) => {
-  const { t, locationId, disabled, selected = false, selectLocation, deselectLocation } = props;
+  const { locationId, disabled, selected = false, selectLocation, deselectLocation } = props;
 
+  const [t] = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [location, setLocation] = useState(props.location);
 
@@ -139,6 +140,4 @@ const mapDispatchToProps = (dispatch) => ({
   remCustomLocation: (locationId) => dispatch(remCustomLocationAction(locationId)),
 });
 
-export default withNamespaces()(
-  connect(mapStateToProps, mapDispatchToProps)(Location),
-);
+export default connect(mapStateToProps, mapDispatchToProps)(Location);

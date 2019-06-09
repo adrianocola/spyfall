@@ -14,6 +14,7 @@ import '!file-loader?name=[name].[ext]!./images/favicon.ico';
 
 // Import CSS reset and Global Styles
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'react-toastify/dist/ReactToastify.css';
 import 'animate.css/animate.min.css';
 import 'styles/theme.scss';
 

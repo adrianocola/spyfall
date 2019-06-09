@@ -4,15 +4,18 @@ import { connect } from 'react-redux';
 import { Row, Col, Input, Button} from 'reactstrap';
 import Localized from 'components/Localized/Localized';
 import LocationsCount from 'components/LocationsCount/LocationsCount';
-import { withNamespaces } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { selectAllLocationsAction, deselectAllLocationsAction } from 'actions/config';
 
 import DefaultLocationsList from './DefaultLocationsList';
 import CustomLocationsList from './CustomLocationsList';
+import ExportLocations from './ExportLocations';
 
 export const Settings = (props) => {
-  const { t, selectAllLocations, deselectAllLocations } = props;
+  const { selectAllLocations, deselectAllLocations } = props;
+
+  const [t] = useTranslation();
 
   return (
     <Row className={`${styles.container} justify-content-center`}>
@@ -30,6 +33,7 @@ export const Settings = (props) => {
         <DefaultLocationsList version={1} onSelectAll={selectAllLocations} onDeselectAll={deselectAllLocations} />
         <DefaultLocationsList version={2} onSelectAll={selectAllLocations} onDeselectAll={deselectAllLocations} />
         <CustomLocationsList onSelectAll={selectAllLocations} onDeselectAll={deselectAllLocations} />
+        <ExportLocations />
         <Row className={`${styles.backContainer} justify-content-center`}>
           <Col xs={12} className="text-center">
             <Link className={styles.backLink} to="/">
@@ -68,6 +72,4 @@ const mapDispatchToProps = (dispatch) => ({
   deselectAllLocations: (locationsIds) => dispatch(deselectAllLocationsAction(locationsIds)),
 });
 
-export default withNamespaces()(
-  connect(null, mapDispatchToProps)(Settings)
-);
+export default connect(null, mapDispatchToProps)(Settings);

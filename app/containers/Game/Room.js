@@ -9,6 +9,7 @@ import { setRoomConnectedAction } from 'actions/session';
 import ButtonWithLoading from 'components/ButtonWithLoading/ButtonWithLoading';
 import Localized from 'components/Localized/Localized';
 import { resetGame } from 'services/game';
+import copyToClipboard from 'utils/copyToClipboard';
 
 export const Room = (props) => {
   const { roomId, roomConnected, setRoomConnected } = props;
@@ -24,26 +25,11 @@ export const Room = (props) => {
     setLoading(false);
   };
 
-  const onCopyToClipboard = () => {
-    const textArea = document.createElement('textarea');
-    textArea.value = roomId;
-    document.body.appendChild(textArea);
-    textArea.select();
-
-    try {
-      document.execCommand('copy');
-    } catch (err) {
-      console.log('Oops, unable to copy');
-    }
-
-    document.body.removeChild(textArea);
-  };
-
   if(roomConnected){
     return (
       <Row className={styles.roomControllerContainer}>
         <Col xs={12} sm={5}>
-          <Button outline color="secondary" block className={styles.roomId} onClick={onCopyToClipboard}>
+          <Button outline color="secondary" block className={styles.roomId} onClick={() => copyToClipboard(roomId)}>
             <Localized name="interface.room" />
             {': '}
             <span>{roomId}</span>

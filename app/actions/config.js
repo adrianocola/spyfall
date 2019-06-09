@@ -5,6 +5,8 @@ export const DESELECT_ALL_LOCATIONS = 'CONFIG_DESELECT_ALL_LOCATIONS';
 export const CREATE_CUSTOM_LOCATION = 'CONFIG_CREATE_CUSTOM_LOCATION';
 export const SAVE_CUSTOM_LOCATION = 'CONFIG_SAVE_CUSTOM_LOCATION';
 export const REM_CUSTOM_LOCATION = 'CONFIG_REM_CUSTOM_LOCATION';
+export const SET_CUSTOM_LOCATIONS = 'SET_CUSTOM_LOCATIONS';
+export const SET_SELECTED_LOCATIONS = 'SET_SELECTED_LOCATIONS';
 export const ADD_PLAYER = 'CONFIG_ADD_PLAYER';
 export const REM_PLAYER = 'CONFIG_REM_PLAYER';
 export const UPDATE_PLAYER = 'CONFIG_UPDATE_PLAYER';
@@ -43,6 +45,16 @@ export const saveCustomLocationAction = (id, location) => ({
 export const remCustomLocationAction = (id) => ({
   type: REM_CUSTOM_LOCATION,
   payload: id,
+});
+
+export const setCustomLocations = (customLocations) => ({
+  type: SET_CUSTOM_LOCATIONS,
+  payload: customLocations,
+});
+
+export const setSelectedLocations = (selectedLocations) => ({
+  type: SET_SELECTED_LOCATIONS,
+  payload: selectedLocations,
 });
 
 export const addPlayerAction = () => ({
