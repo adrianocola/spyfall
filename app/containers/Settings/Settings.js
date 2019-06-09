@@ -11,6 +11,7 @@ import { selectAllLocationsAction, deselectAllLocationsAction } from 'actions/co
 import DefaultLocationsList from './DefaultLocationsList';
 import CustomLocationsList from './CustomLocationsList';
 import ExportLocations from './ExportLocations';
+import DownloadLocations from './DownloadLocations';
 
 export const Settings = (props) => {
   const { selectAllLocations, deselectAllLocations } = props;
@@ -34,6 +35,7 @@ export const Settings = (props) => {
         <DefaultLocationsList version={2} onSelectAll={selectAllLocations} onDeselectAll={deselectAllLocations} />
         <CustomLocationsList onSelectAll={selectAllLocations} onDeselectAll={deselectAllLocations} />
         <ExportLocations />
+        <DownloadLocations />
         <Row className={`${styles.backContainer} justify-content-center`}>
           <Col xs={12} className="text-center">
             <Link className={styles.backLink} to="/">
