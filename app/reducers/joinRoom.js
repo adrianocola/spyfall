@@ -13,7 +13,7 @@ export default (state = initialState, action) => {
     case SET_ROOM_ID:
       return {...state, roomId: (action.payload || '').toUpperCase()};
     case SET_PLAYER_ID:
-      return {...state, player: action.payload};
+      return {...state, player: (action.payload || '').toUpperCase()};
     default: return state;
   }
 };

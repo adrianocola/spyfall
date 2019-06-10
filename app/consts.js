@@ -3,6 +3,7 @@ export const MAX_PLAYERS = 12;
 export const MAX_ROLES = MAX_PLAYERS - 2;
 export const MAX_ROLES_ARRAY = new Array(MAX_ROLES).fill('');
 export const SPY_ROLE = 'spy';
+export const ID_LENGTH = 5;
 
 export const DEFAULT_LOCATIONS = {
   // spyfall 1

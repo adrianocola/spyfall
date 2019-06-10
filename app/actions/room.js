@@ -1,6 +1,5 @@
-export const SET_CONNECTED = 'ROOM_SET_ROOM_CONNECTED';
+export const REFRESH_ROOM_ID = 'ROOM_REFRESH_ROOM_ID';
 
-export const setConnectedAction = (connected) => ({
-  type: SET_CONNECTED,
-  payload: connected,
+export const refreshRoomId = () => ({
+  type: REFRESH_ROOM_ID,
 });

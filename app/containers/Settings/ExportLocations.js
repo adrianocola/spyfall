@@ -13,6 +13,7 @@ import copyToClipboard from 'utils/copyToClipboard';
 import { setCustomLocations, setSelectedLocations } from 'actions/config';
 import {SHADES} from 'styles/consts';
 import { showError, showSuccess } from 'utils/toast';
+import {ID_LENGTH} from 'consts';
 
 export const ExportLocations = ({userId, customLocations, selectedLocations, ...props}) => {
   const [loading, setLoading] = useState(false);
@@ -35,7 +36,7 @@ export const ExportLocations = ({userId, customLocations, selectedLocations, ...
       setExported(true);
       showSuccess();
     }catch(err){
-      showError(err);
+      showError(null, err);
     }
     setLoading(false);
   };
@@ -82,7 +83,7 @@ export const ExportLocations = ({userId, customLocations, selectedLocations, ...
     return (
       <Row className={styles.exportContainer}>
         <Col xs={12} md={6}>
-          <Input type="text" placeholder={t('interface.export_id')} value={importId} maxLength={5} onChange={(evt) => setImportId(_.toUpper(evt.target.value))} />
+          <Input type="text" placeholder={t('interface.export_id')} value={importId} maxLength={ID_LENGTH} onChange={(evt) => setImportId(_.toUpper(evt.target.value))} />
         </Col>
         <Col xs={12} sm={6}>
           <ButtonWithLoading color="primary" block loading={loading} onClick={onImport}>

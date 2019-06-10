@@ -22,7 +22,7 @@ export const ExportLocations = ({customLocations, selectedLocations, ...props}) 
       downloadAnchorNode.remove();
       showSuccess();
     }catch(err){
-      showError(err);
+      showError(null, err);
     }
     setLoading(false);
   };
@@ -38,7 +38,7 @@ export const ExportLocations = ({customLocations, selectedLocations, ...props}) 
       };
       reader.readAsText(files[0]);
     }catch(err){
-      showError(err);
+      showError(null, err);
     }
     setLoading(false);
   };

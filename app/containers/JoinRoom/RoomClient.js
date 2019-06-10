@@ -13,6 +13,7 @@ import {setJoinedRoomAction} from 'actions/session';
 import SpyIcon from 'components/SpyIcon/SpyIcon';
 import Timer from 'components/Timer/Timer';
 import Spinner from 'components/Spinner/Spinner';
+import { showError } from 'utils/toast';
 
 const isOfflineForDatabase = {
   online: false,
@@ -27,12 +28,16 @@ const isOnlineForDatabase = {
 export const RoomClient = (props) => {
   const { userId, roomId, player, joinedRoom, setJoinedRoom } = props;
 
-  const [room, setRoom] = useState();
+  const [room, setRoom] = useState(null);
   const [showRole, setShowRole] = useState(false);
 
   useEffect(() => {
     const roomRef = database.ref(`/rooms/${roomId}`);
     roomRef.on('value', (roomSnapshot) => {
+      if (!roomSnapshot || !roomSnapshot.exists() || !roomSnapshot.val()) {
+        showError('interface.error_room_connection');
+        return setJoinedRoom(false);
+      }
       setRoom(roomSnapshot.val());
     });
 
@@ -62,14 +67,16 @@ export const RoomClient = (props) => {
         userStatusDatabaseRef.off();
       };
     }
-  }, [joinedRoom]);
+  }, [joinedRoom, roomId]);
 
   const toggleShowRole = () => {
     setShowRole((prevShowRole) => !prevShowRole);
   };
 
   const onLeaveRoom = async () => {
-    await database.ref(`rooms/${roomId}/remotePlayers/${userId}`).remove();
+    if(room){
+      await database.ref(`rooms/${roomId}/remotePlayers/${userId}`).remove();
+    }
     setJoinedRoom(false);
   };
 

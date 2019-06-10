@@ -129,7 +129,7 @@ export const GameManager = (props) => {
         userStatusDatabaseRef.off();
       };
     }
-  }, [roomConnected]);
+  }, [roomConnected, roomId]);
 
   const started = state === 'started';
 

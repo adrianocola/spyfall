@@ -6,9 +6,10 @@ import {SHADES} from 'styles/consts';
 import { Link } from 'react-router-dom';
 import { GoClippy } from 'react-icons/go';
 import { setRoomConnectedAction } from 'actions/session';
+import { refreshRoomId } from 'actions/room';
 import ButtonWithLoading from 'components/ButtonWithLoading/ButtonWithLoading';
 import Localized from 'components/Localized/Localized';
-import { resetGame } from 'services/game';
+import { resetGame, deleteGame } from 'services/game';
 import copyToClipboard from 'utils/copyToClipboard';
 
 export const Room = (props) => {
@@ -25,20 +26,27 @@ export const Room = (props) => {
     setLoading(false);
   };
 
+  const onRefreshRoom = async () => {
+    await deleteGame();
+    props.refreshRoomId();
+    await onCreateRoom();
+  };
+
   if(roomConnected){
     return (
       <Row className={styles.roomControllerContainer}>
         <Col xs={12} sm={5}>
-          <Button outline color="secondary" block className={styles.roomId} onClick={() => copyToClipboard(roomId)}>
+          <ButtonWithLoading outline color="secondary" loading={loading} block className={styles.roomId} onClick={() => copyToClipboard(roomId)}>
             <Localized name="interface.room" />
             {': '}
             <span>{roomId}</span>
             {'   '}
             <GoClippy className={styles.copy} />
-          </Button>
+          </ButtonWithLoading>
         </Col>
         <Col xs={12} sm={7} className={styles.roomHelp}>
           <Localized name="interface.room_instructions" />
+          <div className={styles.refresh} onClick={onRefreshRoom}>↻</div>
         </Col>
       </Row>
     );
@@ -83,6 +91,14 @@ const styles = {
     fontSize: '1rem',
     marginBottom: 5,
   }),
+  refresh: css({
+    display: 'inline-block',
+    marginLeft: 5,
+    cursor: 'pointer',
+    '&:hover': {
+      color: SHADES.darker,
+    },
+  }),
 };
 
 const mapStateToProps = (state) => ({
@@ -93,6 +109,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   setRoomConnected: (connected) => dispatch(setRoomConnectedAction(connected)),
+  refreshRoomId: () => dispatch(refreshRoomId()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Room);

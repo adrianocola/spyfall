@@ -9,8 +9,10 @@ import { Link } from 'react-router-dom';
 import {database, databaseServerTimestamp} from 'services/firebase';
 import { setJoinRoomIdAction, setJoinPlayerAction } from 'actions/joinRoom';
 import { setJoinedRoomAction } from 'actions/session';
+import {ID_LENGTH} from 'consts';
 
 import RoomClient from './RoomClient';
+import {showError} from '../../utils/toast';
 
 export const JoinRoom = (props) => {
   const {
@@ -27,14 +29,18 @@ export const JoinRoom = (props) => {
 
   const onJoinRoom = async () => {
     setLoading(true);
-    await database.ref(`rooms/${joinRoomId}/remotePlayers/${userId}`).update({
-      createdAt: databaseServerTimestamp,
-      updatedAt: databaseServerTimestamp,
-      name: joinPlayer,
-      remote: true,
-    });
-
-    setJoinedRoom(true);
+    const roomOnline = await database.ref(`rooms/${joinRoomId}/online`).once('value');
+    if(roomOnline.exists() && roomOnline.val() === true){
+      await database.ref(`rooms/${joinRoomId}/remotePlayers/${userId}`).update({
+        createdAt: databaseServerTimestamp,
+        updatedAt: databaseServerTimestamp,
+        name: joinPlayer,
+        remote: true,
+      });
+      setJoinedRoom(true);
+    }else{
+      showError('interface.error_room_connection');
+    }
     setLoading(false);
   };
 
@@ -48,10 +54,10 @@ export const JoinRoom = (props) => {
     <Container>
       <Row className={`${styles.container} justify-content-center`}>
         <Col xs={12} md={4}>
-          <Input type="text" placeholder={t('interface.room')} value={joinRoomId} onChange={(evt) => setJoinRoomId(evt.target.value)} />
+          <Input maxLength={ID_LENGTH} type="text" placeholder={t('interface.room')} value={joinRoomId} onChange={(evt) => setJoinRoomId(evt.target.value)} />
         </Col>
         <Col xs={12} md={4}>
-          <Input type="text" placeholder={t('interface.player')} value={joinPlayer} onChange={(evt) => setJoinPlayer(evt.target.value)} />
+          <Input maxLength={20} type="text" placeholder={t('interface.player')} value={joinPlayer} onChange={(evt) => setJoinPlayer(evt.target.value)} />
         </Col>
         <Col xs={12} md={4}>
           <ButtonWithLoading color="success" block onClick={onJoinRoom} loading={loading} disabled={!canJoin}><Localized name="interface.join" /></ButtonWithLoading>

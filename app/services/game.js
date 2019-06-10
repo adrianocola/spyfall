@@ -34,3 +34,13 @@ export const updateGame = (game) => {
 
   return Promise.resolve();
 };
+
+export const deleteGame = () => {
+  store.dispatch(resetGameAction());
+  const state = store.getState();
+  if(state.session.roomConnected){
+    return database.ref(`rooms/${state.room.id}`).remove();
+  }
+
+  return Promise.resolve();
+};

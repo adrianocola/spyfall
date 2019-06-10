@@ -35,10 +35,10 @@ export const Game = (props) => {
     selectedLocationsCount,
   } = props;
 
-  const [room, setRoom] = useState();
+  const [room, setRoom] = useState(null);
   const totalNumberOfPlayers = useMemo(() => playersCount + _.size(room?.remotePlayers), [playersCount, room]);
   const canAddPlayers = useMemo(() => totalNumberOfPlayers < MAX_PLAYERS, [totalNumberOfPlayers]);
-  const canRemovePlayers = useMemo(() => totalNumberOfPlayers > MIN_PLAYERS, [totalNumberOfPlayers]);
+  const canRemovePlayers = useMemo(() => totalNumberOfPlayers > 0 && playersCount > 0, [playersCount, totalNumberOfPlayers]);
   const canStartGame = useMemo(() => totalNumberOfPlayers >= MIN_PLAYERS && totalNumberOfPlayers <= MAX_PLAYERS, [totalNumberOfPlayers]);
   const [showLocationsPopup, setShowLocationsPopup] = useState(false);
 
