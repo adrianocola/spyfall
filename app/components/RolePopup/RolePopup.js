@@ -23,14 +23,21 @@ export default (props) => {
             </span>
           </Col>
         </Row>
-        <Row className={styles.roleLine}>
-          <Col className="text-center">
-            <span className={styles.label}><Localized name="interface.role" />: </span>
-            <span className={styles.value}>
-              {role === SPY_ROLE ? <SpyIcon /> : <LocalizedRole role={role} location={location} customLocations={customLocations} />}
-            </span>
-          </Col>
-        </Row>
+        {!!role &&
+          <Row className={styles.roleLine}>
+            <Col className="text-center">
+              {role === SPY_ROLE && <SpyIcon />}
+              {role !== SPY_ROLE &&
+                <React.Fragment>
+                  <span className={styles.label}><Localized name="interface.role" />: </span>
+                  <span className={styles.value}>
+                    <LocalizedRole role={role} location={location} customLocations={customLocations} />
+                  </span>
+                </React.Fragment>
+              }
+            </Col>
+          </Row>
+        }
       </ModalBody>
     </Modal>
   );

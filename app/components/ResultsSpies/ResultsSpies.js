@@ -9,7 +9,7 @@ const CogIcon = (props) => {
     <Row className={props.className}>
       {spies.map((playerId) =>
         <Col key={playerId} className="text-center">
-          <SpyIcon className={styles.spyIcon} /><span>{remotePlayers[playerId] ? remotePlayers[playerId].name : playerId}</span>
+          <SpyIcon className={styles.spyIcon} /><span>{remotePlayers && remotePlayers[playerId] ? remotePlayers[playerId].name : playerId}</span>
         </Col>
       )}
     </Row>
