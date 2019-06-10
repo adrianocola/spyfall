@@ -3,10 +3,10 @@ import { resetGameAction, updateGameAction } from 'actions/game';
 import {database, databaseServerTimestamp} from 'services/firebase';
 import gameLocationsSelector from 'selectors/gameLocations';
 
-export const resetGame = () => {
+export const resetGame = (connected) => {
   store.dispatch(resetGameAction());
   const state = store.getState();
-  if(state.session.roomConnected){
+  if(connected || state.session.roomConnected){
     return database.ref(`rooms/${state.room.id}`).update({
       owner: state.root.userId,
       createdAt: databaseServerTimestamp,

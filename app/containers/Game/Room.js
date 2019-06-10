@@ -11,6 +11,7 @@ import ButtonWithLoading from 'components/ButtonWithLoading/ButtonWithLoading';
 import Localized from 'components/Localized/Localized';
 import { resetGame, deleteGame } from 'services/game';
 import copyToClipboard from 'utils/copyToClipboard';
+import {showError} from 'utils/toast';
 
 export const Room = (props) => {
   const { roomId, roomConnected, setRoomConnected } = props;
@@ -19,9 +20,14 @@ export const Room = (props) => {
 
   const onCreateRoom = async () => {
     setLoading(true);
-    setRoomConnected(true);
 
-    await resetGame(null);
+    try{
+      await resetGame(true);
+      setRoomConnected(true);
+    }catch(err){
+      showError(null, err);
+      props.refreshRoomId();
+    }
 
     setLoading(false);
   };
