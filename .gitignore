@@ -7,3 +7,4 @@ secret.json
 .firebase
 env/
 build/
+functions/lib/*.js

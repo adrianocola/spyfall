@@ -17,6 +17,9 @@
         ".read": true,
         ".write": "!data.exists() || data.child('owner').val() === auth.uid"
       }
+    },
+    "translations": {
+      ".read": true
     }
   }
 }

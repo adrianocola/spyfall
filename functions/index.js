@@ -3,6 +3,15 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const moment = require('moment');
 const promiseLimit = require('promise-limit');
+const fetch = require('node-fetch');
+
+const translationsMap = require('./lib/translations.js');
+const translationsShortMap = _.reduce(translationsMap, (obj, translation) => {
+  obj[translation.short] = translation.id;
+  return obj;
+}, {});
+
+const CROWDIN_API = functions.config().crowdin.api;
 
 admin.initializeApp();
 
@@ -22,4 +31,16 @@ exports.deleteOld = functions.pubsub.schedule('0 0 * * *').onRun(async (context)
   await Promise.all(_.map(exports, (v, exportId) =>
     limit(() => admin.database().ref(`exports/${exportId}`).remove())
   ));
+});
+
+// every 6 hours
+exports.updateLocalizationStatus = functions.pubsub.schedule('0 */6 * * *').onRun(async (context) => {
+  const status = {};
+  const translations = await fetch(`https://api.crowdin.com/api/project/adrianocola-spyfall/status?key=${CROWDIN_API}&json`).then((response) => response.json());
+  _.each(translations, (translation) => {
+    const code = translationsShortMap[translation.code];
+    status[code] = Math.round(100 * translation.approved / translation.phrases);
+  });
+
+  return admin.database().ref('translations').set(status);
 });

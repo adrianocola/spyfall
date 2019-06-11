@@ -33,8 +33,8 @@
     "lint:staged": "lint-staged",
     "eslint:fix": "eslint -- . --ignore-path .gitignore --fix",
     "lint:js": "npm run lint:eslint -- . ",
-    "deploy": "firebase deploy --project default",
-    "deploy-prod": "firebase deploy --project prod"
+    "deploy": "cp app/translations.js functions/lib/translations.js && firebase deploy --project default --only",
+    "deploy-prod": "cp app/translations.js functions/lib/translations.js && firebase deploy --project prod --only"
   },
   "lint-staged": {
     "*.js": "eslint --ignore-path .gitignore --ignore-pattern internals/scripts"

@@ -8,9 +8,10 @@ import {MEDIA, SHADES} from 'styles/consts';
 import { ToastContainer } from 'react-toastify';
 import Loadable from 'react-loadable';
 import { Container, Row, Col, Input } from 'reactstrap';
-import { auth } from 'services/firebase';
-import { setUserIdAction, setLanguageAction, setImportedLegacy } from 'actions/root';
+import { auth, database } from 'services/firebase';
+import { setUserIdAction, setLanguageAction, setImportedLegacy, setTranslations} from 'actions/root';
 import { setSelectedLocations, setCustomLocations } from 'actions/config';
+import { TRANSLATIONS } from 'consts';
 
 import SpinnerModal from 'components/SpinnerModal/SpinnerModal';
 import SpyIcon from 'components/SpyIcon/SpyIcon';
@@ -21,14 +22,17 @@ const LoadableJoinRoom = Loadable({loader: () => import('../JoinRoom/JoinRoom'),
 
 export class App extends React.Component{
   componentDidMount() {
-    const { setUserId, importedLegacy } = this.props;
+    const { setUserId } = this.props;
     auth.signInAnonymously().then((authUser) => {
       setUserId(authUser.user.uid);
     });
-    if(!importedLegacy) this.importLegacy();
+    this.importLegacy();
+    this.importTranslations();
   }
 
   importLegacy = () => {
+    if(!this.props.importedLegacy) return null;
+
     try{
       const customLocations = window.store.get('custom_locations');
       const selectedLocations = window.store.get('selected_locations');
@@ -49,6 +53,15 @@ export class App extends React.Component{
     this.props.setImportedLegacy(true);
   };
 
+  importTranslations = async () => {
+    // imported less than 6 hours ago
+    if(this.props.translationsImportTime && Date.now() - this.props.translationsImportTime < 6 * 60 * 60 * 1000) return null;
+
+    const translationsSnapshot = await database.ref('translations').once('value');
+    const translations = translationsSnapshot.val();
+    this.props.setTranslations(translations);
+  };
+
   setLanguage = (language) => {
     const { setLanguage } = this.props;
     i18n.changeLanguage(language);
@@ -56,7 +69,7 @@ export class App extends React.Component{
   };
 
   render() {
-    const { language } = this.props;
+    const { language, translations = {} } = this.props;
     return (
       <Container className={styles.container}>
         <Helmet
@@ -75,42 +88,9 @@ export class App extends React.Component{
               </Col>
               <Col xs="12" sm="8" className={`${styles.languageSelector} text-center`}>
                 <Input type="select" name="languages" id="languages" value={language} onChange={(evt) => this.setLanguage(evt.target.value)}>
-                  <option value="af-ZA">Afrikaans</option>
-                  <option value="ar-SA">العربية</option>
-                  <option value="bg-BG">Български</option>
-                  <option value="ca-ES">Català</option>
-                  <option value="cs-CZ">Čeština</option>
-                  <option value="da-DK">Dansk</option>
-                  <option value="de-DE">Deutsch</option>
-                  <option value="el-GR">ελληνικά</option>
-                  <option value="en-GB">English - United Kingdom</option>
-                  <option value="en-US">English - United States</option>
-                  <option value="es-ES">Español</option>
-                  <option value="fa-IR">فارسی</option>
-                  <option value="fi-FI">Suomi</option>
-                  <option value="fr-FR">Fran&ccedil;ais</option>
-                  <option value="he-IL">עברית</option>
-                  <option value="hu-HU">Magyar</option>
-                  <option value="id-ID">Indonesian</option>
-                  <option value="it-IT">Italiano</option>
-                  <option value="ja-JP">日本語</option>
-                  <option value="ko-KR">한국어</option>
-                  <option value="nl-NL">Nederlands</option>
-                  <option value="no-NO">Norsk</option>
-                  <option value="pl-PL">Język Polski</option>
-                  <option value="pt-BR">Português (Brasil)</option>
-                  <option value="pt-PT">Português (Portugal)</option>
-                  <option value="ro-RO">Română</option>
-                  <option value="ru-RU">Pусский</option>
-                  <option value="sr-CS">Srpski (Latinica)</option>
-                  <option value="sr-SP">Српски (Ћирилица)</option>
-                  <option value="sv-SE">Svenska</option>
-                  <option value="th-TH">ภาษาไทย</option>
-                  <option value="tr-TR">Türkçe</option>
-                  <option value="uk-UA">Українська</option>
-                  <option value="vi-VN">Tiếng Việt</option>
-                  <option value="zh-CN">简体中文</option>
-                  <option value="zh-TW">繁體中文</option>
+                  {TRANSLATIONS.map((translation) =>
+                    <option key={translation.id} value={translation.id}>{translation.name} - {translations[translation.id] || 0}%</option>
+                  )}
                 </Input>
               </Col>
             </Row>
@@ -181,6 +161,8 @@ const styles = {
 const mapStateToProps = (state) => ({
   language: state.root.language,
   importedLegacy: state.root.importedLegacy,
+  translations: state.root.translations,
+  translationsImportTime: state.root.translationsImportTime,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -189,6 +171,7 @@ const mapDispatchToProps = (dispatch) => ({
   setImportedLegacy: (importedLegacy) => dispatch(setImportedLegacy(importedLegacy)),
   setSelectedLocations: (selectedLocations) => dispatch(setSelectedLocations(selectedLocations)),
   setCustomLocations: (customLocations) => dispatch(setCustomLocations(customLocations)),
+  setTranslations: (translations) => dispatch(setTranslations(translations)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
