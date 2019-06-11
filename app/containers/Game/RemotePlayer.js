@@ -3,8 +3,9 @@ import {css} from 'emotion';
 import {Col, Row, Button, Badge } from 'reactstrap';
 import {database} from 'services/firebase';
 
-export const RemotePlayer = ({roomId, playerUserId, remotePlayer}) => {
+export const RemotePlayer = ({roomId, playerUserId, remotePlayer, started}) => {
   const onRemove = () => {
+    if(started) return;
     database.ref(`rooms/${roomId}/remotePlayers/${playerUserId}`).remove();
   };
 
@@ -13,7 +14,7 @@ export const RemotePlayer = ({roomId, playerUserId, remotePlayer}) => {
       <Col>
         <Button color="secondary" block disabled>{remotePlayer.name}</Button>
         {remotePlayer.online && <Badge pill color="success" className={styles.isOnline}>✓</Badge>}
-        {!remotePlayer.online && <Badge pill color="danger" className={styles.delete} onClick={onRemove}>✘</Badge>}
+        {!remotePlayer.online && <Badge pill color="danger" className={styles.isOffline} onClick={onRemove}>✘</Badge>}
       </Col>
     </Row>
   );
@@ -30,7 +31,7 @@ const styles = {
     top: 7,
     fontSize: 16,
   }),
-  delete: css({
+  isOffline: css({
     position: 'absolute',
     right: 25,
     top: 7,

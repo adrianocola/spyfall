@@ -36,6 +36,11 @@ export const Room = ({roomId, roomConnected, setRoomConnected, ...props}) => {
     await onCreateRoom();
   };
 
+  const onCloseRoom = async () => {
+    await deleteGame();
+    setRoomConnected(false);
+  };
+
   if(roomConnected){
     return (
       <Row className={styles.roomControllerContainer}>
@@ -51,6 +56,7 @@ export const Room = ({roomId, roomConnected, setRoomConnected, ...props}) => {
         <Col xs={12} sm={7} className={styles.roomHelp}>
           <Localized name="interface.room_instructions" />
           <div className={styles.refresh} onClick={onRefreshRoom}>↻</div>
+          <div className={styles.close} onClick={onCloseRoom}>✘</div>
         </Col>
       </Row>
     );
@@ -97,7 +103,15 @@ const styles = {
   }),
   refresh: css({
     display: 'inline-block',
-    marginLeft: 5,
+    marginLeft: 10,
+    cursor: 'pointer',
+    '&:hover': {
+      color: SHADES.darker,
+    },
+  }),
+  close: css({
+    display: 'inline-block',
+    marginLeft: 10,
     cursor: 'pointer',
     '&:hover': {
       color: SHADES.darker,

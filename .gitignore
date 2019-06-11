@@ -4,7 +4,7 @@ node_modules
 public/status.json
 secret.json
 .firebaserc
-.firebase
+.firebase/
 env/
 build/
 functions/lib/*.js

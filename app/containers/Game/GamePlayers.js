@@ -8,7 +8,7 @@ import RemotePlayer from './RemotePlayer';
 export const GamePlayers = ({started, room, roomId, playersCount, updatePlayer}) => (
   <React.Fragment>
     {room && _.map(room.remotePlayers, (player, playerUserId) =>
-      <RemotePlayer key={playerUserId} roomId={roomId} playerUserId={playerUserId} remotePlayer={player} />
+      <RemotePlayer key={playerUserId} roomId={roomId} playerUserId={playerUserId} remotePlayer={player} started={started} />
     )}
     {_.times(playersCount).map((index) =>
       <Player key={index} started={started} index={index} onPlayerChange={updatePlayer} />
