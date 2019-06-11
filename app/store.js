@@ -1,5 +1,4 @@
 import {createStore, applyMiddleware, compose, combineReducers} from 'redux';
-import {routerReducer, routerMiddleware} from 'react-router-redux';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
@@ -11,11 +10,7 @@ import config from 'reducers/config';
 import room from 'reducers/room';
 import joinRoom from 'reducers/joinRoom';
 
-import history from './browserHistory';
-
-const middlewares = [
-  routerMiddleware(history),
-];
+const middlewares = [];
 
 const persistConfig = {
   key: 'persistor',
@@ -43,7 +38,6 @@ const enhancer = composeEnhancers(
 );
 
 const persistedReducer = persistReducer(persistConfig, combineReducers({
-  routing: routerReducer,
   root,
   session,
   game,

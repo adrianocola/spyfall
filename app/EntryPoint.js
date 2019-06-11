@@ -1,8 +1,7 @@
+import { hot } from 'react-hot-loader/root';
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
-import { hot } from 'react-hot-loader';
+import { Switch, Route, Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'react-router-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import ScrollToTop from 'components/ScrollToTop/ScrollToTop';
 
@@ -11,15 +10,15 @@ import App from 'containers/App/App';
 export const RootComponent = (props) => (
   <Provider store={props.store}>
     <PersistGate loading={null} persistor={props.persistor}>
-      <ConnectedRouter history={props.history}>
+      <Router history={props.history}>
         <ScrollToTop>
           <Switch>
             <Route component={App} />
           </Switch>
         </ScrollToTop>
-      </ConnectedRouter>
+      </Router>
     </PersistGate>
   </Provider>
 );
 
-export default hot(module)(RootComponent);
+export default hot(RootComponent);

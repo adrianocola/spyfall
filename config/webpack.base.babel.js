@@ -33,8 +33,7 @@ module.exports = (options) => ({
       },
       {
         // Preprocess 3rd party .css files located in node_modules
-        test: /\.css$/,
-        include: /node_modules/,
+        test: /\.css$/i,
         use: ['style-loader', 'css-loader'],
       },
       {
@@ -113,6 +112,9 @@ module.exports = (options) => ({
       'jsnext:main',
       'main',
     ],
+    alias: {
+      'react-dom': '@hot-loader/react-dom',
+    },
   },
   devtool: options.devtool,
   target: 'web', // Make web variables accessible to webpack, e.g. window

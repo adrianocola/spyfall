@@ -1,8 +1,9 @@
 import 'babel-polyfill';
+import 'react-hot-loader';
 
 // Import all the third party stuff
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom'; // eslint-disable-line import/no-unresolved
 import FontFaceObserver from 'fontfaceobserver';
 
 import 'sanitize.css/sanitize.css';
