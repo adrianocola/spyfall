@@ -42,6 +42,7 @@ module.exports = require('./webpack.base.babel')({
 
   devServer: {
     stats: 'errors-only',
+    historyApiFallback: true,
   },
 
   performance: {

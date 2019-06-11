@@ -1,13 +1,12 @@
-import React, { useState } from 'react';
-import { css } from 'emotion';
-import { connect } from 'react-redux';
-import { Row, Col} from 'reactstrap';
+import React, {useState} from 'react';
+import {css} from 'emotion';
+import {Col, Row} from 'reactstrap';
 import SelectAll from 'components/SelectAll/SelectAll';
-import { DEFAULT_LOCATIONS } from 'consts';
+import {DEFAULT_LOCATIONS} from 'consts';
 
 import Location from './Location';
 
-export const DefaultLocationsList = ({ version, onSelectAll, onDeselectAll }) => {
+export const DefaultLocationsList = ({version, onSelectAll, onDeselectAll}) => {
   const [locations] = useState(() => Object.entries(DEFAULT_LOCATIONS).filter(([key, value]) => value === version).map(([key]) => key));
 
   return (
@@ -44,8 +43,4 @@ const styles = {
   }),
 };
 
-const mapStateToProps = (state) => ({
-  customLocations: state.config.customLocations,
-});
-
-export default connect(mapStateToProps)(DefaultLocationsList);
+export default DefaultLocationsList;

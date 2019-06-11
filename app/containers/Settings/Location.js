@@ -10,9 +10,7 @@ import { Link } from 'react-router-dom';
 import { SHADES, COLORS } from 'styles/consts';
 import { selectLocationAction, deselectLocationAction, saveCustomLocationAction, remCustomLocationAction } from 'actions/config';
 
-export const Location = (props) => {
-  const { locationId, disabled, selected = false, selectLocation, deselectLocation } = props;
-
+export const Location = ({locationId, disabled, selected = false, selectLocation, deselectLocation, ...props}) => {
   const [t] = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [location, setLocation] = useState(props.location);

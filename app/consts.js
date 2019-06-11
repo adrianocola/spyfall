@@ -5,6 +5,11 @@ export const MAX_ROLES_ARRAY = new Array(MAX_ROLES).fill('');
 export const SPY_ROLE = 'spy';
 export const ID_LENGTH = 5;
 
+export const GAME_STATES = {
+  STARTED: 'STARTED',
+  STOPPED: 'STOPPED',
+};
+
 export const DEFAULT_LOCATIONS = {
   // spyfall 1
   airplane: 1,

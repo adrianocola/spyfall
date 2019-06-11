@@ -3,9 +3,7 @@ import {css} from 'emotion';
 import {Col, Row, Button, Badge } from 'reactstrap';
 import {database} from 'services/firebase';
 
-export const RemotePlayer = (props) => {
-  const { roomId, playerUserId, remotePlayer } = props;
-
+export const RemotePlayer = ({roomId, playerUserId, remotePlayer}) => {
   const onRemove = () => {
     database.ref(`rooms/${roomId}/remotePlayers/${playerUserId}`).remove();
   };

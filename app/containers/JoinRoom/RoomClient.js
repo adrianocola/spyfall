@@ -1,29 +1,21 @@
 import _ from 'lodash';
 import React, {useEffect, useState} from 'react';
-import { css } from 'emotion';
-import { connect } from 'react-redux';
-import {Row, Col, Button, Container} from 'reactstrap';
+import {css} from 'emotion';
+import {connect} from 'react-redux';
+import {Button, Col, Container, Row} from 'reactstrap';
 import Localized from 'components/Localized/Localized';
 
 import Locations from 'components/Locations/Locations';
 import RolePopup from 'components/RolePopup/RolePopup';
 import ResultsSpies from 'components/ResultsSpies/ResultsSpies';
-import {database, databaseServerTimestamp} from 'services/firebase';
+import {database} from 'services/firebase';
 import {setJoinedRoomAction} from 'actions/session';
 import SpyIcon from 'components/SpyIcon/SpyIcon';
 import Timer from 'components/Timer/Timer';
 import Spinner from 'components/Spinner/Spinner';
-import { showError } from 'utils/toast';
-
-const isOfflineForDatabase = {
-  online: false,
-  lastOnline: databaseServerTimestamp,
-};
-
-const isOnlineForDatabase = {
-  online: true,
-  lastOnline: databaseServerTimestamp,
-};
+import {showError} from 'utils/toast';
+import usePresence from 'hooks/usePresence';
+import {GAME_STATES} from 'consts';
 
 export const RoomClient = (props) => {
   const { userId, roomId, player, joinedRoom, setJoinedRoom } = props;
@@ -44,30 +36,7 @@ export const RoomClient = (props) => {
     return () => roomRef.off();
   }, []);
 
-  useEffect(() => {
-    if(joinedRoom){
-      const presenceRef = database.ref('.info/connected');
-      const userStatusDatabaseRef = database.ref(`rooms/${roomId}/remotePlayers/${userId}`);
-      let onDisconnect;
-      presenceRef.on('value', (snapshot) => {
-        if (!snapshot || snapshot.val() === false) {
-          return userStatusDatabaseRef.update(isOfflineForDatabase).catch((err) => console.log('not snapshot error', err)); // eslint-disable-line no-console
-        }
-
-        onDisconnect = userStatusDatabaseRef.onDisconnect();
-        onDisconnect.update(isOfflineForDatabase).then(() => {
-          userStatusDatabaseRef.update(isOnlineForDatabase);
-        }).catch((err) => console.log('onDisconnect error', err)); // eslint-disable-line no-console
-      });
-      return () => {
-        if(onDisconnect){
-          onDisconnect.cancel();
-        }
-        presenceRef.off();
-        userStatusDatabaseRef.off();
-      };
-    }
-  }, [joinedRoom, roomId]);
+  usePresence(`rooms/${roomId}/remotePlayers/${userId}`, joinedRoom);
 
   const toggleShowRole = () => {
     setShowRole((prevShowRole) => !prevShowRole);
@@ -99,8 +68,8 @@ export const RoomClient = (props) => {
     );
   }
 
-  const started = room.state === 'started';
-  const stopped = room.state === 'stopped';
+  const started = room.state === GAME_STATES.STARTED;
+  const stopped = room.state === GAME_STATES.STOPPED;
   const locationsSize = Object.keys(room.gameLocations).length;
 
   return (

@@ -7,9 +7,7 @@ import {DARK_COLORS, SHADES} from 'styles/consts';
 import { useTranslation } from 'react-i18next';
 import { DEFAULT_LOCATIONS } from 'consts';
 
-export const Locations = (props) => {
-  const { location, locations = {}, prevLocation } = props;
-
+export const Locations = ({location, locations = {}, prevLocation}) => {
   const [t] = useTranslation();
 
   const sortedLocations = useMemo(() => {

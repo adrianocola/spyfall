@@ -1,9 +1,8 @@
 import { useRef, useEffect } from 'react';
 import { withRouter } from 'react-router';
 
-export const ScrollToTop = (props) => {
-  const {location, children} = props;
-  const prevLocationRef = useRef();
+export const ScrollToTop = ({location, children}) => {
+  const prevLocationRef = useRef(null);
   const prevLocation = prevLocationRef.current;
   useEffect(() => {
     if (prevLocation && location !== prevLocation) {

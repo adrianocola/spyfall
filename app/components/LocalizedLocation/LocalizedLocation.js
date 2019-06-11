@@ -2,8 +2,7 @@ import React from 'react';
 import { DEFAULT_LOCATIONS } from 'consts';
 import Localized from 'components/Localized/Localized';
 
-const LocalizedLocation = (props) => {
-  const { location, customLocations } = props;
+const LocalizedLocation = ({location, customLocations}) => {
   if(DEFAULT_LOCATIONS[location]){
     return <Localized>{`location.${location}`}</Localized>;
   }

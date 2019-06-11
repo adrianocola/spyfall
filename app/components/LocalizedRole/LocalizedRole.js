@@ -2,8 +2,7 @@ import React from 'react';
 import { DEFAULT_LOCATIONS } from 'consts';
 import Localized from 'components/Localized/Localized';
 
-const LocalizedRole = (props) => {
-  const { role, location, customLocations } = props;
+const LocalizedRole = ({role, location, customLocations}) => {
   if(DEFAULT_LOCATIONS[location]){
     return <Localized>{`location.${location}.role${role}`}</Localized>;
   }

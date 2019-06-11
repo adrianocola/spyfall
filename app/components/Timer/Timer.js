@@ -3,11 +3,9 @@ import React, { useState, useRef, useEffect } from 'react';
 import { css } from 'emotion';
 import { Button } from 'reactstrap';
 import beep from 'services/beep';
-import {SHADES} from '../../styles/consts';
+import {SHADES} from 'styles/consts';
 
-export default (props) => {
-  const {initialValue, running, onComplete} = props;
-
+export default ({initialValue, running, onComplete}) => {
   const prevRunningRef = useRef();
   const prevRunning = prevRunningRef.current;
 

@@ -13,9 +13,7 @@ import CustomLocationsList from './CustomLocationsList';
 import ExportLocations from './ExportLocations';
 import DownloadLocations from './DownloadLocations';
 
-export const Settings = (props) => {
-  const { selectAllLocations, deselectAllLocations } = props;
-
+export const Settings = ({selectAllLocations, deselectAllLocations}) => {
   const [t] = useTranslation();
 
   return (

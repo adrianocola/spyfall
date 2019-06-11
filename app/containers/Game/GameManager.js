@@ -1,26 +1,17 @@
 import _ from 'lodash';
-import React, {useEffect, useState} from 'react';
-import { css } from 'emotion';
-import { connect } from 'react-redux';
-import { Row, Col, Button } from 'reactstrap';
+import React, {useMemo, useState} from 'react';
+import {css} from 'emotion';
+import {connect} from 'react-redux';
+import {Button, Col, Row} from 'reactstrap';
 import Localized from 'components/Localized/Localized';
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 import gameLocationsSelector from 'selectors/gameLocations';
-import { DEFAULT_LOCATIONS, MAX_ROLES, SPY_ROLE } from 'consts';
-import {database, databaseServerTimestamp} from 'services/firebase';
-import { updateGame} from 'services/game';
+import {DEFAULT_LOCATIONS, GAME_STATES, MAX_PLAYERS, MAX_ROLES, MIN_PLAYERS, SPY_ROLE} from 'consts';
+import usePresence from 'hooks/usePresence';
+import {updateGame} from 'services/game';
+import {store} from 'store';
 
 import ResultPopup from './ResultPopup';
-
-const isOfflineForDatabase = {
-  online: false,
-  lastOnline: databaseServerTimestamp,
-};
-
-const isOnlineForDatabase = {
-  online: true,
-  lastOnline: databaseServerTimestamp,
-};
 
 const getPlayerRoles = (allPlayers, availableRoles) => {
   const shuffledRoles = _.shuffle(availableRoles);
@@ -33,22 +24,19 @@ const getPlayerRoles = (allPlayers, availableRoles) => {
   return {newPlayersRoles, newSpies};
 };
 
-export const GameManager = (props) => {
-  const {
-    canStartGame,
-    room, roomId, roomConnected,
-    gameLocations, customLocations,
-    location,
-    spyCount,
-    state,
-    players, spies,
-  } = props;
-
+export const GameManager = ({started, room, roomId, roomConnected, gameLocations, playersCount}) => {
   const [t] = useTranslation();
   const [showResultPopup, setShowResultPopup] = useState(false);
+  const totalNumberOfPlayers = useMemo(() => playersCount + _.size(room?.remotePlayers), [playersCount, room]);
+  const canStartGame = useMemo(() => totalNumberOfPlayers >= MIN_PLAYERS && totalNumberOfPlayers <= MAX_PLAYERS, [totalNumberOfPlayers]);
 
   const onStartGame = async () => {
-    const newState = 'started';
+    const {
+      game: {location, spies},
+      config: {players, spyCount, customLocations},
+    } = store.getState();
+
+    const newState = GAME_STATES.STARTED;
     const allPlayers = [...players];
     if(room){
       _.forEach(room.remotePlayers, (remotePlayer, remotePlayerId) => {
@@ -96,85 +84,48 @@ export const GameManager = (props) => {
   };
 
   const onEndGame = async () => {
-    const newState = 'stopped';
-
     setShowResultPopup(true);
 
     updateGame({
-      state: newState,
+      state: GAME_STATES.STOPPED,
       timerRunning: false,
     });
   };
 
-  useEffect(() => {
-    if(roomConnected){
-      const presenceRef = database.ref('.info/connected');
-      const userStatusDatabaseRef = database.ref(`rooms/${roomId}`);
-      let onDisconnect;
-      presenceRef.on('value', (snapshot) => {
-        if (!snapshot || snapshot.val() === false) {
-          return userStatusDatabaseRef.update(isOfflineForDatabase).catch((err) => console.log('not snapshot error', err)); // eslint-disable-line no-console
-        }
-
-        onDisconnect = userStatusDatabaseRef.onDisconnect();
-        onDisconnect.update(isOfflineForDatabase).then(() => {
-          userStatusDatabaseRef.update(isOnlineForDatabase);
-        }).catch((err) => console.log('onDisconnect error', err)); // eslint-disable-line no-console
-      });
-      return () => {
-        if(onDisconnect){
-          onDisconnect.cancel();
-        }
-        presenceRef.off();
-        userStatusDatabaseRef.off();
-      };
-    }
-  }, [roomConnected, roomId]);
-
-  const started = state === 'started';
+  usePresence(`rooms/${roomId}`, roomConnected);
 
   return (
-    <div>
-      {!started &&
-      <Row className={styles.gameManagerContainer}>
+    <React.Fragment>
+      <Row className={styles.container}>
         <Col>
-          <Button color={canStartGame ? 'primary' : 'secondary'} block disabled={!canStartGame} outline={!canStartGame} onClick={onStartGame}>
-            <Localized name="interface.start_game" />
-          </Button>
+          {!started &&
+            <Button color={canStartGame ? 'primary' : 'secondary'} block disabled={!canStartGame} outline={!canStartGame} onClick={onStartGame}>
+              <Localized name="interface.start_game" />
+            </Button>
+          }
+          {started &&
+            <Button color="danger" block onClick={onEndGame}>
+              <Localized name="interface.end_game" />
+            </Button>
+          }
         </Col>
       </Row>
-      }
-      {started &&
-      <Row className={styles.gameManagerContainer}>
-        <Col>
-          <Button color="danger" block onClick={onEndGame}>
-            <Localized name="interface.end_game" />
-          </Button>
-        </Col>
-      </Row>
-      }
       <ResultPopup remotePlayers={room && room.remotePlayers} isOpen={showResultPopup} toggle={() => setShowResultPopup(false)} />
-    </div>
+    </React.Fragment>
   );
 };
 
 const styles = {
-  gameManagerContainer: css({
+  container: css({
     marginTop: 20,
   }),
 };
 
 const mapStateToProps = (state) => ({
   roomId: state.room.id,
-  state: state.game.state,
   gameLocations: gameLocationsSelector(state),
-  customLocations: state.config.customLocations,
-  prevLocation: state.game.prevLocation,
-  location: state.game.location,
-  players: state.config.players,
-  spyCount: state.config.spyCount,
-  spies: state.game.spies,
   roomConnected: state.session.roomConnected,
+  playersCount: state.config.players.length,
 });
 
 export default connect(mapStateToProps)(GameManager);

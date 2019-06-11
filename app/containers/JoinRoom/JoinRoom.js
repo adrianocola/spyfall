@@ -1,31 +1,24 @@
-import React, {useState, useMemo} from 'react';
-import { css } from 'emotion';
-import { connect } from 'react-redux';
-import {Row, Col, Input, Button, Container} from 'reactstrap';
+import React, {useState} from 'react';
+import {css} from 'emotion';
+import {connect} from 'react-redux';
+import {Button, Col, Container, Input, Row} from 'reactstrap';
 import Localized from 'components/Localized/Localized';
 import ButtonWithLoading from 'components/ButtonWithLoading/ButtonWithLoading';
-import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import {useTranslation} from 'react-i18next';
+import {Link} from 'react-router-dom';
 import {database, databaseServerTimestamp} from 'services/firebase';
-import { setJoinRoomIdAction, setJoinPlayerAction } from 'actions/joinRoom';
-import { setJoinedRoomAction } from 'actions/session';
+import {setJoinPlayerAction, setJoinRoomIdAction} from 'actions/joinRoom';
+import {setJoinedRoomAction} from 'actions/session';
+import {showError} from 'utils/toast';
 import {ID_LENGTH} from 'consts';
 
 import RoomClient from './RoomClient';
-import {showError} from '../../utils/toast';
 
-export const JoinRoom = (props) => {
-  const {
-    userId,
-    joinRoomId, setJoinRoomId,
-    joinPlayer, setJoinPlayer,
-    joinedRoom, setJoinedRoom,
-  } = props;
-
+export const JoinRoom = ({userId, joinRoomId, setJoinRoomId, joinPlayer, setJoinPlayer, joinedRoom, setJoinedRoom}) => {
   const [t] = useTranslation();
 
   const [loading, setLoading] = useState(false);
-  const canJoin = useMemo(() => joinRoomId && joinPlayer, [joinRoomId, joinPlayer]);
+  const canJoin = joinRoomId && joinPlayer;
 
   const onJoinRoom = async () => {
     setLoading(true);

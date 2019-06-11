@@ -5,9 +5,7 @@ import {Col, Input, Row, Button } from 'reactstrap';
 
 import RolePopup from 'components/RolePopup/RolePopup';
 
-export const Player = (props) => {
-  const { index, player, started, location, role, customLocations } = props;
-
+export const Player = ({index, player, started, location, role, customLocations, onPlayerChange}) => {
   const [showRole, setShowRole] = useState(false);
   const [showedRole, setShowedRole] = useState(false);
 
@@ -26,7 +24,7 @@ export const Player = (props) => {
     <Row className={styles.player}>
       <Col>
         {!started &&
-          <Input type="text" name={`player_${index}`} id={`player_${index}`} placeholder="Player" value={player} onChange={(evt) => props.onPlayerChange(index, evt.target.value)} />
+          <Input type="text" name={`player_${index}`} id={`player_${index}`} placeholder="Player" value={player} onChange={(evt) => onPlayerChange(index, evt.target.value)} />
         }
         {!!started &&
           <Button color="success" disabled={showedRole} outline={showedRole} block onClick={toggle}>{player}</Button>

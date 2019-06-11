@@ -13,9 +13,7 @@ import { resetGame, deleteGame } from 'services/game';
 import copyToClipboard from 'utils/copyToClipboard';
 import {showError} from 'utils/toast';
 
-export const Room = (props) => {
-  const { roomId, roomConnected, setRoomConnected } = props;
-
+export const Room = ({roomId, roomConnected, setRoomConnected, ...props}) => {
   const [loading, setLoading] = useState(false);
 
   const onCreateRoom = async () => {

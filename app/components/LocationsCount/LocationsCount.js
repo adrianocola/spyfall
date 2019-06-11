@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import selectedLocationsCountSelector from 'selectors/selectedLocationsCount';
 import totalLocationsCountSelector from 'selectors/totalLocationsCount';
 
-export const LocationsCount = ({ className, style, selectedLocationsCount, totalLocationsCount }) => (
+export const LocationsCount = ({className, style, selectedLocationsCount, totalLocationsCount}) => (
   <span className={className} style={style}>
     {selectedLocationsCount}/{totalLocationsCount}
   </span>
