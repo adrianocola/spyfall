@@ -126,4 +126,5 @@ module.exports = (options) => ({
       minChunks: 2,
     },
   },
+  devServer: options.devServer,
 });
