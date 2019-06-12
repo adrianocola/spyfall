@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {css} from 'emotion';
 import { connect } from 'react-redux';
 import {Col, Input, Row, Button } from 'reactstrap';
+import {logEvent} from 'utils/analytics';
 
 import RolePopup from 'components/RolePopup/RolePopup';
 
@@ -13,6 +14,7 @@ export const Player = ({index, player, started, location, role, customLocations,
     if(!showedRole){
       setShowedRole(true);
     }
+    if(!showRole) logEvent('PLAYER_VIEW_ROLE');
     setShowRole((prevShowRole) => !prevShowRole);
   };
 

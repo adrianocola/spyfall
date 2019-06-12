@@ -2,8 +2,10 @@ import { store } from 'store';
 import { resetGameAction, updateGameAction } from 'actions/game';
 import {database, databaseServerTimestamp} from 'services/firebase';
 import gameLocationsSelector from 'selectors/gameLocations';
+import {logEvent} from 'utils/analytics';
 
 export const resetGame = (connected) => {
+  logEvent('GAME_RESET');
   store.dispatch(resetGameAction());
   const state = store.getState();
   if(connected || state.session.roomConnected){
@@ -21,6 +23,7 @@ export const resetGame = (connected) => {
 };
 
 export const updateGame = (game) => {
+  logEvent('GAME_UPDATE');
   store.dispatch(updateGameAction(game));
   const state = store.getState();
   if(state.session.roomConnected){
@@ -36,6 +39,7 @@ export const updateGame = (game) => {
 };
 
 export const deleteGame = () => {
+  logEvent('GAME_DELETE');
   store.dispatch(resetGameAction());
   const state = store.getState();
   if(state.session.roomConnected){

@@ -12,11 +12,13 @@ import Localized from 'components/Localized/Localized';
 import { resetGame, deleteGame } from 'services/game';
 import copyToClipboard from 'utils/copyToClipboard';
 import {showError} from 'utils/toast';
+import {logEvent} from 'utils/analytics';
 
 export const Room = ({roomId, roomConnected, setRoomConnected, ...props}) => {
   const [loading, setLoading] = useState(false);
 
   const onCreateRoom = async () => {
+    logEvent('ROOM_CREATE');
     setLoading(true);
 
     try{
@@ -31,12 +33,14 @@ export const Room = ({roomId, roomConnected, setRoomConnected, ...props}) => {
   };
 
   const onRefreshRoom = async () => {
+    logEvent('ROOM_REFRESH');
     await deleteGame();
     props.refreshRoomId();
     await onCreateRoom();
   };
 
   const onCloseRoom = async () => {
+    logEvent('ROOM_CLOSE');
     await deleteGame();
     setRoomConnected(false);
   };

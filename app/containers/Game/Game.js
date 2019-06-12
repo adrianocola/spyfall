@@ -8,6 +8,7 @@ import LocationsCount from 'components/LocationsCount/LocationsCount';
 import {database} from 'services/firebase';
 import {GAME_STATES} from 'consts';
 import CogIcon from 'components/CogIcon/CogIcon';
+import {logEvent} from 'utils/analytics';
 
 import GamePlayers from './GamePlayers';
 import GamePlayersController from './GamePlayersController';
@@ -17,12 +18,14 @@ import LocationsPopup from './LocationsPopup';
 import GameManager from './GameManager';
 import Room from './Room';
 
+
 export const Game = ({roomId, roomConnected, state}) => {
   const [room, setRoom] = useState(null);
   const [showLocationsPopup, setShowLocationsPopup] = useState(false);
 
   useEffect(() => {
     if(roomConnected){
+      logEvent('ROOM_CONNECTED_MASTER');
       const roomRef = database.ref(`/rooms/${roomId}`);
       roomRef.on('value', (roomSnapshot) => {
         setRoom(roomSnapshot.val());

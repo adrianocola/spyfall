@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { SHADES, COLORS } from 'styles/consts';
 import { selectLocationAction, deselectLocationAction, saveCustomLocationAction, remCustomLocationAction } from 'actions/config';
+import {logEvent} from 'utils/analytics';
 
 export const Location = ({locationId, disabled, selected = false, selectLocation, deselectLocation, ...props}) => {
   const [t] = useTranslation();
@@ -27,12 +28,14 @@ export const Location = ({locationId, disabled, selected = false, selectLocation
   };
 
   const onSave = (evt) => {
+    logEvent('SETTINGS_SAVE_LOCATION');
     evt.preventDefault();
     props.saveCustomLocation(locationId, location);
     setIsOpen(false);
   };
 
   const onDelete = (evt) => {
+    logEvent('SETTINGS_DELETE_LOCATION');
     evt.preventDefault();
     props.remCustomLocation(locationId);
     setIsOpen(false);

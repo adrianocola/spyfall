@@ -16,6 +16,7 @@ import Spinner from 'components/Spinner/Spinner';
 import {showError} from 'utils/toast';
 import usePresence from 'hooks/usePresence';
 import {GAME_STATES} from 'consts';
+import {logEvent} from 'utils/analytics';
 
 export const RoomClient = (props) => {
   const { userId, roomId, player, joinedRoom, setJoinedRoom } = props;
@@ -24,6 +25,7 @@ export const RoomClient = (props) => {
   const [showRole, setShowRole] = useState(false);
 
   useEffect(() => {
+    logEvent('ROOM_CONNECTED_PLAYER');
     const roomRef = database.ref(`/rooms/${roomId}`);
     roomRef.on('value', (roomSnapshot) => {
       if (!roomSnapshot || !roomSnapshot.exists() || !roomSnapshot.val()) {
@@ -39,10 +41,12 @@ export const RoomClient = (props) => {
   usePresence(`rooms/${roomId}/remotePlayers/${userId}`, joinedRoom);
 
   const toggleShowRole = () => {
+    if(!showRole) logEvent('PLAYER_VIEW_ROLE');
     setShowRole((prevShowRole) => !prevShowRole);
   };
 
   const onLeaveRoom = async () => {
+    logEvent('ROOM_PLAYER_LEFT');
     if(room){
       await database.ref(`rooms/${roomId}/remotePlayers/${userId}`).remove();
     }

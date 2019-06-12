@@ -3,11 +3,22 @@ import {css} from 'emotion';
 import {Col, Row} from 'reactstrap';
 import SelectAll from 'components/SelectAll/SelectAll';
 import {DEFAULT_LOCATIONS} from 'consts';
+import {logEvent} from 'utils/analytics';
 
 import Location from './Location';
 
 export const DefaultLocationsList = ({version, onSelectAll, onDeselectAll}) => {
   const [locations] = useState(() => Object.entries(DEFAULT_LOCATIONS).filter(([key, value]) => value === version).map(([key]) => key));
+
+  const onSelectAllClick = () => {
+    logEvent('SETTINGS_ON_SELECT_ALL');
+    onSelectAll(locations);
+  };
+
+  const onDeselectAllClick = () => {
+    logEvent('SETTINGS_ON_DESELECT_ALL');
+    onDeselectAll(locations);
+  };
 
   return (
     <Row className="justify-content-center">
@@ -19,10 +30,10 @@ export const DefaultLocationsList = ({version, onSelectAll, onDeselectAll}) => {
         </Row>
         <Row className={styles.checksContainer}>
           <Col xs={6} className="text-center">
-            <SelectAll checked onClick={() => onSelectAll(locations)} />
+            <SelectAll checked onClick={onSelectAllClick} />
           </Col>
           <Col xs={6} className="text-center">
-            <SelectAll onClick={() => onDeselectAll(locations)} />
+            <SelectAll onClick={onDeselectAllClick} />
           </Col>
         </Row>
         {locations.map((location) =>

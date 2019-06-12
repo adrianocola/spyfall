@@ -57,6 +57,7 @@
     "react": "^16.8.6",
     "react-animated-css": "^1.2.1",
     "react-dropzone": "^10.1.5",
+    "react-ga": "^2.5.7",
     "react-helmet": "^5.2.1",
     "react-hot-loader": "^4.11.0",
     "react-html-parser": "^2.0.2",

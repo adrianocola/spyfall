@@ -10,6 +10,7 @@ import {DEFAULT_LOCATIONS, GAME_STATES, MAX_PLAYERS, MAX_ROLES, MIN_PLAYERS, SPY
 import usePresence from 'hooks/usePresence';
 import {updateGame} from 'services/game';
 import {store} from 'store';
+import {logEvent} from 'utils/analytics';
 
 import ResultPopup from './ResultPopup';
 
@@ -74,6 +75,7 @@ export const GameManager = ({started, room, roomId, roomConnected, gameLocations
       newSpies = rolesResult.newSpies;
     }
 
+    logEvent('GAME_STARTED', DEFAULT_LOCATIONS[selectedLocationId] ? selectedLocationId : 'CUSTOM_LOCATION');
     updateGame({
       state: newState,
       playersRoles: newPlayersRoles,
@@ -85,6 +87,7 @@ export const GameManager = ({started, room, roomId, roomConnected, gameLocations
 
   const onEndGame = async () => {
     setShowResultPopup(true);
+    logEvent('GAME_STOPPED');
 
     updateGame({
       state: GAME_STATES.STOPPED,
