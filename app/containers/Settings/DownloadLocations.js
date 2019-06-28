@@ -32,8 +32,8 @@ export const ExportLocations = ({customLocations, selectedLocations, ...props}) 
       const reader = new FileReader();
       reader.onload = (evt) => {
         const data = JSON.parse(evt.target.result);
-        props.setCustomLocations(data.customLocations || {});
-        props.setSelectedLocations(data.selectedLocations || {});
+        props.setCustomLocations(data.custom_locations || {});
+        props.setSelectedLocations(data.selected_locations || {});
         showSuccess();
       };
       reader.readAsText(files[0]);
