@@ -1,0 +1,25 @@
+{
+  "rules": {
+    "rooms": {
+      "$roomId": {
+        ".read": true,
+        ".write": "!data.exists() || data.child('owner').val() === auth.uid",
+        "remotePlayers": {
+          "$playerId": {
+            ".read": true,
+            ".write": "!data.exists() || $playerId === auth.uid"
+          }
+        }
+      }
+    },
+    "exports": {
+      "$exportId": {
+        ".read": true,
+        ".write": "!data.exists() || data.child('owner').val() === auth.uid"
+      }
+    },
+    "translations": {
+      ".read": true
+    }
+  }
+}

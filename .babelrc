@@ -1,0 +1,42 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "modules": false
+      }
+    ],
+    "@babel/preset-react"
+  ],
+  "env": {
+    "production": {
+      "only": ["app"],
+      "plugins": [
+        ["emotion", { "hoist": true }],
+        "transform-react-remove-prop-types",
+        "@babel/plugin-transform-react-constant-elements",
+        "@babel/plugin-transform-react-inline-elements"
+      ]
+    },
+    "development": {
+      "plugins": [
+        ["emotion", { "sourceMap": true, "autoLabel": true }]
+      ]
+    },
+    "test": {
+      "plugins": [
+        "emotion",
+        "@babel/plugin-transform-modules-commonjs",
+        "dynamic-import-node"
+      ]
+    }
+  },
+  "plugins": [
+    "react-hot-loader/babel",
+    "emotion",
+    ["@babel/plugin-proposal-decorators", { "legacy": true}],
+    ["@babel/plugin-proposal-class-properties", { "loose": true }],
+    "@babel/plugin-syntax-dynamic-import",
+    ["@babel/plugin-proposal-optional-chaining", { "loose": false }]
+  ]
+}

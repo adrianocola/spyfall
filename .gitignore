@@ -3,3 +3,8 @@ node_modules
 .DS_Store
 public/status.json
 secret.json
+.firebaserc
+.firebase/
+env/
+build/
+functions/lib/*.js
