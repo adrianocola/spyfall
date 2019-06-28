@@ -5,12 +5,11 @@ export const logPageView = (path) => {
   ReactGA.pageview(path);
 };
 
-
 export const logEvent = (action, label) => {
   ReactGA.event({
     category: 'EVENTS',
     action,
-    label,
+    label: String(label),
   });
   if(isDev) console.log(action, label); // eslint-disable-line no-console
 };
