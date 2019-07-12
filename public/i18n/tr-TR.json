@@ -17,7 +17,7 @@
   "interface.pause_timer": "Zamanlayıcıyı Duraklat",
   "interface.create_room": "Oda Yarat",
   "interface.join_room": "Odaya Katıl",
-  "interface.leave_room": "Leave Room",
+  "interface.leave_room": "Oda Yarat",
   "interface.room": "Oda",
   "interface.player": "Oyuncu",
   "interface.room_help": "Oyunculara yukarıda tanımladığınız, aynı isimlerle katılmalarını belirtin!",
