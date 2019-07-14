@@ -21,7 +21,7 @@
   "interface.room": "Sala",
   "interface.player": "Jogador",
   "interface.room_help": "Peça para seus jogadores entrarem com o mesmo nome de jogador que você definiu lá em cima!",
-  "interface.room_instructions": "Ask your players to join this room. They can choose a name when joining the room.",
+  "interface.room_instructions": "Convide seus jogadores para entrar nesta sala. Eles podem escolher um nome quando entrarem na sala.",
   "interface.join": "Entrar",
   "interface.game_connected": "Conectado ao Jogo",
   "interface.game_stopped": "Jogo Parado",
