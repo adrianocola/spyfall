@@ -17,7 +17,7 @@
   "interface.pause_timer": "Pysäytä ajastin",
   "interface.create_room": "Luo huone",
   "interface.join_room": "Liity huoneeseen",
-  "interface.leave_room": "Leave Room",
+  "interface.leave_room": "Poistu huoneesta",
   "interface.room": "Huone",
   "interface.player": "Pelaaja",
   "interface.room_help": "Pyydä muita pelaajia liittymään huoneeseen!",
