@@ -21,7 +21,7 @@
   "interface.room": "Cameră",
   "interface.player": "Jucător",
   "interface.room_help": "Cereți jucătorilor să folosească același username ca cel definit mai sus!",
-  "interface.room_instructions": "Ask your players to join this room. They can choose a name when joining the room.",
+  "interface.room_instructions": "Propune jucătorilor să adere la această cameră. Își pot alege un nume când aderă la camera respectivă.",
   "interface.join": "Intră",
   "interface.game_connected": "Conectat la joc",
   "interface.game_stopped": "Joc oprit",
