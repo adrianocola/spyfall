@@ -4,6 +4,7 @@ node_modules
 public/status.json
 secret.json
 .firebaserc
+.firebaserc.json
 .firebase/
 env/
 build/
