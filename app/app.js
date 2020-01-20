@@ -1,7 +1,5 @@
 import 'babel-polyfill';
 import 'react-hot-loader';
-import ReactGA from 'react-ga';
-ReactGA.initialize('UA-57681735-2');
 
 // Import all the third party stuff
 import React from 'react';
