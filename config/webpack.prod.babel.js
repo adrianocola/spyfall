@@ -17,7 +17,6 @@ module.exports = require('./webpack.base.babel')({
   },
 
   plugins: [
-
     // Minify and optimize the index.html
     new HtmlWebpackPlugin({
       template: 'app/index.html',

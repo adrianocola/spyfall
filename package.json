@@ -20,7 +20,7 @@
   "scripts": {
     "prebuild": "npm run build:clean",
     "build": "cross-env NODE_ENV=development BUILD=true webpack --config config/webpack.dev.babel.js --color --progress --hide-modules --display-optimization-bailout",
-    "build-prod": "cross-env NODE_ENV=production BUILD=true webpack --config config/webpack.prod.babel.js --color --progress --hide-modules --display-optimization-bailout",
+    "build-prod": "cross-env NODE_ENV=production BUILD=true webpack --config config/webpack.prod.babel.js --color --progress --hide-modules --optimize-minimize --optimize-dedupe --display-optimization-bailout",
     "build:clean": "rimraf ./build",
     "firebase-deploy": "firebase deploy --only hosting -P default",
     "firebase-deploy-prod": "rm ./build/*.js.map ; firebase deploy --only hosting -P prod",
