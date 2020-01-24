@@ -22,11 +22,13 @@ export const RoomClient = (props) => {
   const { userId, roomId, player, joinedRoom, setJoinedRoom } = props;
 
   const [room, setRoom] = useState(null);
+  const [gameLocations, setGameLocations] = useState({});
   const [showRole, setShowRole] = useState(false);
 
   useEffect(() => {
     logEvent('ROOM_CONNECTED_PLAYER');
-    const roomRef = database.ref(`/rooms/${roomId}`);
+    const roomRef = database.ref(`/roomsData/${roomId}`);
+    const roomLocationsRef = database.ref(`/roomsLocations/${roomId}`);
     roomRef.on('value', (roomSnapshot) => {
       if (!roomSnapshot || !roomSnapshot.exists() || !roomSnapshot.val()) {
         showError('interface.error_room_connection');
@@ -34,11 +36,21 @@ export const RoomClient = (props) => {
       }
       setRoom(roomSnapshot.val());
     });
+    roomLocationsRef.on('value', (roomLocationsSnapshot) => {
+      if (!roomLocationsSnapshot || !roomLocationsSnapshot.exists() || !roomLocationsSnapshot.val()) {
+        showError('interface.error_room_connection');
+        return setJoinedRoom(false);
+      }
+      setGameLocations(roomLocationsSnapshot.val() || {});
+    });
 
-    return () => roomRef.off();
+    return () => {
+      roomRef.off();
+      roomLocationsRef.off();
+    };
   }, []);
 
-  usePresence(`rooms/${roomId}/remotePlayers/${userId}`, joinedRoom);
+  usePresence(`roomsRemotePlayers/${roomId}/${userId}`, joinedRoom);
 
   const toggleShowRole = () => {
     if(!showRole) logEvent('PLAYER_VIEW_ROLE');
@@ -48,7 +60,7 @@ export const RoomClient = (props) => {
   const onLeaveRoom = async () => {
     logEvent('ROOM_PLAYER_LEFT');
     if(room){
-      await database.ref(`rooms/${roomId}/remotePlayers/${userId}`).remove();
+      await database.ref(`roomsRemotePlayers/${roomId}/${userId}`).remove();
     }
     setJoinedRoom(false);
   };
@@ -74,7 +86,7 @@ export const RoomClient = (props) => {
 
   const started = room.state === GAME_STATES.STARTED;
   const stopped = room.state === GAME_STATES.STOPPED;
-  const locationsSize = Object.keys(room.gameLocations).length;
+  const locationsSize = Object.keys(gameLocations).length;
 
   return (
     <Container className={styles.container}>
@@ -92,13 +104,13 @@ export const RoomClient = (props) => {
         </Col>
       </Row>
       }
-      {started && <RolePopup isOpen={showRole} toggle={toggleShowRole} player={player} location={room.location} role={room.playersRoles[userId]} customLocations={room.gameLocations} />}
+      {started && <RolePopup isOpen={showRole} toggle={toggleShowRole} player={player} location={room.location} role={room.playersRoles[userId]} customLocations={gameLocations} />}
       <Row className={styles.stateContainer}>
         <Col className="text-center">
           <h4><Localized name="interface.game_locations" /> ({locationsSize})</h4>
         </Col>
       </Row>
-      <Locations locations={room.gameLocations} location={!started && room.location} prevLocation={room.prevLocation} />
+      <Locations locations={gameLocations} location={!started && room.location} prevLocation={room.prevLocation} />
       {started &&
         <Row className={styles.timerContainer}>
           <Col>
@@ -107,7 +119,7 @@ export const RoomClient = (props) => {
         </Row>
       }
       {!started &&
-        <ResultsSpies className={styles.spiesContainer} spies={room.spies} remotePlayers={room.remotePlayers} />
+        <ResultsSpies className={styles.spiesContainer} spies={room.spies} />
       }
       <Row className={`${styles.linkContainer} justify-content-center`}>
         <Col>

@@ -12,14 +12,36 @@
         }
       }
     },
+    "roomsData": {
+      "$roomId": {
+        ".read": "auth.uid != null",
+        ".write": "!data.exists() || data.child('owner').val() === auth.uid"
+      }
+    },
+    "roomsRemotePlayers": {
+      "$roomId": {
+        ".read": "root.child('roomsData/'+$roomId+'/owner').val() === auth.uid",
+        ".write": "!data.exists() || root.child('roomsData/'+$roomId+'/owner').val() === auth.uid",
+        "$playerId": {
+          ".read": "$playerId === auth.uid || root.child('roomsData/'+$roomId+'/owner').val() === auth.uid",
+          ".write": "$playerId === auth.uid || root.child('roomsData/'+$roomId+'/owner').val() === auth.uid"
+        }
+      }
+    },
+    "roomsLocations": {
+      "$roomId": {
+        ".read": "auth.uid != null",
+        ".write": "!data.exists() || root.child('roomsData/'+$roomId+'/owner').val() === auth.uid"
+      }
+    },
     "exports": {
       "$exportId": {
-        ".read": true,
+        ".read": "auth.uid != null",
         ".write": "!data.exists() || data.child('owner').val() === auth.uid"
       }
     },
     "translations": {
-      ".read": true
+      ".read": "auth.uid != null"
     }
   }
 }

@@ -6,7 +6,7 @@ import Localized from 'components/Localized/Localized';
 import ResultsSpies from 'components/ResultsSpies/ResultsSpies';
 import LocalizedLocation from 'components/LocalizedLocation/LocalizedLocation';
 
-export const LocationsPopup = ({isOpen, toggle, location, customLocations, spies, remotePlayers}) => (
+export const LocationsPopup = ({isOpen, toggle, location, customLocations, spies}) => (
   <Modal centered isOpen={isOpen} toggle={toggle}>
     <ModalHeader tag="h3" toggle={toggle} className={`${styles.header} justify-content-center`} close={<button type="button" className="close" onClick={toggle}>&times;</button>}>
       <Localized name="interface.game_information" />
@@ -19,7 +19,7 @@ export const LocationsPopup = ({isOpen, toggle, location, customLocations, spies
           </h4>
         </Col>
       </Row>
-      <ResultsSpies spies={spies} remotePlayers={remotePlayers} />
+      <ResultsSpies spies={spies} />
     </ModalBody>
   </Modal>
 );

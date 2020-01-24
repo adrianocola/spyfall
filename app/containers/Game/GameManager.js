@@ -14,21 +14,22 @@ import {logEvent} from 'utils/analytics';
 
 import ResultPopup from './ResultPopup';
 
-const getPlayerRoles = (allPlayers, availableRoles) => {
+const getPlayerRoles = (allPlayers, availableRoles, remotePlayers = {}) => {
   const shuffledRoles = _.shuffle(availableRoles);
   const newPlayersRoles = allPlayers.reduce((obj, playerId, index) => {
     obj[playerId] = shuffledRoles[index];
     return obj;
   }, {});
-  const newSpies = _.keys(_.pickBy(newPlayersRoles, (v) => v === SPY_ROLE));
+  const spiesIds = _.keys(_.pickBy(newPlayersRoles, (v) => v === SPY_ROLE));
+  const newSpies = _.map(spiesIds, (idOrName) => remotePlayers[idOrName] ? remotePlayers[idOrName].name : idOrName);
 
   return {newPlayersRoles, newSpies};
 };
 
-export const GameManager = ({started, room, roomId, roomConnected, gameLocations, playersCount}) => {
+export const GameManager = ({started, roomId, roomConnected, remotePlayers, gameLocations, playersCount}) => {
   const [t] = useTranslation();
   const [showResultPopup, setShowResultPopup] = useState(false);
-  const totalNumberOfPlayers = useMemo(() => playersCount + _.size(room?.remotePlayers), [playersCount, room]);
+  const totalNumberOfPlayers = useMemo(() => playersCount + _.size(remotePlayers), [playersCount, remotePlayers]);
   const canStartGame = useMemo(() => totalNumberOfPlayers >= MIN_PLAYERS && totalNumberOfPlayers <= MAX_PLAYERS, [totalNumberOfPlayers]);
 
   const onStartGame = async () => {
@@ -39,11 +40,9 @@ export const GameManager = ({started, room, roomId, roomConnected, gameLocations
 
     const newState = GAME_STATES.STARTED;
     const allPlayers = [...players];
-    if(room){
-      _.forEach(room.remotePlayers, (remotePlayer, remotePlayerId) => {
-        allPlayers.push(remotePlayerId);
-      });
-    }
+    _.forEach(remotePlayers, (remotePlayer, remotePlayerId) => {
+      allPlayers.push(remotePlayerId);
+    });
     const gameLocationsIds = _.keys(gameLocations);
     const selectedLocationId = _.sample(gameLocationsIds.length > 1 ? _.without(gameLocationsIds, location) : gameLocationsIds);
     let selectedLocation;
@@ -67,10 +66,10 @@ export const GameManager = ({started, room, roomId, roomConnected, gameLocations
       ..._.times(allPlayers.length - locationRoles.length - spyCount, () => _.sample(locationRoles) || ''),
     ];
 
-    let {newPlayersRoles, newSpies} = getPlayerRoles(allPlayers, availableRoles);
+    let {newPlayersRoles, newSpies} = getPlayerRoles(allPlayers, availableRoles, remotePlayers);
     // if the same spies, try again (keeping new results)
     if(_.isEqual(_.sortBy(newSpies), _.sortBy(spies))){
-      const rolesResult = getPlayerRoles(allPlayers, availableRoles);
+      const rolesResult = getPlayerRoles(allPlayers, availableRoles, remotePlayers);
       newPlayersRoles = rolesResult.newPlayersRoles;
       newSpies = rolesResult.newSpies;
     }
@@ -95,7 +94,7 @@ export const GameManager = ({started, room, roomId, roomConnected, gameLocations
     });
   };
 
-  usePresence(`rooms/${roomId}`, roomConnected);
+  usePresence(`roomsData/${roomId}`, roomConnected);
 
   return (
     <React.Fragment>
@@ -113,7 +112,7 @@ export const GameManager = ({started, room, roomId, roomConnected, gameLocations
           }
         </Col>
       </Row>
-      <ResultPopup remotePlayers={room && room.remotePlayers} isOpen={showResultPopup} toggle={() => setShowResultPopup(false)} />
+      <ResultPopup remotePlayers={remotePlayers} isOpen={showResultPopup} toggle={() => setShowResultPopup(false)} />
     </React.Fragment>
   );
 };

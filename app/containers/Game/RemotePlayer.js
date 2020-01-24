@@ -8,7 +8,7 @@ export const RemotePlayer = ({roomId, playerUserId, remotePlayer, started}) => {
   const onRemove = () => {
     if(started) return;
     logEvent('ROOM_PLAYER_REMOVED');
-    database.ref(`rooms/${roomId}/remotePlayers/${playerUserId}`).remove();
+    database.ref(`roomsRemotePlayers/${roomId}/${playerUserId}`).remove();
   };
 
   return (
