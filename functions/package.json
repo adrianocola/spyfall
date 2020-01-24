@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "firebase-admin": "^8.0.0",
-    "firebase-functions": "^2.3.1",
+    "firebase-functions": "^3.3.0",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
     "node-fetch": "^2.6.0",

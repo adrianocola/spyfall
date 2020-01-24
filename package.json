@@ -34,7 +34,10 @@
     "eslint:fix": "eslint -- . --ignore-path .gitignore --fix",
     "lint:js": "npm run lint:eslint -- . ",
     "deploy": "cp app/translations.js functions/lib/translations.js && firebase deploy --project default --only",
-    "deploy-prod": "cp app/translations.js functions/lib/translations.js && firebase deploy --project prod --only"
+    "deploy-prod": "cp app/translations.js functions/lib/translations.js && firebase deploy --project prod --only",
+    "copy-translations": "rimraf ./build/i18n && ncp ./public/i18n ./build/i18n",
+    "deploy-translations": "npm run copy-translations && npm run firebase-deploy",
+    "deploy-translations-prod": "npm run copy-translations && npm run firebase-deploy-prod"
   },
   "lint-staged": {
     "*.js": "eslint --ignore-path .gitignore --ignore-pattern internals/scripts"
@@ -118,6 +121,7 @@
     "imports-loader": "^0.8.0",
     "lint-staged": "^8.2.1",
     "mobx-react-devtools": "^6.1.1",
+    "ncp": "^2.0.0",
     "node-plop": "^0.18.0",
     "node-sass": "^4.13.1",
     "null-loader": "^3.0.0",
