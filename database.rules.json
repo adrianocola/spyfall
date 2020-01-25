@@ -10,13 +10,15 @@
             ".write": "!data.exists() || $playerId === auth.uid"
           }
         }
-      }
+      },
+      ".indexOn": "updatedAt"
     },
     "roomsData": {
       "$roomId": {
         ".read": "auth.uid != null",
         ".write": "!data.exists() || data.child('owner').val() === auth.uid"
-      }
+      },
+      ".indexOn": "updatedAt"
     },
     "roomsRemotePlayers": {
       "$roomId": {
@@ -37,8 +39,9 @@
     "exports": {
       "$exportId": {
         ".read": "auth.uid != null",
-        ".write": "!data.exists() || data.child('owner').val() === auth.uid"
-      }
+        ".write": "!data.exists() || data.child('owner').val() === auth.uid",
+      },
+      ".indexOn": "createdAt"
     },
     "translations": {
       ".read": "auth.uid != null"
