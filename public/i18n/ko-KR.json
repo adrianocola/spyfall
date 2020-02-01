@@ -29,6 +29,7 @@
   "interface.error_room_connection": "연결 에러 또는 잘못된 방입니다.",
   "interface.error_room_invalid_player": "방주인에게 당신의 이름으로 플레이어명을 등록하도록 요청을 해주시기 바랍니다.",
   "interface.add_location": "추가장소 입력하기",
+  "interface.all_spies": "All players are spies at this location",
   "interface.back_to_game": "게임으로 돌아가기",
   "interface.save": "저장",
   "interface.delete": "삭제",
