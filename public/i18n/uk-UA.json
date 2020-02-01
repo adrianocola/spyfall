@@ -29,6 +29,7 @@
   "interface.error_room_connection": "Помилка підключення або неправильний код кімнати!",
   "interface.error_room_invalid_player": "Попросіть ведучого створити гравця з Вашим іменем!",
   "interface.add_location": "Додати свою локацію",
+  "interface.all_spies": "All players are spies at this location",
   "interface.back_to_game": "Назад в гру",
   "interface.save": "Зберегти",
   "interface.delete": "Видалити",
