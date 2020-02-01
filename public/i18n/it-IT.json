@@ -29,6 +29,7 @@
   "interface.error_room_connection": "Errore di Connessione o Stanza non Valida!",
   "interface.error_room_invalid_player": "Chiedi al proprietario della stanza di creare un giocatore con il tuo nome!",
   "interface.add_location": "Aggiungi Luogo Personalizzato",
+  "interface.all_spies": "All players are spies at this location",
   "interface.back_to_game": "Ritorna al Gioco",
   "interface.save": "Salva",
   "interface.delete": "Elimina",
