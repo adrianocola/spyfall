@@ -29,6 +29,7 @@
   "interface.error_room_connection": "Erreur de connection ou partie invalide!",
   "interface.error_room_invalid_player": "Demander à l'hôte de la partie de créer un joueur avec votre nom!",
   "interface.add_location": "Ajouter un lieu personnalisé",
+  "interface.all_spies": "All players are spies at this location",
   "interface.back_to_game": "Retour à la partie",
   "interface.save": "Sauvegarder",
   "interface.delete": "Supprimer",
