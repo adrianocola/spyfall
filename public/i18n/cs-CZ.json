@@ -29,6 +29,7 @@
   "interface.error_room_connection": "Chyba připojení nebo špatné jméno hry!",
   "interface.error_room_invalid_player": "Požádejte majitele hry o vytvoření hráče s vaším jménem!",
   "interface.add_location": "Přidat vlastní místo",
+  "interface.all_spies": "All players are spies at this location",
   "interface.back_to_game": "Zpět do hry",
   "interface.save": "Uložit",
   "interface.delete": "Smazat",
