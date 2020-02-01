@@ -29,6 +29,7 @@
   "interface.error_room_connection": "Connectie error of niet valide room!",
   "interface.error_room_invalid_player": "Vraag de room-eigenaar om een speler toe te voegen met jouw naam!",
   "interface.add_location": "Voeg Custom Locatie toe",
+  "interface.all_spies": "All players are spies at this location",
   "interface.back_to_game": "Terug naar Spel",
   "interface.save": "Opslaan",
   "interface.delete": "Verwijder",
