@@ -29,6 +29,7 @@
   "interface.error_room_connection": "เข้าร่วมผิดพลาด หรือเกิดความผิดพลาดของห้อง",
   "interface.error_room_invalid_player": "ขอให้เจ้าของห้องสร้างผู้เล่นด้วยชื่อของคุณ!",
   "interface.add_location": "ใส่สถานที่ที่กำหนดเอง",
+  "interface.all_spies": "All players are spies at this location",
   "interface.back_to_game": "กลับสู่เกม",
   "interface.save": "บันทึก",
   "interface.delete": "ลบ",
