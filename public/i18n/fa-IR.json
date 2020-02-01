@@ -29,6 +29,7 @@
   "interface.error_room_connection": "مشکلی پیش اومد!",
   "interface.error_room_invalid_player": "از ادمین اتاق درخواست ساختن بازیکنی با اسم تو را بده!",
   "interface.add_location": "اضافه کردن اماکن مخصوص",
+  "interface.all_spies": "All players are spies at this location",
   "interface.back_to_game": "برگشت به بازی",
   "interface.save": "حفظ",
   "interface.delete": "حذف",
