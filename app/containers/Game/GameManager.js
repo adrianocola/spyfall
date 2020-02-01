@@ -14,16 +14,37 @@ import {logEvent} from 'utils/analytics';
 
 import ResultPopup from './ResultPopup';
 
-const getPlayerRoles = (allPlayers, availableRoles, remotePlayers = {}) => {
+const getSpiesNamesOrIds = (spiesIds, remotePlayers) =>
+  _.map(spiesIds, (idOrName) => remotePlayers[idOrName] ? remotePlayers[idOrName].name : idOrName);
+
+const getAllSpiesRoles = (allPlayers, remotePlayers) => {
+  const newPlayersRoles = allPlayers.reduce((obj, playerId) => {
+    obj[playerId] = SPY_ROLE;
+    return obj;
+  }, {});
+
+  const newSpies = getSpiesNamesOrIds(_.keys(newPlayersRoles), remotePlayers);
+
+  return {newPlayersRoles, newSpies};
+};
+
+const getRegularPlayerRoles = (allPlayers, availableRoles, remotePlayers) => {
   const shuffledRoles = _.shuffle(availableRoles);
   const newPlayersRoles = allPlayers.reduce((obj, playerId, index) => {
     obj[playerId] = shuffledRoles[index];
     return obj;
   }, {});
   const spiesIds = _.keys(_.pickBy(newPlayersRoles, (v) => v === SPY_ROLE));
-  const newSpies = _.map(spiesIds, (idOrName) => remotePlayers[idOrName] ? remotePlayers[idOrName].name : idOrName);
+  const newSpies = getSpiesNamesOrIds(spiesIds, remotePlayers);
 
   return {newPlayersRoles, newSpies};
+};
+
+const getPlayerRoles = (location, allPlayers, availableRoles, remotePlayers = {}) => {
+  if(location.allSpies){
+    return getAllSpiesRoles(allPlayers, remotePlayers);
+  }
+  return getRegularPlayerRoles(allPlayers, availableRoles, remotePlayers);
 };
 
 export const GameManager = ({started, roomId, roomConnected, remotePlayers, gameLocations, playersCount}) => {
@@ -66,10 +87,10 @@ export const GameManager = ({started, roomId, roomConnected, remotePlayers, game
       ..._.times(allPlayers.length - locationRoles.length - spyCount, () => _.sample(locationRoles) || ''),
     ];
 
-    let {newPlayersRoles, newSpies} = getPlayerRoles(allPlayers, availableRoles, remotePlayers);
+    let {newPlayersRoles, newSpies} = getPlayerRoles(selectedLocation, allPlayers, availableRoles, remotePlayers);
     // if the same spies, try again (keeping new results)
     if(_.isEqual(_.sortBy(newSpies), _.sortBy(spies))){
-      const rolesResult = getPlayerRoles(allPlayers, availableRoles, remotePlayers);
+      const rolesResult = getPlayerRoles(selectedLocation, allPlayers, availableRoles, remotePlayers);
       newPlayersRoles = rolesResult.newPlayersRoles;
       newSpies = rolesResult.newSpies;
     }

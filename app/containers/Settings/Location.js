@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { css } from 'emotion';
 import { Row, Col, Collapse, Input, Label } from 'reactstrap';
-import { MAX_ROLES_ARRAY } from 'consts';
+import { MAX_ROLES_ARRAY, SPY_LOCATION } from 'consts';
 import { connect } from 'react-redux';
 import CogIcon from 'components/CogIcon/CogIcon';
 import ReactHtmlParser from 'react-html-parser';
@@ -11,7 +11,7 @@ import { SHADES, COLORS } from 'styles/consts';
 import { selectLocationAction, deselectLocationAction, saveCustomLocationAction, remCustomLocationAction } from 'actions/config';
 import {logEvent} from 'utils/analytics';
 
-export const Location = ({locationId, disabled, selected = false, selectLocation, deselectLocation, ...props}) => {
+export const Location = React.memo(({locationId, disabled, selected = false, selectLocation, deselectLocation, ...props}) => {
   const [t] = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [location, setLocation] = useState(props.location);
@@ -21,10 +21,17 @@ export const Location = ({locationId, disabled, selected = false, selectLocation
   };
 
   const updateLocation = (field, value) => {
-    setLocation({
-      ...location,
+    setLocation((prevLocation) => ({
+      ...prevLocation,
       [field]: value,
-    });
+    }));
+  };
+
+  const onToggleAllSpies = () => {
+    if(!location.allSpies){
+      updateLocation('name', SPY_LOCATION);
+    }
+    updateLocation('allSpies', !location.allSpies);
   };
 
   const onSave = (evt) => {
@@ -68,7 +75,7 @@ export const Location = ({locationId, disabled, selected = false, selectLocation
                     className={styles.input}
                     value={disabled ? ReactHtmlParser(t(`location.${locationId}`, ' ')) : location.name}
                     onChange={(evt) => updateLocation('name', evt.target.value)}
-                    disabled={disabled}
+                    disabled={disabled || location.allSpies}
                   />
                 </Col>
               </Row>
@@ -83,20 +90,30 @@ export const Location = ({locationId, disabled, selected = false, selectLocation
                       className={styles.input}
                       value={disabled ? ReactHtmlParser(t(`location.${locationId}.role${index + 1}`, ' ')) : location[`role${index + 1}`] || ''}
                       onChange={(evt) => updateLocation(`role${index + 1}`, evt.target.value)}
-                      disabled={disabled}
+                      disabled={disabled || location.allSpies}
                     />
                   </Col>
                 </Row>
               )}
               {!disabled &&
-              <Row className={`${styles.linksContainer} justify-content-center text-center`}>
-                <Col xs={6}>
-                  <Link to="#" onClick={onSave}>Save</Link>
-                </Col>
-                <Col xs={6}>
-                  <Link className={styles.deleteLocation} to="#" onClick={onDelete}>Delete</Link>
-                </Col>
-              </Row>
+                <>
+                  <Row className={`${styles.linksContainer} justify-content-center text-center`}>
+                    <Col xs={12}>
+                      <Label check className={styles.check}>
+                        <Input type="checkbox" checked={location.allSpies} onChange={onToggleAllSpies} />
+                        {ReactHtmlParser(t('interface.all_spies'))}
+                      </Label>
+                    </Col>
+                  </Row>
+                  <Row className={`${styles.linksContainer} justify-content-center text-center`}>
+                    <Col xs={6}>
+                      <Link to="#" onClick={onSave}>Save</Link>
+                    </Col>
+                    <Col xs={6}>
+                      <Link className={styles.deleteLocation} to="#" onClick={onDelete}>Delete</Link>
+                    </Col>
+                  </Row>
+                </>
               }
             </Collapse>
           </Col>
@@ -104,7 +121,7 @@ export const Location = ({locationId, disabled, selected = false, selectLocation
       </Col>
     </Row>
   );
-};
+});
 
 const styles = {
   container: css({
