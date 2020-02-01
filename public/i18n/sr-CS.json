@@ -29,6 +29,7 @@
   "interface.error_room_connection": "Greška pri povezivanju ili nepostojeća soba!",
   "interface.error_room_invalid_player": "Pitaj vlasnika sobe da stvori igrača sa tvojim imenom!",
   "interface.add_location": "Dodaj svoju lokaciju",
+  "interface.all_spies": "All players are spies at this location",
   "interface.back_to_game": "Nazad u igru",
   "interface.save": "Sačuvaj",
   "interface.delete": "Izbriši",
