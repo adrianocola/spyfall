@@ -29,6 +29,7 @@
   "interface.error_room_connection": "接続エラー、または存在しない部屋へのアクセス",
   "interface.error_room_invalid_player": "部屋の主にあなたの名前のプレイヤーを追加するようにお願いしましょう！",
   "interface.add_location": "自分で場所を追加する",
+  "interface.all_spies": "All players are spies at this location",
   "interface.back_to_game": "ゲームに戻る",
   "interface.save": "保存",
   "interface.delete": "削除",
