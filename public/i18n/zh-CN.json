@@ -29,6 +29,7 @@
   "interface.error_room_connection": "联机错误或不存在的房间！",
   "interface.error_room_invalid_player": "请房间主办人创建与你同名的角色！",
   "interface.add_location": "增加自建地点",
+  "interface.all_spies": "All players are spies at this location",
   "interface.back_to_game": "回到游戏",
   "interface.save": "储存",
   "interface.delete": "删除",

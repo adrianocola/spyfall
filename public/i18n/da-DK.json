@@ -29,6 +29,7 @@
   "interface.error_room_connection": "Forbindelses fejl eller forkert rum!",
   "interface.error_room_invalid_player": "Bed Rum ejeren om at oprette en spiller med dit navn!",
   "interface.add_location": "Tilføj Brugerdefineret Lokation",
+  "interface.all_spies": "All players are spies at this location",
   "interface.back_to_game": "Tilbage til Spillet",
   "interface.save": "Gem",
   "interface.delete": "Slet",

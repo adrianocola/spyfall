@@ -29,6 +29,7 @@
   "interface.error_room_connection": "Проблем с връзката или невалидна стая!",
   "interface.error_room_invalid_player": "Попитай собственика на стаята да създаде играч с твоето име!",
   "interface.add_location": "Добави Персонилизирана Стая",
+  "interface.all_spies": "All players are spies at this location",
   "interface.back_to_game": "Върни се към Играта",
   "interface.save": "Запази",
   "interface.delete": "Изтрий",

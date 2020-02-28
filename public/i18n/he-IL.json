@@ -29,6 +29,7 @@
   "interface.error_room_connection": "בעיית חיבור או חדר שגוי!",
   "interface.error_room_invalid_player": "בקש/י מבעל/ת החדר ליצור שחקן/נית עם שמך!",
   "interface.add_location": "הוספת מקום",
+  "interface.all_spies": "All players are spies at this location",
   "interface.back_to_game": "חזרה למשחק",
   "interface.save": "שמירה",
   "interface.delete": "מחיקה",
