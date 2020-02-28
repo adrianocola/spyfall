@@ -29,6 +29,7 @@
   "interface.error_room_connection": "Erro de conexão ou sala inválida!",
   "interface.error_room_invalid_player": "Peça ao dono da sala para criar um jogador com o seu nome!",
   "interface.add_location": "Adicionar Local Personalizado",
+  "interface.all_spies": "Todos os jogadores são espiões nessa localização",
   "interface.back_to_game": "Voltar para o Jogo",
   "interface.save": "Salvar",
   "interface.delete": "Deletar",

@@ -29,6 +29,7 @@
   "interface.error_room_connection": "Yhteys virhe tai virheellinen huone!",
   "interface.error_room_invalid_player": "Pyydä huoneen omistajaa lisäämään sinun niminen pelaaja!",
   "interface.add_location": "Lisää oma sijainti",
+  "interface.all_spies": "All players are spies at this location",
   "interface.back_to_game": "Takaisin peliin",
   "interface.save": "Tallenna",
   "interface.delete": "Poista",

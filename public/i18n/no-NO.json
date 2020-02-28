@@ -29,6 +29,7 @@
   "interface.error_room_connection": "Tilkoblingsfeil eller ugyldig rom!",
   "interface.error_room_invalid_player": "Be eieren av rommet lage en spiller med ditt navn!",
   "interface.add_location": "Legg Til Egendefinert sted",
+  "interface.all_spies": "All players are spies at this location",
   "interface.back_to_game": "Tilbake til spillet",
   "interface.save": "Lagre",
   "interface.delete": "Slett",

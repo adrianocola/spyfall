@@ -29,6 +29,7 @@
   "interface.error_room_connection": "Σφάλμα σύνδεσης ή λάθος δωμάτιο!",
   "interface.error_room_invalid_player": "Ειδοποίηστε τον διαχειριστή του δωματίου να δημιουργήσει έναν παίκτη με το όνομά σας!",
   "interface.add_location": "Προσθέστε δική σας τοποθεσία",
+  "interface.all_spies": "All players are spies at this location",
   "interface.back_to_game": "Επιστροφή στο παιχνίδι",
   "interface.save": "Αποθήκευση",
   "interface.delete": "Διαγραφή",

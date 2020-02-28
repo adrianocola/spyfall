@@ -29,6 +29,7 @@
   "interface.error_room_connection": "Csatlakozási hiba vagy ismeretlen szoba!",
   "interface.error_room_invalid_player": "Kérd meg a szoba tulajdonosát, hogy hozzon létre egy játékost a neveddel!",
   "interface.add_location": "Saját helyszín hozzáadása",
+  "interface.all_spies": "All players are spies at this location",
   "interface.back_to_game": "Vissza a játékhoz",
   "interface.save": "Mentés",
   "interface.delete": "Törlés",
