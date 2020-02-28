@@ -42,7 +42,7 @@ module.exports = require('./webpack.base.babel')({
       inject: true,
     }),
     new DynamicCdnWebpackPlugin({
-      verbose: true,
+      // verbose: true,
       resolver: (moduleName, version, options) => {
         const res = resolvers[moduleName];
         if(!res) return null;
@@ -50,6 +50,7 @@ module.exports = require('./webpack.base.babel')({
           name: moduleName,
           var: res.var,
           url: res.url.replace('{{VERSION}}', moduleName === 'react-dom' ? REACT_VERSION : version),
+          weight: res.weight,
           version,
         };
       },

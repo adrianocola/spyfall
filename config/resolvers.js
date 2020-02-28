@@ -1,9 +1,13 @@
+const _ = require('lodash');
+
+let weight = 1;
+
 const firebase = (name) => ({
   var: `firebase.${name}`,
   url: `https://www.gstatic.com/firebasejs/{{VERSION}}/firebase-${name}.js`,
 });
 
-module.exports = {
+module.exports = _.mapValues({
   'bootstrap/dist/css/bootstrap.min.css': {
     var: null,
     url: 'https://unpkg.com/bootstrap@{{VERSION}}/dist/css/bootstrap.min.css',
@@ -31,4 +35,7 @@ module.exports = {
     var: 'ReactDOM',
     url: 'https://unpkg.com/react-dom@{{VERSION}}/umd/react-dom.production.min.js',
   },
-};
+}, (value) => ({
+  ...value,
+  weight: weight++, // eslint-disable-line no-plusplus
+}));
