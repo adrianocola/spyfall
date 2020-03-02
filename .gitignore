@@ -6,6 +6,5 @@ secret.json
 .firebaserc
 .firebaserc.json
 .firebase/
-env/
 build/
 functions/lib/*.js
