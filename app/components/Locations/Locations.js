@@ -56,16 +56,16 @@ export const Locations = ({ location, locations = {}, prevLocation }) => {
                   onClick={() => crossOutLocation(locationObj)}
                   className={`${styles.location} 
                     ${
-                    prevLocation === locationObj.locationId
-                      ? styles.prevLocation
-                      : ''
-                    } ${
-                    locationObj.crossOut && prevLocation !== undefined
-                      ? styles.crossedOut
-                      : ''
-                    } ${
-                    location === locationObj.locationId ? styles.highlight : ''
-                    }`}
+            prevLocation === locationObj.locationId
+              ? styles.prevLocation
+              : ''
+            } ${
+              locationObj.crossOut && prevLocation !== undefined
+                ? styles.crossedOut
+                : ''
+            } ${
+              location === locationObj.locationId ? styles.highlight : ''
+            }`}
                 >
                   {ReactHtmlParser(locationObj.name)}
                 </div>
@@ -74,23 +74,23 @@ export const Locations = ({ location, locations = {}, prevLocation }) => {
           ))}
         </Col>
         <Col xs={6}>
-          {locationsRight.map(locationObj => (
+          {locationsRight.map((locationObj) => (
             <Row key={locationObj.locationId}>
               <Col>
                 <div
                   onClick={() => crossOutLocation(locationObj)}
                   className={`${styles.location} 
                     ${
-                    prevLocation === locationObj.locationId
-                      ? styles.prevLocation
-                      : ''
-                    } ${
-                    locationObj.crossOut && prevLocation !== undefined
-                      ? styles.crossedOut
-                      : ''
-                    } ${
-                    location === locationObj.locationId ? styles.highlight : ''
-                    }`}
+            prevLocation === locationObj.locationId
+              ? styles.prevLocation
+              : ''
+            } ${
+              locationObj.crossOut && prevLocation !== undefined
+                ? styles.crossedOut
+                : ''
+            } ${
+              location === locationObj.locationId ? styles.highlight : ''
+            }`}
                 >
                   {ReactHtmlParser(locationObj.name)}
                 </div>
@@ -121,8 +121,8 @@ const styles = {
   }),
   highlight: css({
     fontWeight: 'bold',
-    color: DARK_COLORS.red
-  })
+    color: DARK_COLORS.red,
+  }),
 };
 
 export default Locations;
