@@ -24,14 +24,13 @@ export const JoinRoom = ({userId, joinRoomId, setJoinRoomId, joinPlayer, setJoin
   const onJoinRoom = async () => {
     logEvent('ROOM_PLAYER_ASKED_JOIN');
     setLoading(true);
-    const roomOnline = await database.ref(`rooms/${joinRoomId}/online`).once('value');
+    const roomOnline = await database.ref(`roomsData/${joinRoomId}/online`).once('value');
     if(roomOnline.exists() && roomOnline.val() === true){
       logEvent('ROOM_PLAYER_JOINED');
-      await database.ref(`rooms/${joinRoomId}/remotePlayers/${userId}`).update({
+      await database.ref(`roomsRemotePlayers/${joinRoomId}/${userId}`).update({
         createdAt: databaseServerTimestamp,
         updatedAt: databaseServerTimestamp,
         name: joinPlayer,
-        remote: true,
       });
       setJoinedRoom(true);
     }else{

@@ -89,8 +89,10 @@ export default (state = initialState, action) => {
       };
     case REM_CUSTOM_LOCATION: {
       const customLocations = {...state.customLocations};
+      const selectedLocations = {...state.selectedLocations};
       delete customLocations[action.payload];
-      return {...state, customLocations};
+      delete selectedLocations[action.payload];
+      return {...state, customLocations, selectedLocations};
     }
     case ADD_PLAYER: {
       const players = [...state.players, `P${state.players.length + 1}`];

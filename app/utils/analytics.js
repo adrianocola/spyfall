@@ -1,15 +1,11 @@
-import ReactGA from 'react-ga';
-import { isDev } from 'env';
+import {isDev} from 'env';
+import {analytics} from 'services/firebase';
 
 export const logPageView = (path) => {
-  ReactGA.pageview(path);
+  analytics.setCurrentScreen(path);
 };
 
 export const logEvent = (action, label) => {
-  ReactGA.event({
-    category: 'EVENTS',
-    action,
-    label: String(label),
-  });
+  analytics.logEvent(action, {label});
   if(isDev) console.log(action, label); // eslint-disable-line no-console
 };

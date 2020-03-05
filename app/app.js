@@ -1,14 +1,10 @@
 import 'babel-polyfill';
 import 'react-hot-loader';
-import ReactGA from 'react-ga';
-ReactGA.initialize('UA-57681735-2');
 
 // Import all the third party stuff
 import React from 'react';
 import ReactDOM from 'react-dom'; // eslint-disable-line import/no-unresolved
 import FontFaceObserver from 'fontfaceobserver';
-
-import 'sanitize.css/sanitize.css';
 
 // Load the favicon
 /* eslint-disable import/no-webpack-loader-syntax */
@@ -19,9 +15,7 @@ import '!file-loader?name=[name].[ext]!./favicon-96x96.png';
 /* eslint-enable import/no-webpack-loader-syntax */
 
 // Import CSS reset and Global Styles
-import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
-import 'animate.css/animate.min.css';
 import 'styles/theme.scss';
 
 import './services/firebase';

@@ -8,8 +8,8 @@ import {addPlayerAction, remPlayerAction} from 'actions/config';
 import {MAX_PLAYERS} from 'consts';
 import {logEvent} from 'utils/analytics';
 
-export const GamePlayersController = ({room, playersCount, addPlayer, remPlayer}) => {
-  const totalNumberOfPlayers = useMemo(() => playersCount + _.size(room?.remotePlayers), [playersCount, room]);
+export const GamePlayersController = ({remotePlayers, playersCount, addPlayer, remPlayer}) => {
+  const totalNumberOfPlayers = useMemo(() => playersCount + _.size(remotePlayers), [playersCount, remotePlayers]);
   const canAddPlayers = useMemo(() => totalNumberOfPlayers < MAX_PLAYERS, [totalNumberOfPlayers]);
   const canRemovePlayers = useMemo(() => totalNumberOfPlayers > 0 && playersCount > 0, [playersCount, totalNumberOfPlayers]);
 

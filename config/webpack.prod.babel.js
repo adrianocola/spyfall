@@ -2,6 +2,13 @@
 const path = require('path');
 // const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+const DynamicCdnWebpackPlugin = require('dynamic-cdn-webpack-plugin');
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+
+const REACT_VERSION = require('react/package.json').version;
+
+const resolvers = require('./resolvers');
 
 module.exports = require('./webpack.base.babel')({
   mode: 'production',
@@ -17,7 +24,6 @@ module.exports = require('./webpack.base.babel')({
   },
 
   plugins: [
-
     // Minify and optimize the index.html
     new HtmlWebpackPlugin({
       template: 'app/index.html',
@@ -35,11 +41,37 @@ module.exports = require('./webpack.base.babel')({
       },
       inject: true,
     }),
+    new DynamicCdnWebpackPlugin({
+      // verbose: true,
+      resolver: (moduleName, version, options) => {
+        const res = resolvers[moduleName];
+        if(!res) return null;
+        return {
+          name: moduleName,
+          var: res.var,
+          url: res.url.replace('{{VERSION}}', moduleName === 'react-dom' ? REACT_VERSION : version),
+          weight: res.weight,
+          version,
+        };
+      },
+    }),
+    // new BundleAnalyzerPlugin(),
   ],
 
   devtool: 'hidden-source-map',
 
   performance: {
     assetFilter: (assetFilename) => !(/(\.map$)|(^(main\.|favicon\.))/.test(assetFilename)),
+  },
+
+  optimization: {
+    minimize: true,
+    minimizer: [new TerserPlugin({
+      terserOptions: {
+        output: {
+          comments: false,
+        },
+      },
+    })],
   },
 });
