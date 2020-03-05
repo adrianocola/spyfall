@@ -20,20 +20,21 @@ import Room from './Room';
 
 
 export const Game = ({roomId, roomConnected, state}) => {
-  const [room, setRoom] = useState(null);
+  const [remotePlayers, setRemotePlayers] = useState({});
   const [showLocationsPopup, setShowLocationsPopup] = useState(false);
 
   useEffect(() => {
     if(roomConnected){
       logEvent('ROOM_CONNECTED_MASTER');
-      const roomRef = database.ref(`/rooms/${roomId}`);
-      roomRef.on('value', (roomSnapshot) => {
-        setRoom(roomSnapshot.val());
+      const roomRemotePlayersRef = database.ref(`/roomsRemotePlayers/${roomId}`);
+      roomRemotePlayersRef.on('value', (roomRemotePlayersSnapshot) => {
+        setRemotePlayers(roomRemotePlayersSnapshot.val());
       });
 
-      return () => roomRef.off();
+      return () => roomRemotePlayersRef.off();
     }
-    setRoom(null);
+
+    setRemotePlayers({});
   }, [roomConnected]);
 
   const started = state === GAME_STATES.STARTED;
@@ -48,17 +49,17 @@ export const Game = ({roomId, roomConnected, state}) => {
         </Col>
       </Row>
       }
-      <GamePlayers started={started} room={room} />
+      <GamePlayers started={started} remotePlayers={remotePlayers} />
       {!started &&
         <React.Fragment>
-          <GamePlayersController room={room} />
+          <GamePlayersController remotePlayers={remotePlayers} />
           <GameConfig />
         </React.Fragment>
       }
       {started &&
         <GameInfo />
       }
-      <GameManager room={room} started={started} />
+      <GameManager remotePlayers={remotePlayers} started={started} />
       <Room />
       <LocationsPopup isOpen={showLocationsPopup} toggle={() => setShowLocationsPopup(false)} />
     </div>

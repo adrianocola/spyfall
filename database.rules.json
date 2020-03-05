@@ -10,16 +10,41 @@
             ".write": "!data.exists() || $playerId === auth.uid"
           }
         }
+      },
+      ".indexOn": "updatedAt"
+    },
+    "roomsData": {
+      "$roomId": {
+        ".read": "auth.uid != null",
+        ".write": "!data.exists() || data.child('owner').val() === auth.uid"
+      },
+      ".indexOn": "updatedAt"
+    },
+    "roomsRemotePlayers": {
+      "$roomId": {
+        ".read": "root.child('roomsData/'+$roomId+'/owner').val() === auth.uid",
+        ".write": "!data.exists() || root.child('roomsData/'+$roomId+'/owner').val() === auth.uid",
+        "$playerId": {
+          ".read": "$playerId === auth.uid || root.child('roomsData/'+$roomId+'/owner').val() === auth.uid",
+          ".write": "$playerId === auth.uid || root.child('roomsData/'+$roomId+'/owner').val() === auth.uid"
+        }
+      }
+    },
+    "roomsLocations": {
+      "$roomId": {
+        ".read": "auth.uid != null",
+        ".write": "!data.exists() || root.child('roomsData/'+$roomId+'/owner').val() === auth.uid"
       }
     },
     "exports": {
       "$exportId": {
-        ".read": true,
-        ".write": "!data.exists() || data.child('owner').val() === auth.uid"
-      }
+        ".read": "auth.uid != null",
+        ".write": "!data.exists() || data.child('owner').val() === auth.uid",
+      },
+      ".indexOn": "createdAt"
     },
     "translations": {
-      ".read": true
+      ".read": "auth.uid != null"
     }
   }
 }

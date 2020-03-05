@@ -1,0 +1,7 @@
+{
+  "extends": "@ensemblebr/eslint-config",
+  "root": true,
+  "env": {
+    "node": true
+  }
+}

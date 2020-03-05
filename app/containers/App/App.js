@@ -1,17 +1,17 @@
 import React from 'react';
-import { Helmet } from 'react-helmet';
-import { connect } from 'react-redux';
-import {Switch, Route, Link} from 'react-router-dom';
+import {Helmet} from 'react-helmet';
+import {connect} from 'react-redux';
+import {Link, Route, Switch} from 'react-router-dom';
 import {css} from 'emotion';
 import i18n from 'i18n';
 import {MEDIA, SHADES} from 'styles/consts';
-import { ToastContainer } from 'react-toastify';
+import {ToastContainer} from 'react-toastify';
 import Loadable from 'react-loadable';
-import { Container, Row, Col, Input } from 'reactstrap';
-import { auth, database } from 'services/firebase';
-import { setUserIdAction, setLanguageAction, setImportedLegacy, setTranslations} from 'actions/root';
-import { setSelectedLocations, setCustomLocations } from 'actions/config';
-import { TRANSLATIONS } from 'consts';
+import {Col, Container, Input, Row} from 'reactstrap';
+import {auth, database} from 'services/firebase';
+import {setLanguageAction, setTranslations, setUserIdAction} from 'actions/root';
+import {setCustomLocations, setSelectedLocations} from 'actions/config';
+import {TRANSLATIONS} from 'consts';
 
 import SpinnerModal from 'components/SpinnerModal/SpinnerModal';
 import SpyIcon from 'components/SpyIcon/SpyIcon';
@@ -25,41 +25,16 @@ export class App extends React.Component{
     const { setUserId } = this.props;
     auth.signInAnonymously().then((authUser) => {
       setUserId(authUser.user.uid);
+      this.importTranslations();
     });
-    this.importLegacy();
-    this.importTranslations();
   }
-
-  importLegacy = () => {
-    if(!this.props.importedLegacy) return null;
-
-    try{
-      const customLocations = window.store.get('custom_locations');
-      const selectedLocations = window.store.get('selected_locations');
-      if(customLocations){
-        this.props.setCustomLocations(customLocations);
-      }
-      if(selectedLocations){
-        const selectedLocationsMap = {};
-        selectedLocations.forEach((location) => {
-          selectedLocationsMap[location] = true;
-        });
-        this.props.setSelectedLocations(selectedLocationsMap);
-      }
-    }catch(err){
-      console.error(err); // eslint-disable-line no-console
-    }
-
-    this.props.setImportedLegacy(true);
-  };
 
   importTranslations = async () => {
     // imported less than 6 hours ago
     if(this.props.translationsImportTime && Date.now() - this.props.translationsImportTime < 6 * 60 * 60 * 1000) return null;
 
     const translationsSnapshot = await database.ref('translations').once('value');
-    const translations = translationsSnapshot.val();
-    this.props.setTranslations(translations);
+    this.props.setTranslations(translationsSnapshot.val() || {});
   };
 
   setLanguage = (language) => {
@@ -160,7 +135,6 @@ const styles = {
 
 const mapStateToProps = (state) => ({
   language: state.root.language,
-  importedLegacy: state.root.importedLegacy,
   translations: state.root.translations,
   translationsImportTime: state.root.translationsImportTime,
 });
@@ -168,7 +142,6 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   setUserId: (userId) => dispatch(setUserIdAction(userId)),
   setLanguage: (language) => dispatch(setLanguageAction(language)),
-  setImportedLegacy: (importedLegacy) => dispatch(setImportedLegacy(importedLegacy)),
   setSelectedLocations: (selectedLocations) => dispatch(setSelectedLocations(selectedLocations)),
   setCustomLocations: (customLocations) => dispatch(setCustomLocations(customLocations)),
   setTranslations: (translations) => dispatch(setTranslations(translations)),

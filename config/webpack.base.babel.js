@@ -125,6 +125,7 @@ module.exports = (options) => ({
       name: 'vendor',
       minChunks: 2,
     },
+    ...options.optimization,
   },
   devServer: options.devServer,
 });

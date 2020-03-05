@@ -5,7 +5,7 @@ import SpyIcon from 'components/SpyIcon/SpyIcon';
 import Localized from 'components/Localized/Localized';
 import LocalizedLocation from 'components/LocalizedLocation/LocalizedLocation';
 import LocalizedRole from 'components/LocalizedRole/LocalizedRole';
-import { SPY_ROLE } from 'consts';
+import { SPY_ROLE, SPY_LOCATION } from 'consts';
 
 export default ({isOpen, toggle, player, location, role, customLocations}) => (
   <Modal centered isOpen={isOpen} toggle={toggle}>
@@ -17,22 +17,17 @@ export default ({isOpen, toggle, player, location, role, customLocations}) => (
         <Col className="text-center">
           <span className={styles.label}><Localized name="interface.location" />: </span>
           <span className={styles.value}>
-            {role === SPY_ROLE ? '???' : <LocalizedLocation location={location} customLocations={customLocations} />}
+            {role === SPY_ROLE ? SPY_LOCATION : <LocalizedLocation location={location} customLocations={customLocations} />}
           </span>
         </Col>
       </Row>
       {!!role &&
       <Row className={styles.roleLine}>
         <Col className="text-center">
-          {role === SPY_ROLE && <SpyIcon />}
-          {role !== SPY_ROLE &&
-          <React.Fragment>
-            <span className={styles.label}><Localized name="interface.role" />: </span>
-            <span className={styles.value}>
-              <LocalizedRole role={role} location={location} customLocations={customLocations} />
-            </span>
-          </React.Fragment>
-          }
+          <span className={styles.label}><Localized name="interface.role" />: </span>
+          <span className={styles.value}>
+            {role === SPY_ROLE ? <SpyIcon /> : <LocalizedRole role={role} location={location} customLocations={customLocations} />}
+          </span>
         </Col>
       </Row>
       }

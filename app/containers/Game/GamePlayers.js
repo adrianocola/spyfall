@@ -5,9 +5,9 @@ import {updatePlayerAction} from 'actions/config';
 import Player from './Player';
 import RemotePlayer from './RemotePlayer';
 
-export const GamePlayers = ({started, room, roomId, playersCount, updatePlayer}) => (
+export const GamePlayers = ({started, remotePlayers, roomId, playersCount, updatePlayer}) => (
   <React.Fragment>
-    {room && _.map(room.remotePlayers, (player, playerUserId) =>
+    {_.map(remotePlayers, (player, playerUserId) =>
       <RemotePlayer key={playerUserId} roomId={roomId} playerUserId={playerUserId} remotePlayer={player} started={started} />
     )}
     {_.times(playersCount).map((index) =>
