@@ -18,9 +18,7 @@ import usePresence from 'hooks/usePresence';
 import {GAME_STATES} from 'consts';
 import {logEvent} from 'utils/analytics';
 
-export const RoomClient = (props) => {
-  const { userId, roomId, player, joinedRoom, setJoinedRoom } = props;
-
+export const RoomClient = ({ userId, roomId, player, joinedRoom, setJoinedRoom }) => {
   const [room, setRoom] = useState(null);
   const [gameLocations, setGameLocations] = useState({});
   const [showRole, setShowRole] = useState(false);
@@ -110,7 +108,7 @@ export const RoomClient = (props) => {
           <h4><Localized name="interface.game_locations" /> ({locationsSize})</h4>
         </Col>
       </Row>
-      <Locations locations={gameLocations} location={!started && room.location} prevLocation={room.prevLocation} />
+      <Locations matchId={room?.matchId} locations={gameLocations} location={!started && room.location} prevLocation={room.prevLocation} />
       {started &&
         <Row className={styles.timerContainer}>
           <Col>

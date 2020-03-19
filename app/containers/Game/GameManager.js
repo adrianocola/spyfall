@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import shortid from 'shortid';
 import React, {useMemo, useState} from 'react';
 import {css} from 'emotion';
 import {connect} from 'react-redux';
@@ -97,6 +98,7 @@ export const GameManager = ({started, roomId, roomConnected, remotePlayers, game
 
     logEvent('GAME_STARTED', DEFAULT_LOCATIONS[selectedLocationId] ? selectedLocationId : 'CUSTOM_LOCATION');
     updateGame({
+      matchId: shortid.generate(),
       state: newState,
       playersRoles: newPlayersRoles,
       location: selectedLocationId,
