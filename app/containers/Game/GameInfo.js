@@ -11,7 +11,7 @@ import selectedLocationsCountSelector from 'selectors/selectedLocationsCount';
 import SpyIcon from 'components/SpyIcon/SpyIcon';
 import TimerManager from './TimerManager';
 
-export const GameInfo = ({gameLocations, spyCount, prevLocation, selectedLocationsCount}) => (
+export const GameInfo = ({matchId, gameLocations, spyCount, prevLocation, selectedLocationsCount}) => (
   <div>
     <Row className={styles.spiesCountContainer}>
       <Col className="text-center">
@@ -23,7 +23,7 @@ export const GameInfo = ({gameLocations, spyCount, prevLocation, selectedLocatio
         <h4><Localized name="interface.game_locations" /> ({selectedLocationsCount})</h4>
       </Col>
     </Row>
-    <Locations locations={gameLocations} prevLocation={prevLocation} />
+    <Locations matchId={matchId} locations={gameLocations} prevLocation={prevLocation} />
     <TimerManager />
   </div>
 );
@@ -42,6 +42,7 @@ const mapStateToProps = (state) => ({
   selectedLocationsCount: selectedLocationsCountSelector(state),
   spyCount: state.config.spyCount,
   prevLocation: state.game.prevLocation,
+  matchId: state.game.matchId,
 });
 
 export default connect(mapStateToProps)(GameInfo);
