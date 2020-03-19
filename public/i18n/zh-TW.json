@@ -29,7 +29,7 @@
   "interface.error_room_connection": "連線錯誤或不存在的房間！",
   "interface.error_room_invalid_player": "請房間主辦人創建與你同名的角色！",
   "interface.add_location": "增加自建地點",
-  "interface.all_spies": "All players are spies at this location",
+  "interface.all_spies": "舞台劇戲院\n",
   "interface.back_to_game": "回到遊戲",
   "interface.save": "儲存",
   "interface.delete": "刪除",
