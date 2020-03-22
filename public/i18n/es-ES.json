@@ -29,7 +29,7 @@
   "interface.error_room_connection": "Error de conexión o cuarto inválido!",
   "interface.error_room_invalid_player": "Le pida que el dueño del cuarto cree un jugador con su nombre!",
   "interface.add_location": "Añadir un lugar a medida",
-  "interface.all_spies": "All players are spies at this location",
+  "interface.all_spies": "Todos los jugadores son espías en esta ubicación.",
   "interface.back_to_game": "Volver al juego",
   "interface.save": "Guardar",
   "interface.delete": "Eliminar",
