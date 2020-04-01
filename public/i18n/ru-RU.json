@@ -29,7 +29,7 @@
   "interface.error_room_connection": "Ошибка соединения или неверный код комнаты!",
   "interface.error_room_invalid_player": "Попросите хозяина комнаты добавить игрока с вашим ником!",
   "interface.add_location": "Добавить свою локацию",
-  "interface.all_spies": "All players are spies at this location",
+  "interface.all_spies": "Все игроки — шпионы в данной локации",
   "interface.back_to_game": "Назад в игру",
   "interface.save": "Сохранить",
   "interface.delete": "Удалить",
