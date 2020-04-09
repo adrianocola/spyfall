@@ -17,7 +17,7 @@
   "interface.pause_timer": "Wstrzymaj czas",
   "interface.create_room": "Utwórz pokój",
   "interface.join_room": "Dołącz do pokoju",
-  "interface.leave_room": "Leave Room",
+  "interface.leave_room": "Opuść pokój",
   "interface.room": "Pokój",
   "interface.player": "Gracz",
   "interface.room_help": "Poproś graczy, aby dołączyli do pokoju z taką samą nazwą użytkownika, jaką ustawiłeś powyżej",
