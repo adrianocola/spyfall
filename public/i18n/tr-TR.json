@@ -29,7 +29,7 @@
   "interface.error_room_connection": "Bağlantı hatası veya hatalı oda!",
   "interface.error_room_invalid_player": "Oda kurucusuna sizin isminizle bir oyuncu eklemesini belirtin!",
   "interface.add_location": "Özel Konum Ekle",
-  "interface.all_spies": "All players are spies at this location",
+  "interface.all_spies": "Burada tüm oyuncular casus",
   "interface.back_to_game": "Oyuna Geri Dön",
   "interface.save": "Kaydet",
   "interface.delete": "Sil",
