@@ -6,13 +6,15 @@ import {logEvent} from 'utils/analytics';
 
 import RolePopup from 'components/RolePopup/RolePopup';
 
-export const Player = ({index, player, started, location, role, customLocations, onPlayerChange}) => {
+export const Player = ({index, player, started, location, role, customLocations, onPlayerChange, localPlayerAmount}) => {
   const [showRole, setShowRole] = useState(false);
   const [showedRole, setShowedRole] = useState(false);
 
   const toggle = () => {
     if(!showedRole){
-      setShowedRole(true);
+      if (localPlayerAmount > 1){
+        setShowedRole(true); // Only disable showing role if there are other local players as per issue #172
+      }
     }
     if(!showRole) logEvent('PLAYER_VIEW_ROLE');
     setShowRole((prevShowRole) => !prevShowRole);
@@ -51,6 +53,7 @@ const mapStateToProps = (state, ownProps) => {
     role: state.game.playersRoles[player],
     location: state.game.location,
     customLocations: state.config.customLocations,
+    localPlayerAmount: state.config.players.length,
   };
 };
 
