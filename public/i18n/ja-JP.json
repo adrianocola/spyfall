@@ -17,7 +17,7 @@
   "interface.pause_timer": "PAUSE",
   "interface.create_room": "部屋を作る",
   "interface.join_room": "部屋に参加する",
-  "interface.leave_room": "Leave Room",
+  "interface.leave_room": "部屋をデル",
   "interface.room": "部屋",
   "interface.player": "プレイヤー",
   "interface.room_help": "他の参加者を上記のプレイヤー名に設定してもらい参加してもらいましょう！",
