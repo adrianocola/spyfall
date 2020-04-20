@@ -29,7 +29,7 @@
   "interface.error_room_connection": "Savienojuma kļūda vai nepareiza istaba!",
   "interface.error_room_invalid_player": "Lūdziet istabas īpašnieku izveidot spēlētāju ar tavu vārdu!",
   "interface.add_location": "Pievienot izveidotu atrašanās vietu",
-  "interface.all_spies": "All players are spies at this location",
+  "interface.all_spies": "Visi spēlētāji ir spiegi šajā vietā",
   "interface.back_to_game": "Atpakaļ uz spēli",
   "interface.save": "Saglabāt",
   "interface.delete": "Izdzēst",

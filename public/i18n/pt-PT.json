@@ -17,7 +17,7 @@
   "interface.pause_timer": "Pausar Cronómetro",
   "interface.create_room": "Criar Sala",
   "interface.join_room": "Entrar em Sala",
-  "interface.leave_room": "Leave Room",
+  "interface.leave_room": "Sair da Sala",
   "interface.room": "Sala",
   "interface.player": "Jogador",
   "interface.room_help": "Peça aos seus jogadores para entrarem com o mesmo nome de jogador que definiu acima!",
