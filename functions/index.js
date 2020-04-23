@@ -15,6 +15,19 @@ const CROWDIN_API = functions.config().crowdin.api;
 
 admin.initializeApp();
 
+const updateTranslations = async () => {
+  const status = {};
+  const translations = await fetch(`https://api.crowdin.com/api/project/adrianocola-spyfall/status?key=${CROWDIN_API}&json`).then((response) => response.json());
+  _.each(translations, (translation) => {
+    const code = translationsShortMap[translation.code];
+    status[code] = Math.round(100 * translation.approved / translation.phrases);
+  });
+
+  await admin.database().ref('translations').set(status);
+
+  return status;
+};
+
 // once per day
 exports.deleteOld = functions.runWith({timeoutSeconds: 120, memory: '512MB'}).pubsub.schedule('0 0 * * *').onRun(async (context) => {
   const limit = promiseLimit(10);
@@ -47,13 +60,10 @@ exports.deleteOld = functions.runWith({timeoutSeconds: 120, memory: '512MB'}).pu
 });
 
 // every 6 hours
-exports.updateLocalizationStatus = functions.pubsub.schedule('0 */6 * * *').onRun(async (context) => {
-  const status = {};
-  const translations = await fetch(`https://api.crowdin.com/api/project/adrianocola-spyfall/status?key=${CROWDIN_API}&json`).then((response) => response.json());
-  _.each(translations, (translation) => {
-    const code = translationsShortMap[translation.code];
-    status[code] = Math.round(100 * translation.approved / translation.phrases);
-  });
+exports.updateLocalizationStatus = functions.pubsub.schedule('0 */6 * * *').onRun((context) => updateTranslations());
 
-  return admin.database().ref('translations').set(status);
+exports.forceUpdateLocalizationStatus = functions.https.onRequest(async (req, res) => {
+  const translations = await updateTranslations();
+
+  res.json(translations);
 });
