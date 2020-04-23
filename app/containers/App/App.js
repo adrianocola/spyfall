@@ -30,8 +30,8 @@ export class App extends React.Component{
   }
 
   importTranslations = async () => {
-    // imported less than 6 hours ago
-    if(this.props.translationsImportTime && Date.now() - this.props.translationsImportTime < 6 * 60 * 60 * 1000) return null;
+    // imported less than 24 hours ago
+    if(this.props.translationsImportTime && Date.now() - this.props.translationsImportTime < 24 * 60 * 60 * 1000) return null;
 
     const translationsSnapshot = await database.ref('translations').once('value');
     this.props.setTranslations(translationsSnapshot.val() || {});
@@ -45,6 +45,7 @@ export class App extends React.Component{
 
   render() {
     const { language, translations = {} } = this.props;
+
     return (
       <Container className={styles.container}>
         <Helmet

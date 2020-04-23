@@ -1,3 +1,5 @@
+// ID must be equal to the json filename
+// SHORT must be equal to the language code returned by crowdin API
 module.exports = [
   {id: 'af-ZA', name: 'Afrikaans', short: 'af'},
   {id: 'ar-SA', name: 'العربية', short: 'ar'},
