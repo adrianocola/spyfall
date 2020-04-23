@@ -26,6 +26,7 @@ module.exports = [
   {id: 'pt-PT', name: 'Português (Portugal)', short: 'pt-PT'},
   {id: 'ro-RO', name: 'Română', short: 'ro'},
   {id: 'ru-RU', name: 'Pусский', short: 'ru'},
+  {id: 'sk-SK', name: 'Slovenčina', short: 'sk'},
   {id: 'sr-CS', name: 'Srpski (Latinica)', short: 'sr-CS'},
   {id: 'sr-SP', name: 'Српски (Ћирилица)', short: 'sr'},
   {id: 'sv-SE', name: 'Svenska', short: 'sv-SE'},
