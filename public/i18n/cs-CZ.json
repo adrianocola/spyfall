@@ -16,7 +16,7 @@
   "interface.start_timer": "Spustit stopky",
   "interface.pause_timer": "Zastavit stopky",
   "interface.create_room": "Vytvořit hru",
-  "interface.join_room": "Přpojit se ke hře",
+  "interface.join_room": "Připojit se ke hře",
   "interface.leave_room": "Odejít z místnosti",
   "interface.room": "Hra",
   "interface.player": "Hráč",
