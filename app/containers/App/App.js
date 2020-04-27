@@ -12,6 +12,7 @@ import {auth, database} from 'services/firebase';
 import {setLanguageAction, setTranslations, setUserIdAction} from 'actions/root';
 import {setCustomLocations, setSelectedLocations} from 'actions/config';
 import {TRANSLATIONS} from 'consts';
+import Discord from 'images/discord.png';
 
 import SpinnerModal from 'components/SpinnerModal/SpinnerModal';
 import SpyIcon from 'components/SpyIcon/SpyIcon';
@@ -83,6 +84,14 @@ export class App extends React.Component{
                 <a className={styles.localizationLink} target="_blank" href="https://crowdin.com/project/adrianocola-spyfall">Help us with translations!</a>
               </Col>
             </Row>
+            <Row className={styles.localizationContainer}>
+              <Col className="text-center">
+                <a title="Discord Server" target="_blank" href="https://discord.io/spyfall">
+                  <img alt="discord server" src={Discord} className={styles.discordImage} />
+                  <span className={styles.discordLink}>Join Spyfall Discord server</span>
+                </a>
+              </Col>
+            </Row>
             <Row className={styles.footer}>
               <Col className="text-center">
                 <Row>
@@ -124,6 +133,12 @@ const styles = {
     fontSize: '0.8rem',
   }),
   localizationLink: css({
+    marginLeft: 10,
+  }),
+  discordImage: css({
+    height: 32,
+  }),
+  discordLink: css({
     marginLeft: 10,
   }),
   footer: css({
