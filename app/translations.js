@@ -14,7 +14,7 @@ module.exports = [
   {id: 'es-ES', name: 'Español', short: 'es-ES'},
   {id: 'fa-IR', name: 'فارسی', short: 'fa'},
   {id: 'fi-FI', name: 'Suomi', short: 'fi'},
-  {id: 'fr-FR', name: 'Fran&ccedil;ais', short: 'fr'},
+  {id: 'fr-FR', name: 'Français', short: 'fr'},
   {id: 'he-IL', name: 'עברית', short: 'he'},
   {id: 'hu-HU', name: 'Magyar', short: 'hu'},
   {id: 'id-ID', name: 'Indonesian', short: 'id'},
