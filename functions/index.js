@@ -62,6 +62,12 @@ exports.deleteOld = functions.runWith({timeoutSeconds: 120, memory: '512MB'}).pu
 // every 6 hours
 exports.updateLocalizationStatus = functions.pubsub.schedule('0 */6 * * *').onRun((context) => updateTranslations());
 
+exports.getCrowdinTranslations = functions.https.onRequest(async (req, res) => {
+  const translations = await fetch(`https://api.crowdin.com/api/project/adrianocola-spyfall/status?key=${CROWDIN_API}&json`).then((response) => response.json());
+
+  res.json(translations);
+});
+
 exports.forceUpdateLocalizationStatus = functions.https.onRequest(async (req, res) => {
   const translations = await updateTranslations();
 

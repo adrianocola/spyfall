@@ -12,6 +12,7 @@ module.exports = [
   {id: 'en-GB', name: 'English - United Kingdom', short: 'en-GB'},
   {id: 'en-US', name: 'English - United States', short: 'en'},
   {id: 'es-ES', name: 'Español', short: 'es-ES'},
+  {id: 'eo-UY', name: 'Esperanto', short: 'eo'},
   {id: 'fa-IR', name: 'فارسی', short: 'fa'},
   {id: 'fi-FI', name: 'Suomi', short: 'fi'},
   {id: 'fr-FR', name: 'Français', short: 'fr'},
