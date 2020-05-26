@@ -523,15 +523,15 @@
   "location.wedding.role8": "Wedding Crasher",
   "location.wedding.role9": "Best Man",
   "location.wedding.role10": "Relative",
-  "location.zoo": "Zoo",
-  "location.zoo.role1": "Zookeeper",
-  "location.zoo.role2": "Visitor",
-  "location.zoo.role3": "Photographer",
-  "location.zoo.role4": "Child",
-  "location.zoo.role5": "Veterinarian",
+  "location.zoo": "Bestoĝardeno",
+  "location.zoo.role1": "Bestoĝardenisto",
+  "location.zoo.role2": "Vizitanto",
+  "location.zoo.role3": "Fotisto",
+  "location.zoo.role4": "Infano",
+  "location.zoo.role5": "Bestokuracisto",
   "location.zoo.role6": "Turisto",
   "location.zoo.role7": "Manĝvendisto",
   "location.zoo.role8": "Kasisto",
-  "location.zoo.role9": "Zookeeper",
-  "location.zoo.role10": "Researcher"
+  "location.zoo.role9": "Bestoĝardenisto",
+  "location.zoo.role10": "Sciencisto"
 }
