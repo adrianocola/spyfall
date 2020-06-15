@@ -12,7 +12,7 @@
   "interface.end_game": "Avslutt spillet",
   "interface.is_the_spy": "er spionen!",
   "interface.game_information": "Spillinformasjon",
-  "interface.timer": "Klokke",
+  "interface.timer": "Tid ",
   "interface.start_timer": "Start Tid",
   "interface.pause_timer": "Stopp Tid",
   "interface.create_room": "Lag Rom",
