@@ -29,7 +29,7 @@
   "interface.error_room_connection": "غلط!",
   "interface.error_room_invalid_player": "أسأل صاحب الغرفة لأنشاء أسم لاعب!",
   "interface.add_location": "إضافة مواقع",
-  "interface.all_spies": "كل اللاعبين جواسيس فى هذا المكان",
+  "interface.all_spies": "جميع اللاعبين جواسيس فى هذا المكان",
   "interface.back_to_game": "العودة الى اللعبة",
   "interface.save": "حفظ",
   "interface.delete": "حذف",
