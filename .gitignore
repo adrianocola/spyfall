@@ -8,3 +8,4 @@ secret.json
 .firebase/
 build/
 functions/lib/*.js
+firebase-debug.log
