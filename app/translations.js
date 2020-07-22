@@ -22,6 +22,7 @@ module.exports = [
   {id: 'it-IT', name: 'Italiano', short: 'it'},
   {id: 'ja-JP', name: '日本語', short: 'js'},
   {id: 'ko-KR', name: '한국어', short: 'ko'},
+  {id: 'lt-LT', name: 'Lietuvių Kalba', short: 'lt'},
   {id: 'nl-NL', name: 'Nederlands', short: 'nl'},
   {id: 'no-NO', name: 'Norsk', short: 'no'},
   {id: 'pl-PL', name: 'Język Polski', short: 'pl'},
