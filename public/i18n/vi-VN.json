@@ -29,7 +29,7 @@
   "interface.error_room_connection": "Lỗi kết nối hoặc phòng không đúng!",
   "interface.error_room_invalid_player": "Yêu cầu chủ phòng tạo một người chơi với tên của bạn!",
   "interface.add_location": "Thêm địa điểm tùy chọn",
-  "interface.all_spies": "All players are spies at this location",
+  "interface.all_spies": "Mọi người chơi đều là gián điệp.",
   "interface.back_to_game": "Quay lại trò chơi",
   "interface.save": "Bảo lưu",
   "interface.delete": "Xóa",
