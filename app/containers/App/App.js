@@ -64,7 +64,7 @@ export class App extends React.Component{
                 </Link>
               </Col>
               <Col xs="12" sm="8" className={`${styles.languageSelector} text-center`}>
-                <Input type="select" name="languages" id="languages" value={language} onChange={(evt) => this.setLanguage(evt.target.value)}>
+                <Input type="select" name="languages" id="languages" value={i18n.language} onChange={(evt) => this.setLanguage(evt.target.value)}>
                   {TRANSLATIONS.map((translation) =>
                     <option key={translation.id} value={translation.id}>{translation.name} - {translations[translation.id] || 0}%</option>
                   )}
