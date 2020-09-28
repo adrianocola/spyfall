@@ -3,7 +3,7 @@ import {Helmet} from 'react-helmet';
 import {connect} from 'react-redux';
 import {Link, Route, Switch} from 'react-router-dom';
 import {css} from 'emotion';
-import i18n from 'i18n';
+import i18n, { i18nInit } from 'i18n';
 import {MEDIA, SHADES} from 'styles/consts';
 import {ToastContainer} from 'react-toastify';
 import Loadable from 'react-loadable';
@@ -22,8 +22,16 @@ const LoadableGame = Loadable({loader: () => import('../Game/Game'), loading: Sp
 const LoadableJoinRoom = Loadable({loader: () => import('../JoinRoom/JoinRoom'), loading: SpinnerModal});
 
 export class App extends React.Component{
+  state = { loading: true };
+
   componentDidMount() {
     const { setUserId } = this.props;
+    i18nInit.then(() => {
+      if (!this.props.language) {
+        this.setLanguage(i18n.language);
+      }
+      this.setState({ loading: false });
+    });
     auth.signInAnonymously().then((authUser) => {
       setUserId(authUser.user.uid);
       this.importTranslations();
@@ -47,6 +55,8 @@ export class App extends React.Component{
   render() {
     const { language, translations = {} } = this.props;
 
+    if (this.state.loading) return null;
+
     return (
       <Container className={styles.container}>
         <Helmet
@@ -64,7 +74,7 @@ export class App extends React.Component{
                 </Link>
               </Col>
               <Col xs="12" sm="8" className={`${styles.languageSelector} text-center`}>
-                <Input type="select" name="languages" id="languages" value={i18n.language} onChange={(evt) => this.setLanguage(evt.target.value)}>
+                <Input type="select" name="languages" id="languages" value={language} onChange={(evt) => this.setLanguage(evt.target.value)}>
                   {TRANSLATIONS.map((translation) =>
                     <option key={translation.id} value={translation.id}>{translation.name} - {translations[translation.id] || 0}%</option>
                   )}
