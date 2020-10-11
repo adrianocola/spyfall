@@ -29,7 +29,7 @@
   "interface.error_room_connection": "Daar was of 'n konneksie propleem of die kamer bestaan nie!",
   "interface.error_room_invalid_player": "Versoek vanaf die kamer eienaar om jou skuilnaam by te voeg!",
   "interface.add_location": "Voeg Pasgemaakte Ligging by",
-  "interface.all_spies": "All players are spies at this location",
+  "interface.all_spies": "Alle spelers is spioene by hierdie plek",
   "interface.back_to_game": "Verkeer terug na die Spel",
   "interface.save": "Stoor",
   "interface.delete": "Verwyder",
