@@ -26,7 +26,7 @@
   "interface.game_connected": "اتصل بغرفة",
   "interface.game_stopped": "اللعبة توقفت",
   "interface.show_my_role": "اظهر دوري",
-  "interface.error_room_connection": "غلط!",
+  "interface.error_room_connection": "يوجد خطأ بالأتصال او برقم تعريف الغرفة.",
   "interface.error_room_invalid_player": "أسأل صاحب الغرفة لأنشاء أسم لاعب!",
   "interface.add_location": "إضافة مواقع",
   "interface.all_spies": "جميع اللاعبين جواسيس فى هذا المكان",
