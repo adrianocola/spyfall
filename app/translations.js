@@ -3,6 +3,7 @@
 module.exports = [
   {id: 'af-ZA', name: 'Afrikaans', short: 'af'},
   {id: 'ar-SA', name: 'العربية', short: 'ar'},
+  {id: 'az-AZ', name: 'Azərbaycan', short: 'az'},
   {id: 'bg-BG', name: 'Български', short: 'bg'},
   {id: 'ca-ES', name: 'Català', short: 'ca'},
   {id: 'cs-CZ', name: 'Čeština', short: 'cs'},
