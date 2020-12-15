@@ -106,7 +106,7 @@ export class App extends React.Component{
               <Col className="text-center">
                 <Row>
                   <Col>
-                    <a target="_blank" href="http://international.hobbyworld.ru/catalog/25-spyfall/">Spyfall</a> is designed by Alexandr Ushan and published by <a target="_blank" href="http://international.hobbyworld.ru/">Hobby World</a>
+                    <a target="_blank" href="https://hwint.ru/portfolio-item/spyfall/">Spyfall</a> is designed by Alexandr Ushan and published by <a target="_blank" href="http://international.hobbyworld.ru/">Hobby World</a>
                   </Col>
                 </Row>
                 <Row>
