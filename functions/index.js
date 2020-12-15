@@ -23,6 +23,7 @@ const updateTranslations = async () => {
   const translations = await getCrowdinTranslations();
   _.each(translations, (translation) => {
     const code = translationsShortMap[translation.code];
+    if (!code) console.log('CODE NOT FOUND', translation.code);
     status[code] = Math.round(100 * translation.approved / translation.phrases);
   });
 
