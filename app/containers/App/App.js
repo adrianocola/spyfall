@@ -62,7 +62,7 @@ export class App extends React.Component{
         <Helmet
           defaultTitle="Spyfall"
         >
-          <meta name="description" content="Ensemble React Web Template" />
+          <meta name="description" content="Free online spyfall game" />
         </Helmet>
         <Row className="justify-content-center">
           <Col xs={12} md={8} lg={6}>
