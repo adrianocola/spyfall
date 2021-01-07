@@ -29,7 +29,7 @@
   "interface.error_room_connection": "Eroare de conectare sau cameră de joc invalidă!",
   "interface.error_room_invalid_player": "Cereți proprietarului camerei să creeze un jucător cu numele vostru!",
   "interface.add_location": "Adaugă locație personalizată",
-  "interface.all_spies": "Spy",
+  "interface.all_spies": "All players are spies at this location",
   "interface.back_to_game": "Înapoi la joc",
   "interface.save": "Salvează",
   "interface.delete": "Șterge",
