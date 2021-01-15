@@ -6,7 +6,7 @@
   "interface.game_locations": "רשימת מקומות במשחק",
   "interface.game_locations_custom": "מקומות מותאמים אישית",
   "interface.role": "תפקיד",
-  "interface.add_player": "הוספת שחקן/נית",
+  "interface.add_player": "הוסף שחקן/נית",
   "interface.rem_player": "הסרת שחקן/נית",
   "interface.start_game": "התחל משחק",
   "interface.end_game": "סיים משחק",
