@@ -37,7 +37,7 @@
   "interface.export_locations": "Orte exportieren",
   "interface.import_locations": "Orte importieren",
   "interface.download_locations": "Orte herunterladen",
-  "interface.upload_locations": "Orte heraufladen",
+  "interface.upload_locations": "Orte hochladen",
   "interface.export_id": "ID exportieren",
   "interface.import": "Importieren",
   "interface.export_help": "Nutze die generierte ID, um deine benutzerdefinierten Orte auf einem anderen Gerät zu importieren",
