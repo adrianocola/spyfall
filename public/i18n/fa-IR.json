@@ -16,7 +16,7 @@
   "interface.start_timer": "شروع کردن زمان",
   "interface.pause_timer": "توقف زمان",
   "interface.create_room": "ساختن اتاق",
-  "interface.join_room": "رفتن با اتاق",
+  "interface.join_room": "پیوستن به اتاق",
   "interface.leave_room": "ترک اتاق",
   "interface.room": "اتاق",
   "interface.player": "بازیکن",
