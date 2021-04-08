@@ -29,7 +29,7 @@
   "interface.error_room_connection": "Anslutningsfel eller ogiltigt rum!",
   "interface.error_room_invalid_player": "Fråga rumsägaren att skapa en spelare med ditt namn!",
   "interface.add_location": "Lägg till anpassad plats",
-  "interface.all_spies": "All players are spies at this location",
+  "interface.all_spies": "Alla spelare är spioner vid denna plats",
   "interface.back_to_game": "Tillbaka till spelet",
   "interface.save": "Spara",
   "interface.delete": "Ta bort",
