@@ -11,7 +11,7 @@ import { SHADES, COLORS } from 'styles/consts';
 import { selectLocationAction, deselectLocationAction, saveCustomLocationAction, remCustomLocationAction } from 'actions/config';
 import { logEvent } from 'utils/analytics';
 
-export const Location = React.memo(({ locationId, disabled, selected = false, selectLocation, deselectLocation, ...props }) => {
+export const Location = React.memo(({ locationId, description, disabled, selected = false, selectLocation, deselectLocation, ...props }) => {
   const [t] = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [location, setLocation] = useState(props.location);
@@ -52,11 +52,12 @@ export const Location = React.memo(({ locationId, disabled, selected = false, se
     <Row className={`${styles.container} justify-content-center`}>
       <Col xs={10}>
         <Row className="justify-content-between">
-          <Col xs="auto">
+          <Col xs="auto" className="align-items-center">
             <Label check className={styles.check}>
               <Input type="checkbox" checked={selected} onChange={selected ? () => deselectLocation(locationId) : () => selectLocation(locationId)} />
               {disabled ? ReactHtmlParser(t(`location.${locationId}`)) : props.location.name}
             </Label>
+            {!!description && <div className={styles.description}>{description}</div>}
           </Col>
           <Col xs="auto" onClick={toggle}>
             <CogIcon />
@@ -145,6 +146,12 @@ const styles = {
   }),
   deleteLocation: css({
     color: COLORS.red,
+  }),
+  description: css({
+    display: 'inline-block',
+    color: SHADES.light2,
+    marginLeft: 10,
+    fontSize: 12,
   }),
 };
 

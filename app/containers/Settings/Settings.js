@@ -1,20 +1,29 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { css } from 'emotion';
 import { connect } from 'react-redux';
-import { Row, Col, Input, Button } from 'reactstrap';
+import { Button, Col, Input, Row } from 'reactstrap';
 import Localized from 'components/Localized/Localized';
 import LocationsCount from 'components/LocationsCount/LocationsCount';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { selectAllLocationsAction, deselectAllLocationsAction } from 'actions/config';
+import { TiDelete } from 'react-icons/ti';
+import { deselectAllLocationsAction, selectAllLocationsAction } from 'actions/config';
+import { SHADES } from 'styles/consts';
 
 import DefaultLocationsList from './DefaultLocationsList';
 import CustomLocationsList from './CustomLocationsList';
+import FilteredLocationsList from './FilteredLocationsList';
 import ExportLocations from './ExportLocations';
 import DownloadLocations from './DownloadLocations';
 
 export const Settings = ({ selectAllLocations, deselectAllLocations }) => {
   const [t] = useTranslation();
+  const [filter, setFilter] = useState('');
+  const onFilterChange = useCallback((event) => {
+    setFilter(event.target.value);
+  }, []);
+
+  const onClearFilter = useCallback(() => setFilter(''), []);
 
   return (
     <Row className={`${styles.container} justify-content-center`}>
@@ -26,12 +35,18 @@ export const Settings = ({ selectAllLocations, deselectAllLocations }) => {
         </Row>
         <Row className={`${styles.filterContainer} justify-content-center`}>
           <Col className="text-center">
-            <Input placeholder={t('interface.filter')} />
+            <Input placeholder={t('interface.filter')} value={filter} onChange={onFilterChange} />
+            {!!filter && <TiDelete className={styles.clearFilter} onClick={onClearFilter} />}
           </Col>
         </Row>
-        <DefaultLocationsList version={1} onSelectAll={selectAllLocations} onDeselectAll={deselectAllLocations} />
-        <DefaultLocationsList version={2} onSelectAll={selectAllLocations} onDeselectAll={deselectAllLocations} />
-        <CustomLocationsList onSelectAll={selectAllLocations} onDeselectAll={deselectAllLocations} />
+        {!filter && (
+          <>
+            <DefaultLocationsList version={1} onSelectAll={selectAllLocations} onDeselectAll={deselectAllLocations} />
+            <DefaultLocationsList version={2} onSelectAll={selectAllLocations} onDeselectAll={deselectAllLocations} />
+            <CustomLocationsList onSelectAll={selectAllLocations} onDeselectAll={deselectAllLocations} />
+          </>
+        )}
+        {!!filter && <FilteredLocationsList filter={filter} />}
         <ExportLocations />
         <DownloadLocations />
         <Row className={`${styles.backContainer} justify-content-center`}>
@@ -63,6 +78,17 @@ const styles = {
     textDecoration: 'none',
     ':hover': {
       textDecoration: 'none',
+    },
+  }),
+  clearFilter: css({
+    position: 'absolute',
+    right: 25,
+    top: 8,
+    fontSize: 22,
+    color: SHADES.light,
+    cursor: 'pointer',
+    '&:hover': {
+      color: SHADES.darker,
     },
   }),
 };

@@ -33,7 +33,7 @@ export const DefaultLocationsList = ({ version, onSelectAll, onDeselectAll }) =>
       <Col>
         <Row className={styles.locationsListNameContainer}>
           <Col className="text-center">
-            <h5>Spyfall{version === 1 ? '' : ` ${version}`}</h5>
+            <h5>Spyfall {version}</h5>
           </Col>
         </Row>
         <Row className={styles.checksContainer}>
