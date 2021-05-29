@@ -43,6 +43,7 @@
   "interface.export_help": "Käytä generoitua Id:tä tuodaksesi sinun omat sijainnit toisesta laitteesta",
   "interface.done": "Valmis!",
   "interface.error": "Virhe!",
+  "interface.link_copied": "Link copied to clipboard!",
   "location.airplane": "Lentokone",
   "location.airplane.role1": "1. luokan matkustaja",
   "location.airplane.role2": "Turvamies",
