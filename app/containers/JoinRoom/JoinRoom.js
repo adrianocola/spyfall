@@ -1,11 +1,11 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {css} from 'emotion';
 import {connect} from 'react-redux';
 import {Button, Col, Container, Input, Row} from 'reactstrap';
 import Localized from 'components/Localized/Localized';
 import ButtonWithLoading from 'components/ButtonWithLoading/ButtonWithLoading';
 import {useTranslation} from 'react-i18next';
-import {Link} from 'react-router-dom';
+import {Link, useParams} from 'react-router-dom';
 import {database, databaseServerTimestamp} from 'services/firebase';
 import {setJoinPlayerAction, setJoinRoomIdAction} from 'actions/joinRoom';
 import {setJoinedRoomAction} from 'actions/session';
@@ -19,7 +19,12 @@ export const JoinRoom = ({userId, joinRoomId, setJoinRoomId, joinPlayer, setJoin
   const [t] = useTranslation();
 
   const [loading, setLoading] = useState(false);
+  const { roomId } = useParams();
   const canJoin = joinRoomId && joinPlayer;
+
+  useEffect(() => {
+    if (roomId) setJoinRoomId(roomId);
+  }, [roomId]);
 
   const onJoinRoom = async () => {
     logEvent('ROOM_PLAYER_ASKED_JOIN');

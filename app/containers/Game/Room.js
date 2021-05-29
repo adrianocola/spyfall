@@ -11,11 +11,13 @@ import ButtonWithLoading from 'components/ButtonWithLoading/ButtonWithLoading';
 import Localized from 'components/Localized/Localized';
 import { resetGame, deleteGame } from 'services/game';
 import copyToClipboard from 'utils/copyToClipboard';
-import {showError} from 'utils/toast';
+import {showError, showSuccess} from 'utils/toast';
 import {logEvent} from 'utils/analytics';
+import {useTranslation} from 'react-i18next';
 
 export const Room = ({roomId, roomConnected, setRoomConnected, ...props}) => {
   const [loading, setLoading] = useState(false);
+  const [t] = useTranslation();
 
   const onCreateRoom = async () => {
     logEvent('ROOM_CREATE');
@@ -45,11 +47,16 @@ export const Room = ({roomId, roomConnected, setRoomConnected, ...props}) => {
     setRoomConnected(false);
   };
 
+  const onRoomCopy = () => {
+    copyToClipboard(`${window.location.origin}/join/${roomId}`);
+    showSuccess(t('interface.link_copied'));
+  };
+
   if(roomConnected){
     return (
       <Row className={styles.roomControllerContainer}>
         <Col xs={12} sm={5}>
-          <ButtonWithLoading outline color="secondary" loading={loading} block className={styles.roomId} onClick={() => copyToClipboard(roomId)}>
+          <ButtonWithLoading outline color="secondary" loading={loading} block className={styles.roomId} onClick={onRoomCopy}>
             <Localized name="interface.room" />
             {': '}
             <span>{roomId}</span>

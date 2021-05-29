@@ -84,6 +84,7 @@ export class App extends React.Component{
             <Switch>
               <Route exact path="/settings" component={LoadableSettings} />
               <Route exact path="/join" component={LoadableJoinRoom} />
+              <Route exact path="/join/:roomId" component={LoadableJoinRoom} />
               <Route exact path="/" component={LoadableGame} />
             </Switch>
             <Row className={styles.localizationContainer}>
