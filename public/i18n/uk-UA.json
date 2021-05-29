@@ -43,6 +43,7 @@
   "interface.export_help": "Ви можете імпортувати локацію на іншому пристрої по даному коду",
   "interface.done": "Готово!",
   "interface.error": "Помилка!",
+  "interface.link_copied": "Link copied to clipboard!",
   "location.airplane": "Літак",
   "location.airplane.role1": "Пасажир бізнес класу",
   "location.airplane.role2": "Агент поліції",
