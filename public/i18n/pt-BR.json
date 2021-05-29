@@ -43,6 +43,7 @@
   "interface.export_help": "Use o ID gerado para importar suas localidades personalizadas em outro dispositivo",
   "interface.done": "Finalizado!",
   "interface.error": "Erro!",
+  "interface.link_copied": "Link copied to clipboard!",
   "location.airplane": "Avião",
   "location.airplane.role1": "Passageiro de Primeira Classe",
   "location.airplane.role2": "Agente Federal Disfarçado",
