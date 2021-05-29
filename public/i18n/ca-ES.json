@@ -43,6 +43,7 @@
   "interface.export_help": "Utilitza la ID generada per importar els teus llocs a mida a un altre dispositiu",
   "interface.done": "Fet!",
   "interface.error": "Error!",
+  "interface.link_copied": "Link copied to clipboard!",
   "location.airplane": "Avió",
   "location.airplane.role1": "Passatger de Primera Classe",
   "location.airplane.role2": "Policia de paisà",
