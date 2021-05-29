@@ -43,6 +43,7 @@
   "interface.export_help": "Használd a generált azonosítót, hogy a saját helyszíneket másik eszközön importáld",
   "interface.done": "Kész!",
   "interface.error": "Hiba!",
+  "interface.link_copied": "Link copied to clipboard!",
   "location.airplane": "Repülőgép",
   "location.airplane.role1": "Első osztályú utas",
   "location.airplane.role2": "Légi marsall",
