@@ -43,6 +43,7 @@
   "interface.export_help": "생성된 내보내기 ID를 사용하여 다른 기계에서 장소목록을 가져오시면 됩니다.",
   "interface.done": "완료!",
   "interface.error": "에러!",
+  "interface.link_copied": "Link copied to clipboard!",
   "location.airplane": "여객기",
   "location.airplane.role1": "1등석 승객",
   "location.airplane.role2": "여객기 보안 요원",
