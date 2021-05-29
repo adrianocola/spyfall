@@ -1,21 +1,21 @@
-import React, {useEffect, useState} from 'react';
-import {css} from 'emotion';
-import {connect} from 'react-redux';
-import {Button, Col, Container, Input, Row} from 'reactstrap';
+import React, { useEffect, useState } from 'react';
+import { css } from 'emotion';
+import { connect } from 'react-redux';
+import { Button, Col, Container, Input, Row } from 'reactstrap';
 import Localized from 'components/Localized/Localized';
 import ButtonWithLoading from 'components/ButtonWithLoading/ButtonWithLoading';
-import {useTranslation} from 'react-i18next';
-import {Link, useParams} from 'react-router-dom';
-import {database, databaseServerTimestamp} from 'services/firebase';
-import {setJoinPlayerAction, setJoinRoomIdAction} from 'actions/joinRoom';
-import {setJoinedRoomAction} from 'actions/session';
-import {showError} from 'utils/toast';
-import {ID_LENGTH} from 'consts';
-import {logEvent} from 'utils/analytics';
+import { useTranslation } from 'react-i18next';
+import { Link, useParams } from 'react-router-dom';
+import { database, databaseServerTimestamp } from 'services/firebase';
+import { setJoinPlayerAction, setJoinRoomIdAction } from 'actions/joinRoom';
+import { setJoinedRoomAction } from 'actions/session';
+import { showError } from 'utils/toast';
+import { ID_LENGTH } from 'consts';
+import { logEvent } from 'utils/analytics';
 
 import RoomClient from './RoomClient';
 
-export const JoinRoom = ({userId, joinRoomId, setJoinRoomId, joinPlayer, setJoinPlayer, joinedRoom, setJoinedRoom}) => {
+export const JoinRoom = ({ userId, joinRoomId, setJoinRoomId, joinPlayer, setJoinPlayer, joinedRoom, setJoinedRoom }) => {
   const [t] = useTranslation();
 
   const [loading, setLoading] = useState(false);
@@ -24,13 +24,13 @@ export const JoinRoom = ({userId, joinRoomId, setJoinRoomId, joinPlayer, setJoin
 
   useEffect(() => {
     if (roomId) setJoinRoomId(roomId);
-  }, [roomId]);
+  }, [roomId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const onJoinRoom = async () => {
     logEvent('ROOM_PLAYER_ASKED_JOIN');
     setLoading(true);
     const roomOnline = await database.ref(`roomsData/${joinRoomId}/online`).once('value');
-    if(roomOnline.exists() && roomOnline.val() === true){
+    if (roomOnline.exists() && roomOnline.val() === true) {
       logEvent('ROOM_PLAYER_JOINED');
       await database.ref(`roomsRemotePlayers/${joinRoomId}/${userId}`).update({
         createdAt: databaseServerTimestamp,
@@ -38,13 +38,13 @@ export const JoinRoom = ({userId, joinRoomId, setJoinRoomId, joinPlayer, setJoin
         name: joinPlayer,
       });
       setJoinedRoom(true);
-    }else{
+    } else {
       showError('interface.error_room_connection');
     }
     setLoading(false);
   };
 
-  if(joinedRoom){
+  if (joinedRoom) {
     return (
       <RoomClient roomId={joinRoomId} player={joinPlayer} />
     );

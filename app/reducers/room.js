@@ -9,9 +9,9 @@ const initialState = {
 };
 
 export default (state = initialState, action) => {
-  switch(action.type){
+  switch (action.type) {
     case REFRESH_ROOM_ID:
-      return {...state, id: roomIdGenerator()};
+      return { ...state, id: roomIdGenerator() };
     default: return state;
   }
 };

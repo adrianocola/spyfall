@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import React from 'react';
-import {css} from 'emotion';
-import {connect} from 'react-redux';
-import {Col, Row} from 'reactstrap';
+import { css } from 'emotion';
+import { connect } from 'react-redux';
+import { Col, Row } from 'reactstrap';
 import Localized from 'components/Localized/Localized';
 import Locations from 'components/Locations/Locations';
 import gameLocationsSelector from 'selectors/gameLocations';
@@ -11,7 +11,7 @@ import selectedLocationsCountSelector from 'selectors/selectedLocationsCount';
 import SpyIcon from 'components/SpyIcon/SpyIcon';
 import TimerManager from './TimerManager';
 
-export const GameInfo = ({matchId, gameLocations, spyCount, prevLocation, selectedLocationsCount}) => (
+export const GameInfo = ({ matchId, gameLocations, spyCount, prevLocation, selectedLocationsCount }) => (
   <div>
     <Row className={styles.spiesCountContainer}>
       <Col className="text-center">

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { css } from 'emotion';
 import { Row, Col, Button } from 'reactstrap';
 import { connect } from 'react-redux';
-import {SHADES} from 'styles/consts';
+import { SHADES } from 'styles/consts';
 import { Link } from 'react-router-dom';
 import { GoClippy } from 'react-icons/go';
 import { setRoomConnectedAction } from 'actions/session';
@@ -11,11 +11,11 @@ import ButtonWithLoading from 'components/ButtonWithLoading/ButtonWithLoading';
 import Localized from 'components/Localized/Localized';
 import { resetGame, deleteGame } from 'services/game';
 import copyToClipboard from 'utils/copyToClipboard';
-import {showError, showSuccess} from 'utils/toast';
-import {logEvent} from 'utils/analytics';
-import {useTranslation} from 'react-i18next';
+import { showError, showSuccess } from 'utils/toast';
+import { logEvent } from 'utils/analytics';
+import { useTranslation } from 'react-i18next';
 
-export const Room = ({roomId, roomConnected, setRoomConnected, ...props}) => {
+export const Room = ({ roomId, roomConnected, setRoomConnected, ...props }) => {
   const [loading, setLoading] = useState(false);
   const [t] = useTranslation();
 
@@ -23,10 +23,10 @@ export const Room = ({roomId, roomConnected, setRoomConnected, ...props}) => {
     logEvent('ROOM_CREATE');
     setLoading(true);
 
-    try{
+    try {
       await resetGame(true);
       setRoomConnected(true);
-    }catch(err){
+    } catch (err) {
       showError(null, err);
       props.refreshRoomId();
     }
@@ -52,7 +52,7 @@ export const Room = ({roomId, roomConnected, setRoomConnected, ...props}) => {
     showSuccess(t('interface.link_copied'));
   };
 
-  if(roomConnected){
+  if (roomConnected) {
     return (
       <Row className={styles.roomControllerContainer}>
         <Col xs={12} sm={5}>

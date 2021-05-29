@@ -1,9 +1,9 @@
 import React from 'react';
-import {Col, Row} from 'reactstrap';
+import { Col, Row } from 'reactstrap';
 import ReactHtmlParser from 'react-html-parser';
-import {css} from 'emotion';
+import { css } from 'emotion';
 import cn from 'classnames';
-import {DARK_COLORS, SHADES} from 'styles/consts';
+import { DARK_COLORS, SHADES } from 'styles/consts';
 
 export const Locations = React.memo(({ locationObj, crossOutLocation, state }) => {
   const className = cn(styles.location, {

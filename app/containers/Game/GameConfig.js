@@ -1,14 +1,14 @@
 import React from 'react';
-import {connect} from 'react-redux';
-import {Col, Input, Row} from 'reactstrap';
-import {css} from 'emotion';
+import { connect } from 'react-redux';
+import { Col, Input, Row } from 'reactstrap';
+import { css } from 'emotion';
 import Localized from 'components/Localized/Localized';
-import {setSpyCountAction, setTimeAction} from 'actions/config';
-import {logEvent} from 'utils/analytics';
+import { setSpyCountAction, setTimeAction } from 'actions/config';
+import { logEvent } from 'utils/analytics';
 
 import SpyIcon from 'components/SpyIcon/SpyIcon';
 
-export const GameConfig = ({time, setTime, spyCount, setSpyCount}) => {
+export const GameConfig = ({ time, setTime, spyCount, setSpyCount }) => {
   const onChangeSpyCount = (count) => () => {
     logEvent('GAME_SET_SPIES', count);
     setSpyCount(count);
@@ -60,7 +60,6 @@ const styles = {
     marginTop: 20,
   }),
 };
-
 
 const mapStateToProps = (state) => ({
   time: state.config.time,

@@ -2,7 +2,7 @@
   "name": "functions",
   "description": "Cloud Functions for Firebase",
   "engines": {
-    "node": "10"
+    "node": "14"
   },
   "scripts": {
     "serve": "firebase serve --only functions",
@@ -12,12 +12,15 @@
     "logs": "firebase functions:log"
   },
   "dependencies": {
-    "firebase-admin": "^8.13.0",
-    "firebase-functions": "^3.8.0",
-    "lodash": "^4.17.19",
-    "moment": "^2.26.0",
-    "node-fetch": "^2.6.1",
-    "promise-limit": "^2.7.0"
+    "firebase-admin": "9.9.0",
+    "firebase-functions": "3.14.1",
+    "lodash": "4.17.21",
+    "moment": "2.29.1",
+    "node-fetch": "2.6.1",
+    "promise-limit": "2.7.0"
+  },
+  "devDependencies": {
+    "@ensemblebr/eslint-config": "3.1.1"
   },
   "private": true
 }

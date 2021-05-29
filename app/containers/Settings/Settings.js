@@ -1,7 +1,7 @@
 import React from 'react';
 import { css } from 'emotion';
 import { connect } from 'react-redux';
-import { Row, Col, Input, Button} from 'reactstrap';
+import { Row, Col, Input, Button } from 'reactstrap';
 import Localized from 'components/Localized/Localized';
 import LocationsCount from 'components/LocationsCount/LocationsCount';
 import { useTranslation } from 'react-i18next';
@@ -13,7 +13,7 @@ import CustomLocationsList from './CustomLocationsList';
 import ExportLocations from './ExportLocations';
 import DownloadLocations from './DownloadLocations';
 
-export const Settings = ({selectAllLocations, deselectAllLocations}) => {
+export const Settings = ({ selectAllLocations, deselectAllLocations }) => {
   const [t] = useTranslation();
 
   return (

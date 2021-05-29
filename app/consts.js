@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 export const MIN_PLAYERS = 3;
 export const MAX_PLAYERS = 12;
 export const MAX_ROLES = MAX_PLAYERS - 2;

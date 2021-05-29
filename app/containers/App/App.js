@@ -1,27 +1,27 @@
 import React from 'react';
-import {Helmet} from 'react-helmet';
-import {connect} from 'react-redux';
-import {Link, Route, Switch} from 'react-router-dom';
-import {css} from 'emotion';
+import { Helmet } from 'react-helmet';
+import { connect } from 'react-redux';
+import { Link, Route, Switch } from 'react-router-dom';
+import { css } from 'emotion';
 import i18n, { i18nInit } from 'i18n';
-import {MEDIA, SHADES} from 'styles/consts';
-import {ToastContainer} from 'react-toastify';
+import { MEDIA, SHADES } from 'styles/consts';
+import { ToastContainer } from 'react-toastify';
 import Loadable from 'react-loadable';
-import {Col, Container, Input, Row} from 'reactstrap';
-import {auth, database} from 'services/firebase';
-import {setLanguageAction, setTranslations, setUserIdAction} from 'actions/root';
-import {setCustomLocations, setSelectedLocations} from 'actions/config';
-import {TRANSLATIONS} from 'consts';
+import { Col, Container, Input, Row } from 'reactstrap';
+import { auth, database } from 'services/firebase';
+import { setLanguageAction, setTranslations, setUserIdAction } from 'actions/root';
+import { setCustomLocations, setSelectedLocations } from 'actions/config';
+import { TRANSLATIONS } from 'consts';
 import Discord from 'images/discord.png';
 
 import SpinnerModal from 'components/SpinnerModal/SpinnerModal';
 import SpyIcon from 'components/SpyIcon/SpyIcon';
 
-const LoadableSettings = Loadable({loader: () => import('../Settings/Settings'), loading: SpinnerModal});
-const LoadableGame = Loadable({loader: () => import('../Game/Game'), loading: SpinnerModal});
-const LoadableJoinRoom = Loadable({loader: () => import('../JoinRoom/JoinRoom'), loading: SpinnerModal});
+const LoadableSettings = Loadable({ loader: () => import('../Settings/Settings'), loading: SpinnerModal });
+const LoadableGame = Loadable({ loader: () => import('../Game/Game'), loading: SpinnerModal });
+const LoadableJoinRoom = Loadable({ loader: () => import('../JoinRoom/JoinRoom'), loading: SpinnerModal });
 
-export class App extends React.Component{
+export class App extends React.Component {
   state = { loading: true };
 
   componentDidMount() {
@@ -40,7 +40,7 @@ export class App extends React.Component{
 
   importTranslations = async () => {
     // imported less than 24 hours ago
-    if(this.props.translationsImportTime && Date.now() - this.props.translationsImportTime < 24 * 60 * 60 * 1000) return null;
+    if (this.props.translationsImportTime && Date.now() - this.props.translationsImportTime < 24 * 60 * 60 * 1000) return null;
 
     const translationsSnapshot = await database.ref('translations').once('value');
     this.props.setTranslations(translationsSnapshot.val() || {});
@@ -89,15 +89,15 @@ export class App extends React.Component{
             </Switch>
             <Row className={styles.localizationContainer}>
               <Col className="text-center">
-                <a title="Crowdin" target="_blank" href="https://crowdin.com/project/adrianocola-spyfall">
+                <a title="Crowdin" target="_blank" href="https://crowdin.com/project/adrianocola-spyfall" rel="noreferrer">
                   <img alt="localization status" src="https://d322cqt584bo4o.cloudfront.net/adrianocola-spyfall/localized.svg" />
                 </a>
-                <a className={styles.localizationLink} target="_blank" href="https://crowdin.com/project/adrianocola-spyfall">Help us with translations!</a>
+                <a className={styles.localizationLink} target="_blank" href="https://crowdin.com/project/adrianocola-spyfall" rel="noreferrer">Help us with translations!</a>
               </Col>
             </Row>
             <Row className={styles.localizationContainer}>
               <Col className="text-center">
-                <a title="Discord Server" target="_blank" href="https://discord.io/spyfall">
+                <a title="Discord Server" target="_blank" href="https://discord.io/spyfall" rel="noreferrer">
                   <img alt="discord server" src={Discord} className={styles.discordImage} />
                   <span className={styles.discordLink}>Join Spyfall Discord server</span>
                 </a>
@@ -107,17 +107,17 @@ export class App extends React.Component{
               <Col className="text-center">
                 <Row>
                   <Col>
-                    <a target="_blank" href="https://hwint.ru/portfolio-item/spyfall/">Spyfall</a> is designed by Alexandr Ushan and published by <a target="_blank" href="http://international.hobbyworld.ru/">Hobby World</a>
+                    <a target="_blank" href="https://hwint.ru/portfolio-item/spyfall/" rel="noreferrer">Spyfall</a> is designed by Alexandr Ushan and published by <a target="_blank" href="http://international.hobbyworld.ru/" rel="noreferrer">Hobby World</a>
                   </Col>
                 </Row>
                 <Row>
                   <Col>
-                    Spy icon created by Dan Hetteix (<a target="_blank" href="http://thenounproject.com/">TheNounProject</a>)
+                    Spy icon created by Dan Hetteix (<a target="_blank" href="http://thenounproject.com/" rel="noreferrer">TheNounProject</a>)
                   </Col>
                 </Row>
                 <Row>
                   <Col>
-                    <a target="_blank" href="https://github.com/adrianocola/spyfall">https://github.com/adrianocola/spyfall</a>
+                    <a target="_blank" href="https://github.com/adrianocola/spyfall" rel="noreferrer">https://github.com/adrianocola/spyfall</a>
                   </Col>
                 </Row>
               </Col>

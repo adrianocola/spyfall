@@ -3,7 +3,7 @@ import 'react-hot-loader';
 
 // Import all the third party stuff
 import React from 'react';
-import ReactDOM from 'react-dom'; // eslint-disable-line import/no-unresolved
+import ReactDOM from 'react-dom'; // eslint-disable-line import/no-unresolved,import/no-extraneous-dependencies
 import FontFaceObserver from 'fontfaceobserver';
 
 // Load the favicon
@@ -24,6 +24,9 @@ import './i18n';
 
 import EntryPoint from './EntryPoint';
 
+import history from './browserHistory';
+import { store, persistor } from './store';
+
 // Observe loading of Open Sans (to remove open sans, remove the <link> tag in
 // the index.html file and this observer)
 const openSansObserver = new FontFaceObserver('Open Sans', {});
@@ -34,9 +37,6 @@ openSansObserver.load().then(() => {
 }, () => {
   document.body.classList.remove('fontLoaded');
 });
-
-import history from './browserHistory';
-import { store, persistor } from './store';
 
 ReactDOM.render(
   <EntryPoint store={store} persistor={persistor} history={history} />,

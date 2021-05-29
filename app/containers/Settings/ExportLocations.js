@@ -1,8 +1,8 @@
 import _ from 'lodash';
-import React, {useState, useMemo} from 'react';
-import {css} from 'emotion';
+import React, { useState, useMemo } from 'react';
+import { css } from 'emotion';
 import { connect } from 'react-redux';
-import {Button, Col, Input, Row} from 'reactstrap';
+import { Button, Col, Input, Row } from 'reactstrap';
 import ButtonWithLoading from 'components/ButtonWithLoading/ButtonWithLoading';
 import Localized from 'components/Localized/Localized';
 import { database, databaseServerTimestamp } from 'services/firebase';
@@ -11,11 +11,11 @@ import { GoClippy } from 'react-icons/go';
 import { useTranslation } from 'react-i18next';
 import copyToClipboard from 'utils/copyToClipboard';
 import { setCustomLocations, setSelectedLocations } from 'actions/config';
-import {SHADES} from 'styles/consts';
+import { SHADES } from 'styles/consts';
 import { showError, showSuccess } from 'utils/toast';
-import {ID_LENGTH} from 'consts';
+import { ID_LENGTH } from 'consts';
 
-export const ExportLocations = ({userId, customLocations, selectedLocations, ...props}) => {
+export const ExportLocations = ({ userId, customLocations, selectedLocations, ...props }) => {
   const [loading, setLoading] = useState(false);
   const [exported, setExported] = useState(false);
   const [importing, setImporting] = useState(false);
@@ -26,7 +26,7 @@ export const ExportLocations = ({userId, customLocations, selectedLocations, ...
 
   const onExport = async () => {
     setLoading(true);
-    try{
+    try {
       await database.ref(`exports/${exportId}`).set({
         customLocations,
         selectedLocations,
@@ -35,27 +35,27 @@ export const ExportLocations = ({userId, customLocations, selectedLocations, ...
       });
       setExported(true);
       showSuccess();
-    }catch(err){
+    } catch (err) {
       showError(null, err);
     }
     setLoading(false);
   };
 
   const onImport = async () => {
-    if(!importId) return null;
+    if (!importId) return null;
 
     setLoading(true);
-    try{
+    try {
       const snapshot = await database.ref(`exports/${importId}`).once('value');
-      if(snapshot.exists()){
+      if (snapshot.exists()) {
         const data = snapshot.val();
         props.setCustomLocations(data.customLocations || {});
         props.setSelectedLocations(data.selectedLocations || {});
         showSuccess();
-      }else{
+      } else {
         showError();
       }
-    }catch(err){
+    } catch (err) {
       showError(err);
     }
     setLoading(false);
@@ -65,7 +65,7 @@ export const ExportLocations = ({userId, customLocations, selectedLocations, ...
     setExported(false);
   };
 
-  if(exported){
+  if (exported) {
     return (
       <Row className={styles.exportContainer}>
         <Col xs={12} sm={6}>
@@ -84,7 +84,7 @@ export const ExportLocations = ({userId, customLocations, selectedLocations, ...
     );
   }
 
-  if(importing){
+  if (importing) {
     return (
       <Row className={styles.exportContainer}>
         <Col xs={12} md={6}>

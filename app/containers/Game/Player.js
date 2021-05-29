@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import {css} from 'emotion';
+import { css } from 'emotion';
 import { connect } from 'react-redux';
-import {Col, Input, Row, Button } from 'reactstrap';
-import {logEvent} from 'utils/analytics';
+import { Col, Input, Row, Button } from 'reactstrap';
+import { logEvent } from 'utils/analytics';
 
 import RolePopup from 'components/RolePopup/RolePopup';
 
-export const Player = ({index, player, started, location, role, customLocations, onPlayerChange, localPlayerAmount}) => {
+export const Player = ({ index, player, started, location, role, customLocations, onPlayerChange, localPlayerAmount }) => {
   const [showRole, setShowRole] = useState(false);
   const [showedRole, setShowedRole] = useState(false);
 
   const toggle = () => {
-    if(!showedRole){
-      if (localPlayerAmount > 1){
+    if (!showedRole) {
+      if (localPlayerAmount > 1) {
         setShowedRole(true); // Only disable showing role if there are other local players as per issue #172
       }
     }
-    if(!showRole) logEvent('PLAYER_VIEW_ROLE');
+    if (!showRole) logEvent('PLAYER_VIEW_ROLE');
     setShowRole((prevShowRole) => !prevShowRole);
   };
 
@@ -28,11 +28,9 @@ export const Player = ({index, player, started, location, role, customLocations,
     <Row className={styles.player}>
       <Col>
         {!started &&
-          <Input type="text" name={`player_${index}`} id={`player_${index}`} placeholder="Player" value={player} onChange={(evt) => onPlayerChange(index, evt.target.value)} />
-        }
+          <Input type="text" name={`player_${index}`} id={`player_${index}`} placeholder="Player" value={player} onChange={(evt) => onPlayerChange(index, evt.target.value)} />}
         {!!started &&
-          <Button color="success" disabled={showedRole} outline={showedRole} block onClick={toggle}>{player}</Button>
-        }
+          <Button color="success" disabled={showedRole} outline={showedRole} block onClick={toggle}>{player}</Button>}
       </Col>
       <RolePopup isOpen={showRole} toggle={toggle} player={player} location={location} role={role} customLocations={customLocations} />
     </Row>

@@ -45,9 +45,9 @@ module.exports = require('./webpack.base.babel')({
     }),
     new DynamicCdnWebpackPlugin({
       // verbose: true,
-      resolver: (moduleName, version, options) => {
+      resolver: (moduleName, version) => {
         const res = resolvers[moduleName];
-        if(!res) return null;
+        if (!res) return null;
         return {
           name: moduleName,
           var: res.var,

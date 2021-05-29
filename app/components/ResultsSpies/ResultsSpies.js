@@ -3,12 +3,13 @@ import { css } from 'emotion';
 import { Row, Col } from 'reactstrap';
 import SpyIcon from 'components/SpyIcon/SpyIcon';
 
-const CogIcon = ({className, spies = [], remotePlayers = {}}) => (
+const CogIcon = ({ className, spies = [], remotePlayers = {} }) => (
   <Row className={className}>
-    {spies.map((playerId) =>
+    {spies.map((playerId) => (
       <Col key={playerId} className="text-center">
         <SpyIcon className={styles.spyIcon} /><span>{remotePlayers && remotePlayers[playerId] ? remotePlayers[playerId].name : playerId}</span>
       </Col>
+    )
     )}
   </Row>
 );

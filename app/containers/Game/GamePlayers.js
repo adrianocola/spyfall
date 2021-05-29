@@ -1,19 +1,19 @@
 import _ from 'lodash';
 import React from 'react';
-import {connect} from 'react-redux';
-import {updatePlayerAction} from 'actions/config';
+import { connect } from 'react-redux';
+import { updatePlayerAction } from 'actions/config';
 import Player from './Player';
 import RemotePlayer from './RemotePlayer';
 
-export const GamePlayers = ({started, remotePlayers, roomId, playersCount, updatePlayer}) => (
-  <React.Fragment>
+export const GamePlayers = ({ started, remotePlayers, roomId, playersCount, updatePlayer }) => (
+  <>
     {_.map(remotePlayers, (player, playerUserId) =>
       <RemotePlayer key={playerUserId} roomId={roomId} playerUserId={playerUserId} remotePlayer={player} started={started} />
     )}
     {_.times(playersCount).map((index) =>
       <Player key={index} started={started} index={index} onPlayerChange={updatePlayer} />
     )}
-  </React.Fragment>
+  </>
 );
 
 const mapStateToProps = (state) => ({

@@ -1,7 +1,7 @@
 import shortid from 'shortid';
 import i18n from 'i18n';
 import roomIdGenerator from 'services/roomIdGenerator';
-import {DEFAULT_LOCATIONS} from 'consts';
+import { DEFAULT_LOCATIONS } from 'consts';
 import {
   ADD_PLAYER,
   CREATE_CUSTOM_LOCATION,
@@ -19,7 +19,10 @@ import {
   UPDATE_PLAYER,
 } from 'actions/config';
 
-const defaultSelectedLocations = Object.entries(DEFAULT_LOCATIONS).filter(([key, value]) => value === 1).reduce((obj, [key]) => {obj[key] = true; return obj}, {});
+const defaultSelectedLocations =
+  Object.entries(DEFAULT_LOCATIONS)
+    .filter(([, value]) => value === 1)
+    .reduce((obj, [key]) => { obj[key] = true; return obj }, {});
 
 const initialState = {
   selectedLocations: defaultSelectedLocations,
@@ -31,7 +34,7 @@ const initialState = {
 };
 
 export default (state = initialState, action) => {
-  switch(action.type){
+  switch (action.type) {
     case SELECT_LOCATION:
       return {
         ...state,
@@ -41,23 +44,23 @@ export default (state = initialState, action) => {
         },
       };
     case DESELECT_LOCATION: {
-      const selectedLocations = {...state.selectedLocations};
+      const selectedLocations = { ...state.selectedLocations };
       delete selectedLocations[action.payload];
-      return {...state, selectedLocations};
+      return { ...state, selectedLocations };
     }
     case SELECT_ALL_LOCATIONS: {
-      const selectedLocations = {...state.selectedLocations};
+      const selectedLocations = { ...state.selectedLocations };
       action.payload.forEach((locationId) => {
         selectedLocations[locationId] = true;
       });
-      return {...state, selectedLocations};
+      return { ...state, selectedLocations };
     }
     case DESELECT_ALL_LOCATIONS: {
-      const selectedLocations = {...state.selectedLocations};
+      const selectedLocations = { ...state.selectedLocations };
       action.payload.forEach((locationId) => {
         delete selectedLocations[locationId];
       });
-      return {...state, selectedLocations};
+      return { ...state, selectedLocations };
     }
     case CREATE_CUSTOM_LOCATION:
       return {
@@ -88,11 +91,11 @@ export default (state = initialState, action) => {
         selectedLocations: action.payload,
       };
     case REM_CUSTOM_LOCATION: {
-      const customLocations = {...state.customLocations};
-      const selectedLocations = {...state.selectedLocations};
+      const customLocations = { ...state.customLocations };
+      const selectedLocations = { ...state.selectedLocations };
       delete customLocations[action.payload];
       delete selectedLocations[action.payload];
-      return {...state, customLocations, selectedLocations};
+      return { ...state, customLocations, selectedLocations };
     }
     case ADD_PLAYER: {
       const players = [...state.players, `P${state.players.length + 1}`];
@@ -118,9 +121,9 @@ export default (state = initialState, action) => {
         ],
       };
     case SET_TIME:
-      return {...state, time: action.payload};
+      return { ...state, time: action.payload };
     case SET_SPY_COUNT:
-      return {...state, spyCount: action.payload};
+      return { ...state, spyCount: action.payload };
     default: return state;
   }
 };

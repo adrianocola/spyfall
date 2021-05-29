@@ -7,6 +7,7 @@ const promiseLimit = require('promise-limit');
 const fetch = require('node-fetch');
 
 const translationsMap = require('./lib/translations.js');
+
 const translationsShortMap = _.reduce(translationsMap, (obj, translation) => {
   obj[translation.short] = translation.id;
   return obj;
@@ -25,7 +26,7 @@ const updateTranslations = async () => {
   _.each(translations, (translation) => {
     const code = translationsShortMap[translation.code];
     if (!code) console.log('CODE NOT FOUND', translation.code);
-    status[code] = Math.round(100 * translation.approved / translation.phrases);
+    status[code] = Math.round(100 * (translation.approved / translation.phrases));
   });
 
   await admin.database().ref('translations').set(status);
@@ -34,7 +35,7 @@ const updateTranslations = async () => {
 };
 
 // once per day
-exports.deleteOld = functions.runWith({timeoutSeconds: 120, memory: '512MB'}).pubsub.schedule('0 0 * * *').onRun(async (context) => {
+exports.deleteOld = functions.runWith({ timeoutSeconds: 120, memory: '512MB' }).pubsub.schedule('0 0 * * *').onRun(async () => {
   const limit = promiseLimit(10);
   const timeAgo = moment.utc().subtract(2, 'weeks').valueOf();
 
@@ -65,7 +66,7 @@ exports.deleteOld = functions.runWith({timeoutSeconds: 120, memory: '512MB'}).pu
 });
 
 // every 6 hours
-exports.updateLocalizationStatus = functions.pubsub.schedule('0 */6 * * *').onRun((context) => updateTranslations());
+exports.updateLocalizationStatus = functions.pubsub.schedule('0 */6 * * *').onRun(() => updateTranslations());
 
 exports.getCrowdinTranslations = functions.https.onRequest(async (req, res) => {
   const translations = await getCrowdinTranslations();

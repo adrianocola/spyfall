@@ -1,8 +1,8 @@
 import _ from 'lodash';
-import React, {useEffect, useMemo, useState} from 'react';
-import {Col, Container, Row} from 'reactstrap';
-import {useTranslation} from 'react-i18next';
-import {DEFAULT_LOCATIONS} from 'consts';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Col, Container, Row } from 'reactstrap';
+import { useTranslation } from 'react-i18next';
+import { DEFAULT_LOCATIONS } from 'consts';
 
 import Location from './Location';
 
@@ -36,10 +36,10 @@ export const Locations = React.memo(({ matchId, location, locations = {}, prevLo
   // only reset state if changed match
   useEffect(() => {
     setLocationsState(resetLocationsState(locations, prevLocation));
-  }, [matchId]);
+  }, [matchId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    if(location){
+    if (location) {
       setLocationsState((prevLocationsState) => ({
         ...prevLocationsState,
         [location]: {

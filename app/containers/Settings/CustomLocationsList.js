@@ -1,15 +1,15 @@
 import React from 'react';
 import { css } from 'emotion';
 import { connect } from 'react-redux';
-import { Row, Col, Button} from 'reactstrap';
+import { Row, Col, Button } from 'reactstrap';
 import Localized from 'components/Localized/Localized';
 import SelectAll from 'components/SelectAll/SelectAll';
 import { createCustomLocationAction } from 'actions/config';
-import {logEvent} from 'utils/analytics';
+import { logEvent } from 'utils/analytics';
 
 import Location from './Location';
 
-export const CustomLocationsList = ({customLocations, onSelectAll, onDeselectAll, createCustomLocation}) => {
+export const CustomLocationsList = ({ customLocations, onSelectAll, onDeselectAll, createCustomLocation }) => {
   const onSelectAllClick = () => {
     logEvent('SETTINGS_ON_SELECT_ALL');
     onSelectAll(Object.keys(customLocations));

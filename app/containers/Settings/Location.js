@@ -9,9 +9,9 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { SHADES, COLORS } from 'styles/consts';
 import { selectLocationAction, deselectLocationAction, saveCustomLocationAction, remCustomLocationAction } from 'actions/config';
-import {logEvent} from 'utils/analytics';
+import { logEvent } from 'utils/analytics';
 
-export const Location = React.memo(({locationId, disabled, selected = false, selectLocation, deselectLocation, ...props}) => {
+export const Location = React.memo(({ locationId, disabled, selected = false, selectLocation, deselectLocation, ...props }) => {
   const [t] = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [location, setLocation] = useState(props.location);
@@ -28,7 +28,7 @@ export const Location = React.memo(({locationId, disabled, selected = false, sel
   };
 
   const onToggleAllSpies = () => {
-    if(!location.allSpies){
+    if (!location.allSpies) {
       updateLocation('name', SPY_LOCATION);
     }
     updateLocation('allSpies', !location.allSpies);
@@ -79,7 +79,7 @@ export const Location = React.memo(({locationId, disabled, selected = false, sel
                   />
                 </Col>
               </Row>
-              { MAX_ROLES_ARRAY.map((r, index) =>
+              { MAX_ROLES_ARRAY.map((r, index) => (
                 <Row key={index} className={`${styles.fields} align-items-center justify-content-center`}>
                   <Col xs={4} className="text-right">
                     Role {index + 1}:
@@ -94,8 +94,9 @@ export const Location = React.memo(({locationId, disabled, selected = false, sel
                     />
                   </Col>
                 </Row>
+              )
               )}
-              {!disabled &&
+              {!disabled && (
                 <>
                   <Row className={`${styles.linksContainer} justify-content-center text-center`}>
                     <Col xs={12}>
@@ -114,7 +115,7 @@ export const Location = React.memo(({locationId, disabled, selected = false, sel
                     </Col>
                   </Row>
                 </>
-              }
+              )}
             </Collapse>
           </Col>
         </Row>

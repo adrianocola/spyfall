@@ -1,14 +1,14 @@
 import _ from 'lodash';
-import React, {useMemo} from 'react';
-import {css} from 'emotion';
-import {connect} from 'react-redux';
-import {Button, Col, Row} from 'reactstrap';
+import React, { useMemo } from 'react';
+import { css } from 'emotion';
+import { connect } from 'react-redux';
+import { Button, Col, Row } from 'reactstrap';
 import Localized from 'components/Localized/Localized';
-import {addPlayerAction, remPlayerAction} from 'actions/config';
-import {MAX_PLAYERS} from 'consts';
-import {logEvent} from 'utils/analytics';
+import { addPlayerAction, remPlayerAction } from 'actions/config';
+import { MAX_PLAYERS } from 'consts';
+import { logEvent } from 'utils/analytics';
 
-export const GamePlayersController = ({remotePlayers, playersCount, addPlayer, remPlayer}) => {
+export const GamePlayersController = ({ remotePlayers, playersCount, addPlayer, remPlayer }) => {
   const totalNumberOfPlayers = useMemo(() => playersCount + _.size(remotePlayers), [playersCount, remotePlayers]);
   const canAddPlayers = useMemo(() => totalNumberOfPlayers < MAX_PLAYERS, [totalNumberOfPlayers]);
   const canRemovePlayers = useMemo(() => totalNumberOfPlayers > 0 && playersCount > 0, [playersCount, totalNumberOfPlayers]);

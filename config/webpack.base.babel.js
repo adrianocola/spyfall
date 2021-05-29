@@ -11,19 +11,27 @@ process.noDeprecation = true;
 module.exports = (options) => ({
   mode: options.mode,
   entry: options.entry,
-  output: Object.assign({ // Compile into js/build.js
+  output: { // Compile into js/build.js
     path: path.resolve(process.cwd(), 'build'),
     publicPath: '/',
-  }, options.output), // Merge with env dependent settings
+    ...options.output,
+  }, // Merge with env dependent settings
   module: {
     rules: [
       {
-        test: /\.js$/, // Transform all .js files required somewhere with Babel
-        exclude: /node_modules/,
+        test: /\.worker\.js$/,
+        use: { loader: 'worker-loader' },
+      },
+      {
+        test: /(\.worker)?\.js$/,
+        exclude: [/node_modules/],
         use: {
           loader: 'babel-loader',
-          options: options.babelQuery,
         },
+      },
+      {
+        test: /\.jsx?$/, // Transform all .js files required somewhere with Babel
+        use: 'babel-loader',
       },
       {
         // Preprocess our own .scss files

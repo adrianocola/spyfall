@@ -11,7 +11,7 @@ export default createSelector(
     const gameLocations = {};
     _.forEach(selectedLocations, (included, locationId) => {
       const location = DEFAULT_LOCATIONS[locationId] ? locationId : customLocations[locationId];
-      if(location){
+      if (location) {
         gameLocations[locationId] = DEFAULT_LOCATIONS[locationId] ? locationId : customLocations[locationId];
       }
     });

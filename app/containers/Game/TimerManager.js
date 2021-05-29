@@ -1,21 +1,21 @@
 import React from 'react';
-import {css} from 'emotion';
-import {connect} from 'react-redux';
-import {Button, Col, Row} from 'reactstrap';
+import { css } from 'emotion';
+import { connect } from 'react-redux';
+import { Button, Col, Row } from 'reactstrap';
 import Localized from 'components/Localized/Localized';
 import Timer from 'components/Timer/Timer';
-import {updateGame} from 'services/game';
-import {logEvent} from 'utils/analytics';
+import { updateGame } from 'services/game';
+import { logEvent } from 'utils/analytics';
 
-export const TimerManager = ({time, timerRunning}) => {
+export const TimerManager = ({ time, timerRunning }) => {
   const toggleTimer = () => {
     logEvent(timerRunning ? 'TIMER_STOP' : 'TIMER_START');
-    updateGame({timerRunning: !timerRunning});
+    updateGame({ timerRunning: !timerRunning });
   };
 
   const stopTimer = () => {
     logEvent('TIMER_END');
-    updateGame({timerRunning: false});
+    updateGame({ timerRunning: false });
   };
 
   return (

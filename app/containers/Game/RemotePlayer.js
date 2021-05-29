@@ -1,12 +1,12 @@
 import React from 'react';
-import {css} from 'emotion';
-import {Col, Row, Button, Badge } from 'reactstrap';
-import {database} from 'services/firebase';
-import {logEvent} from 'utils/analytics';
+import { css } from 'emotion';
+import { Col, Row, Button, Badge } from 'reactstrap';
+import { database } from 'services/firebase';
+import { logEvent } from 'utils/analytics';
 
-export const RemotePlayer = ({roomId, playerUserId, remotePlayer, started}) => {
+export const RemotePlayer = ({ roomId, playerUserId, remotePlayer, started }) => {
   const onRemove = () => {
-    if(started) return;
+    if (started) return;
     logEvent('ROOM_PLAYER_REMOVED');
     database.ref(`roomsRemotePlayers/${roomId}/${playerUserId}`).remove();
   };
@@ -41,6 +41,5 @@ const styles = {
     cursor: 'pointer',
   }),
 };
-
 
 export default RemotePlayer;
