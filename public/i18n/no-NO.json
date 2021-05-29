@@ -43,6 +43,7 @@
   "interface.export_help": "Bruk den genererte ID-en til å importere dine egendefinerte steder i en annen enhet",
   "interface.done": "Ferdig!",
   "interface.error": "Feil!",
+  "interface.link_copied": "Link copied to clipboard!",
   "location.airplane": "Fly",
   "location.airplane.role1": "Passasjer på første klasse",
   "location.airplane.role2": "Flyvakt",
