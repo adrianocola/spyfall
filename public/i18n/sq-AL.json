@@ -43,6 +43,7 @@
   "interface.export_help": "Përdorni ID-në e krijuar për të importuar vendet tuaja të personalizuara në një pajisje tjetër",
   "interface.done": "Në Rregull!",
   "interface.error": "Gabim!",
+  "interface.link_copied": "Link copied to clipboard!",
   "location.airplane": "Aeroplan",
   "location.airplane.role1": "\nPasagjer i klasit të parë",
   "location.airplane.role2": "Marshall Ajror",
