@@ -43,6 +43,7 @@
   "interface.export_help": "Χρησιμοποιήστε το ID που δημιουργήθηκε για να εισάγετε τις δικές σας τοποθεσίες σε άλλη συσκευή",
   "interface.done": "Έτοιμο!",
   "interface.error": "Σφάλμα!",
+  "interface.link_copied": "Link copied to clipboard!",
   "location.airplane": "Αεροπλάνο",
   "location.airplane.role1": "Επιβάτης πρώτης θέσης",
   "location.airplane.role2": "Κρυφός Πράκτορας Ασφάλειας Πτήσης",
