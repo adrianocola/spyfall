@@ -43,6 +43,7 @@
   "interface.export_help": "השתמש/י ב-ID שנוצר בכדי לייבא את המקומות הנוספים למכשיר נוסף",
   "interface.done": "נגמר!",
   "interface.error": "שגיאה!",
+  "interface.link_copied": "Link copied to clipboard!",
   "location.airplane": "מטוס",
   "location.airplane.role1": "נוסע/ת במחלקה ראשונה",
   "location.airplane.role2": "מאבטח/ת טיסה",
