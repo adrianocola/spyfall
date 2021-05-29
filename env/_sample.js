@@ -1,0 +1,8 @@
+module.exports = {
+  FIREBASE_API_KEY: '',
+  FIREBASE_PROJECT_ID: '',
+  FIREBASE_SENDER_ID: '',
+  FIREBASE_APP_ID: '',
+  FIREBASE_MEASUREMENT_ID: '',
+  ADSENSE_CLIENT_ID: '',
+};
