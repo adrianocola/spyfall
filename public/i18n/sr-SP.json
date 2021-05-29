@@ -43,6 +43,7 @@
   "interface.export_help": "Користи генерисан ID да увезеш своју локацију по жељи на други уређај",
   "interface.done": "Завршено!",
   "interface.error": "Грешка!",
+  "interface.link_copied": "Link copied to clipboard!",
   "location.airplane": "Авион",
   "location.airplane.role1": "Путник прве класе",
   "location.airplane.role2": "Ваздушни Маршал",
