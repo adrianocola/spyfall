@@ -43,6 +43,7 @@
   "interface.export_help": "Вы можете импортировать ваши локации на другом устройстве с помощью этого кода",
   "interface.done": "Готово!",
   "interface.error": "Ошибка!",
+  "interface.link_copied": "Link copied to clipboard!",
   "location.airplane": "Самолёт",
   "location.airplane.role1": "Пассажир первого класса",
   "location.airplane.role2": "Безбилетник",
