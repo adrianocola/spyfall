@@ -61,6 +61,10 @@ export const ExportLocations = ({userId, customLocations, selectedLocations, ...
     setLoading(false);
   };
 
+  const onCloseExported = () => {
+    setExported(false);
+  };
+
   if(exported){
     return (
       <Row className={styles.exportContainer}>
@@ -74,6 +78,7 @@ export const ExportLocations = ({userId, customLocations, selectedLocations, ...
         </Col>
         <Col xs={12} sm={6} className={styles.exportHelp}>
           <Localized name="interface.export_help" />
+          <div className={styles.close} onClick={onCloseExported}>✘</div>
         </Col>
       </Row>
     );
@@ -130,6 +135,14 @@ const styles = {
   copy: css({
     fontSize: '1rem',
     marginBottom: 5,
+  }),
+  close: css({
+    display: 'inline-block',
+    marginLeft: 10,
+    cursor: 'pointer',
+    '&:hover': {
+      color: SHADES.darker,
+    },
   }),
 };
 
