@@ -43,6 +43,7 @@
   "interface.export_help": "作成されたIDを使用しカスタムな場所を他のデバイスでも追加",
   "interface.done": "終了",
   "interface.error": "エラー",
+  "interface.link_copied": "Link copied to clipboard!",
   "location.airplane": "飛行機",
   "location.airplane.role1": "ファーストクラス乗客者",
   "location.airplane.role2": "エア・マーシャル（飛行機警察）",
