@@ -43,6 +43,7 @@
   "interface.export_help": "Sử dụng ID đã tạo để nhập những địa điểm bạn chọn tới một thiết bị khác",
   "interface.done": "Xong!",
   "interface.error": "Bị lỗi!",
+  "interface.link_copied": "Link copied to clipboard!",
   "location.airplane": "Máy bay",
   "location.airplane.role1": "Hành khách hạng nhất",
   "location.airplane.role2": "Đại tướng không quân",
