@@ -43,6 +43,7 @@
   "interface.export_help": "Usa el ID para importar tus lugares personalizados a otro dispositivo",
   "interface.done": "Listo!",
   "interface.error": "¡Error!",
+  "interface.link_copied": "Link copied to clipboard!",
   "location.airplane": "Avión",
   "location.airplane.role1": "Pasajero de Primera Clase",
   "location.airplane.role2": "Oficial del Aire",
