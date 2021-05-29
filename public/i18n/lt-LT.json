@@ -43,6 +43,7 @@
   "interface.export_help": "Naudoti sugeneruotą ID, kad įkelti pasirinktinas vietas kitame įrenginyje",
   "interface.done": "Baigta",
   "interface.error": "Klaida!",
+  "interface.link_copied": "Link copied to clipboard!",
   "location.airplane": "Lėktuvas",
   "location.airplane.role1": "Pirmos klasės keleivis",
   "location.airplane.role2": "Aviacijos maršalas",
