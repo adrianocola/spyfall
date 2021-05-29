@@ -43,6 +43,7 @@
   "interface.export_help": "Folosește ID-ul generat pentru a importa locuri personalizate pe alt dispozitiv",
   "interface.done": "Terminat!",
   "interface.error": "Eroare!",
+  "interface.link_copied": "Link copied to clipboard!",
   "location.airplane": "Avion",
   "location.airplane.role1": "Pasager la clasa întâi",
   "location.airplane.role2": "Polițist aerian",
