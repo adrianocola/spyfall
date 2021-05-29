@@ -43,6 +43,7 @@
   "interface.export_help": "Izmantot ģenerēto ID lai importētu izveidotās atrašanās vietas uz citu ierīci",
   "interface.done": "Pabeigts!",
   "interface.error": "Kļūda!",
+  "interface.link_copied": "Link copied to clipboard!",
   "location.airplane": "Lidmašīna",
   "location.airplane.role1": "Pirmās klases pasažieris",
   "location.airplane.role2": "Gaisa maršals",
