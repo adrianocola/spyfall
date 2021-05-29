@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const _ = require('lodash');
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
@@ -42,7 +43,7 @@ exports.deleteOld = functions.runWith({timeoutSeconds: 120, memory: '512MB'}).pu
   await Promise.all(_.map(rooms, (v, roomId) =>
     limit(() => admin.database().ref(`rooms/${roomId}`).remove())
   ));
-  console.log(`DELETED ${_.size(rooms)} OLD ROOMS`); // eslint-disable-line no-console
+  console.log(`DELETED ${_.size(rooms)} OLD ROOMS`);
 
   const roomsDataSnapshot = await admin.database().ref('roomsData').orderByChild('updatedAt').endAt(timeAgo).once('value');
   const roomsData = roomsDataSnapshot.val();
@@ -53,14 +54,14 @@ exports.deleteOld = functions.runWith({timeoutSeconds: 120, memory: '512MB'}).pu
       admin.database().ref(`roomsLocations/${roomId}`).remove(),
     ]))
   ));
-  console.log(`DELETED ${_.size(roomsData)} NEW ROOMS`); // eslint-disable-line no-console
+  console.log(`DELETED ${_.size(roomsData)} NEW ROOMS`);
 
   const exportsSnapshot = await admin.database().ref('exports').orderByChild('createdAt').endAt(timeAgo).once('value');
   const exports = exportsSnapshot.val();
   await Promise.all(_.map(exports, (v, exportId) =>
     limit(() => admin.database().ref(`exports/${exportId}`).remove())
   ));
-  console.log(`DELETED ${_.size(exports)} EXPORTS`); // eslint-disable-line no-console
+  console.log(`DELETED ${_.size(exports)} EXPORTS`);
 });
 
 // every 6 hours
