@@ -43,6 +43,7 @@
   "interface.export_help": "Brug det genererede ID til at importere dine brugeredefinere Lokationer på en anden enhed",
   "interface.done": "Færdig!",
   "interface.error": "Fejl!",
+  "interface.link_copied": "Link copied to clipboard!",
   "location.airplane": "Fly",
   "location.airplane.role1": "Førsteklassespassager",
   "location.airplane.role2": "Luftsherif",
