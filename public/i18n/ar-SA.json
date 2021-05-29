@@ -43,6 +43,7 @@
   "interface.export_help": "استخدم معرف ID الذي تم إنشاؤه لاستيراد مواقعك المخصصة في جهاز آخر",
   "interface.done": "إكمال!",
   "interface.error": "خطأ!",
+  "interface.link_copied": "Link copied to clipboard!",
   "location.airplane": "مطار",
   "location.airplane.role1": "راكب من درجة الأولى",
   "location.airplane.role2": "مشير الهواء",
