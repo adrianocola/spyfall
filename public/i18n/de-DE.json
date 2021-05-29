@@ -43,6 +43,7 @@
   "interface.export_help": "Nutze die generierte ID, um deine benutzerdefinierten Orte auf einem anderen Gerät zu importieren",
   "interface.done": "Fertig!",
   "interface.error": "Fehler!",
+  "interface.link_copied": "Link copied to clipboard!",
   "location.airplane": "Flugzeug",
   "location.airplane.role1": "Passagier in der 1. Klasse",
   "location.airplane.role2": "Flugsicherheitsbegleiter",
