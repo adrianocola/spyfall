@@ -43,6 +43,7 @@
   "interface.export_help": "استفاده از id قبلی برای انتخاب مکان شما در سیستم دیگر(مترجم:خودمم نمیفهمم چی میگه :| )",
   "interface.done": "تمام!",
   "interface.error": "ارور!",
+  "interface.link_copied": "Link copied to clipboard!",
   "location.airplane": "فرودگاه",
   "location.airplane.role1": "مسافر درجه یک",
   "location.airplane.role2": "مامور هوایی",
