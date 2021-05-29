@@ -65,6 +65,10 @@ export const ExportLocations = ({ userId, customLocations, selectedLocations, ..
     setExported(false);
   };
 
+  const onCloseImporting = () => {
+    setImporting(false);
+  };
+
   if (exported) {
     return (
       <Row className={styles.exportContainer}>
@@ -88,7 +92,15 @@ export const ExportLocations = ({ userId, customLocations, selectedLocations, ..
     return (
       <Row className={styles.exportContainer}>
         <Col xs={12} md={6}>
-          <Input type="text" placeholder={t('interface.export_id')} value={importId} maxLength={ID_LENGTH} onChange={(evt) => setImportId(_.toUpper(evt.target.value))} />
+          <Row noGutters className="align-items-center justify-content-center text-center">
+            <Col xs={10}>
+              <Input type="text" placeholder={t('interface.export_id')} value={importId} maxLength={ID_LENGTH} onChange={(evt) => setImportId(_.toUpper(evt.target.value))} />
+            </Col>
+            <Col xs={2}>
+              <span className={styles.close} onClick={onCloseImporting}>✘</span>
+            </Col>
+          </Row>
+
         </Col>
         <Col xs={12} sm={6}>
           <ButtonWithLoading color="primary" block loading={loading} onClick={onImport}>
