@@ -43,6 +43,7 @@
   "interface.export_help": "Gebruik die gegenereerde ID om jou pasgemaakte liggings op 'n ander toestel in te voer",
   "interface.done": "Klaar!",
   "interface.error": "Vout!",
+  "interface.link_copied": "Link copied to clipboard!",
   "location.airplane": "Vliegtuig",
   "location.airplane.role1": "Eerste Klas Passasier",
   "location.airplane.role2": "Air Marshall",
