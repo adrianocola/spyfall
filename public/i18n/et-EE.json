@@ -43,6 +43,7 @@
   "interface.export_help": "Use the generated ID to import your custom locations in another device",
   "interface.done": "Valmis!",
   "interface.error": "Viga!",
+  "interface.link_copied": "Link copied to clipboard!",
   "location.airplane": "lennuk",
   "location.airplane.role1": "esimese klassi reisija",
   "location.airplane.role2": "õhumarssal",
