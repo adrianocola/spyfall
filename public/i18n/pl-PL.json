@@ -43,6 +43,7 @@
   "interface.export_help": "Użyj wygenerowanego ID aby zaimportować swoje lokacje na innym urządzeniu",
   "interface.done": "Zrobione!",
   "interface.error": "Błąd!",
+  "interface.link_copied": "Link copied to clipboard!",
   "location.airplane": "Samolot",
   "location.airplane.role1": "Pasażer pierwszej klasy",
   "location.airplane.role2": "Agent ochrony",
