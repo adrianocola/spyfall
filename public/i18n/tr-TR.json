@@ -43,6 +43,7 @@
   "interface.export_help": "Yarattığınız özel konumlarınızı başka cihazlara aktarmak için üretilen ID'yi kullanın",
   "interface.done": "Tamamlandı!",
   "interface.error": "Hata!",
+  "interface.link_copied": "Link copied to clipboard!",
   "location.airplane": "Uçak",
   "location.airplane.role1": "Birinci Sınıf Yolcusu",
   "location.airplane.role2": "Özel Uçuş Polisi",
