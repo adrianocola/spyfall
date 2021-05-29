@@ -43,6 +43,7 @@
   "interface.export_help": "利用產生的地點碼來匯入你的自建地點至別的裝置",
   "interface.done": "完成！",
   "interface.error": "錯誤！",
+  "interface.link_copied": "Link copied to clipboard!",
   "location.airplane": "民航機",
   "location.airplane.role1": "頭等艙乘客",
   "location.airplane.role2": "空警",
