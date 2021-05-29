@@ -43,6 +43,7 @@
   "interface.export_help": "Použijte vygenerované Id pro import do jiného zařízení",
   "interface.done": "Hotovo!",
   "interface.error": "Chyba!",
+  "interface.link_copied": "Link copied to clipboard!",
   "location.airplane": "Letadlo",
   "location.airplane.role1": "Pasažér v první třídě",
   "location.airplane.role2": "Ochranka v utajení",
