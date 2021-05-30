@@ -44,6 +44,8 @@
   "interface.done": "Finalizado!",
   "interface.error": "Erro!",
   "interface.link_copied": "Link copiado para a área de transferência!",
+  "interface.moderator_mode": "Modo moderador",
+  "interface.auto_start_timer": "Iniciar cronômetro no início do jogo",
   "location.airplane": "Avião",
   "location.airplane.role1": "Passageiro de Primeira Classe",
   "location.airplane.role2": "Agente Federal Disfarçado",
