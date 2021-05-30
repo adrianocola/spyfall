@@ -44,6 +44,8 @@
   "interface.done": "완료!",
   "interface.error": "에러!",
   "interface.link_copied": "Link copied to clipboard!",
+  "interface.moderator_mode": "Moderator mode",
+  "interface.auto_start_timer": "Start timer on game start",
   "location.airplane": "여객기",
   "location.airplane.role1": "1등석 승객",
   "location.airplane.role2": "여객기 보안 요원",
