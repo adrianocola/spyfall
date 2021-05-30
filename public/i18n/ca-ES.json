@@ -44,6 +44,8 @@
   "interface.done": "Fet!",
   "interface.error": "Error!",
   "interface.link_copied": "Link copied to clipboard!",
+  "interface.moderator_mode": "Moderator mode",
+  "interface.auto_start_timer": "Start timer on game start",
   "location.airplane": "Avió",
   "location.airplane.role1": "Passatger de Primera Classe",
   "location.airplane.role2": "Policia de paisà",
