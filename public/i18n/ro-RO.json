@@ -44,6 +44,8 @@
   "interface.done": "Terminat!",
   "interface.error": "Eroare!",
   "interface.link_copied": "Link copied to clipboard!",
+  "interface.moderator_mode": "Moderator mode",
+  "interface.auto_start_timer": "Start timer on game start",
   "location.airplane": "Avion",
   "location.airplane.role1": "Pasager la clasa întâi",
   "location.airplane.role2": "Polițist aerian",
