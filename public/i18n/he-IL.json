@@ -44,6 +44,8 @@
   "interface.done": "נגמר!",
   "interface.error": "שגיאה!",
   "interface.link_copied": "Link copied to clipboard!",
+  "interface.moderator_mode": "Moderator mode",
+  "interface.auto_start_timer": "Start timer on game start",
   "location.airplane": "מטוס",
   "location.airplane.role1": "נוסע/ת במחלקה ראשונה",
   "location.airplane.role2": "מאבטח/ת טיסה",
