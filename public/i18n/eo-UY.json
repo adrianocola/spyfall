@@ -44,6 +44,8 @@
   "interface.done": "Farite!",
   "interface.error": "Eraro!",
   "interface.link_copied": "Link copied to clipboard!",
+  "interface.moderator_mode": "Moderator mode",
+  "interface.auto_start_timer": "Start timer on game start",
   "location.airplane": "Aviadilo",
   "location.airplane.role1": "Unuklasa pasaĝero",
   "location.airplane.role2": "Aviadila policisto",
