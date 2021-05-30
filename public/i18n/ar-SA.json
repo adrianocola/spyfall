@@ -44,6 +44,8 @@
   "interface.done": "إكمال!",
   "interface.error": "خطأ!",
   "interface.link_copied": "Link copied to clipboard!",
+  "interface.moderator_mode": "Moderator mode",
+  "interface.auto_start_timer": "Start timer on game start",
   "location.airplane": "مطار",
   "location.airplane.role1": "راكب من درجة الأولى",
   "location.airplane.role2": "مشير الهواء",
