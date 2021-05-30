@@ -44,6 +44,8 @@
   "interface.done": "Klar!",
   "interface.error": "Fel!",
   "interface.link_copied": "Link copied to clipboard!",
+  "interface.moderator_mode": "Moderator mode",
+  "interface.auto_start_timer": "Start timer on game start",
   "location.airplane": "Flygplan",
   "location.airplane.role1": "Förstaklasspassagerare",
   "location.airplane.role2": "Luftmarskalk",
