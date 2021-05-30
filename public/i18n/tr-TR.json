@@ -44,6 +44,8 @@
   "interface.done": "Tamamlandı!",
   "interface.error": "Hata!",
   "interface.link_copied": "Link copied to clipboard!",
+  "interface.moderator_mode": "Moderator mode",
+  "interface.auto_start_timer": "Start timer on game start",
   "location.airplane": "Uçak",
   "location.airplane.role1": "Birinci Sınıf Yolcusu",
   "location.airplane.role2": "Özel Uçuş Polisi",
