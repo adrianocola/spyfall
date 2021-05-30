@@ -18,6 +18,7 @@ import {
   SET_TIME,
   UPDATE_PLAYER,
   SET_MODERATOR_MODE,
+  SET_AUTO_START_TIMER,
 } from 'actions/config';
 
 const defaultSelectedLocations =
@@ -127,6 +128,8 @@ export default (state = initialState, action) => {
       return { ...state, spyCount: action.payload };
     case SET_MODERATOR_MODE:
       return { ...state, moderatorMode: action.payload };
+    case SET_AUTO_START_TIMER:
+      return { ...state, autoStartTimer: action.payload };
     default: return state;
   }
 };

@@ -1,6 +1,5 @@
 import React from 'react';
 import { css } from 'emotion';
-import { Animated } from 'react-animated-css';
 
 import Spinner from 'components/Spinner/Spinner';
 
@@ -18,15 +17,12 @@ const modalStyle = css({
   background: 'rgba(0, 0, 0, 0.6)',
 });
 
-const SpinnerModal = () => (
-  <Animated
-    animationIn="fadeIn"
-    animationOut="fadeOut"
-    className={modalStyle}
-    isVisible
-  >
-    <Spinner color="white" />
-  </Animated>
-);
+const SpinnerModal = () => {
+  return (
+    <div className={modalStyle}>
+      <Spinner color="white" />
+    </div>
+  );
+};
 
-export default SpinnerModal;
+export default React.memo(SpinnerModal);

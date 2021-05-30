@@ -14,6 +14,7 @@ import { logEvent } from 'utils/analytics';
 import { useRoomId } from 'selectors/roomId';
 import { useRoomConnected } from 'selectors/sessionRoomConnected';
 import { useConfigPlayersCount } from 'selectors/configPlayersCount';
+import { useConfigAutoStartTimer } from 'selectors/configAutoStartTimer';
 
 import ResultPopup from './ResultPopup';
 
@@ -56,6 +57,7 @@ export const GameManager = ({ started, remotePlayers }) => {
   const [roomConnected] = useRoomConnected();
   const playersCount = useConfigPlayersCount();
   const gameLocations = useGameLocations();
+  const [autoStartTimer] = useConfigAutoStartTimer();
   const [showResultPopup, setShowResultPopup] = useState(false);
   const totalNumberOfPlayers = useMemo(() => playersCount + _.size(remotePlayers), [playersCount, remotePlayers]);
   const canStartGame = useMemo(() => totalNumberOfPlayers >= MIN_PLAYERS && totalNumberOfPlayers <= MAX_PLAYERS, [totalNumberOfPlayers]);
@@ -109,6 +111,7 @@ export const GameManager = ({ started, remotePlayers }) => {
       location: selectedLocationId,
       prevLocation: location,
       spies: newSpies,
+      showCountdown: autoStartTimer,
     });
   };
 

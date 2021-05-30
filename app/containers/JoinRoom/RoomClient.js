@@ -114,7 +114,7 @@ export const RoomClient = ({ roomId, player }) => {
       {started && (
         <Row className={styles.timerContainer}>
           <Col>
-            <Timer initialValue={room.time} running={room.timerRunning} />
+            <Timer initialValue={room.time} running={room.timerRunning} showCountdown={room.showCountdown} />
           </Col>
         </Row>
       )}

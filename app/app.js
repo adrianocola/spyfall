@@ -1,5 +1,6 @@
 import 'babel-polyfill';
 import 'react-hot-loader';
+import 'animate.css';
 
 // Import all the third party stuff
 import React from 'react';

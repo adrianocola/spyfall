@@ -13,6 +13,7 @@ export const UPDATE_PLAYER = 'CONFIG_UPDATE_PLAYER';
 export const SET_TIME = 'CONFIG_SET_TIME';
 export const SET_SPY_COUNT = 'CONFIG_SET_SPY_COUNT';
 export const SET_MODERATOR_MODE = 'CONFIG_SET_MODERATOR_MODE';
+export const SET_AUTO_START_TIMER = 'CONFIG_SET_AUTO_START_TIMER';
 
 export const selectLocationAction = (locationId) => ({
   type: SELECT_LOCATION,
@@ -84,4 +85,9 @@ export const setSpyCountAction = (spyCount) => ({
 export const setModeratorModeAction = (moderatorMode) => ({
   type: SET_MODERATOR_MODE,
   payload: moderatorMode,
+});
+
+export const setAutoStarTimerAction = (autoStartTimer) => ({
+  type: SET_AUTO_START_TIMER,
+  payload: autoStartTimer,
 });

@@ -1,16 +1,20 @@
 import React from 'react';
-import { Col, Input, Row } from 'reactstrap';
+import { Col, Input, Label, Row } from 'reactstrap';
 import { css } from 'emotion';
 import Localized from 'components/Localized/Localized';
 import { logEvent } from 'utils/analytics';
 import { useConfigTime } from 'selectors/configTime';
 import { useConfigSpyCount } from 'selectors/configSpyCount';
+import { useTranslation } from 'react-i18next';
+import { useConfigAutoStartTimer } from 'selectors/configAutoStartTimer';
 
 import SpyIcon from 'components/SpyIcon/SpyIcon';
 
 export const GameConfig = () => {
+  const [t] = useTranslation();
   const [time, setTime] = useConfigTime();
   const [spyCount, setSpyCount] = useConfigSpyCount();
+  const [autoStartTimer, setAutoStartTimer] = useConfigAutoStartTimer();
   const onChangeSpyCount = (count) => () => {
     logEvent('GAME_SET_SPIES', count);
     setSpyCount(count);
@@ -26,7 +30,7 @@ export const GameConfig = () => {
     <>
       <Row className={`${styles.container} align-items-center justify-content-center`}>
         <Col>
-          <Row className=" align-items-center justify-content-center text-center">
+          <Row className="align-items-center justify-content-center text-center">
             <Col xs="auto">
               <Input type="radio" name="single" checked={spyCount === 1} onChange={onChangeSpyCount(1)} />
               <SpyIcon />
@@ -55,6 +59,14 @@ export const GameConfig = () => {
           </Row>
         </Col>
       </Row>
+      <Row className={`${styles.container} align-items-center justify-content-center`}>
+        <Col xs="auto" className="text-center">
+          <Label check className={styles.check}>
+            <Input type="checkbox" checked={autoStartTimer} onChange={() => setAutoStartTimer(!autoStartTimer)} />
+            {t('interface.auto_start_timer')}
+          </Label>
+        </Col>
+      </Row>
     </>
   );
 };
@@ -62,6 +74,9 @@ export const GameConfig = () => {
 const styles = {
   container: css({
     marginTop: 20,
+  }),
+  check: css({
+    cursor: 'pointer',
   }),
 };
 
