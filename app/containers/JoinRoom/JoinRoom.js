@@ -1,23 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import { css } from 'emotion';
-import { connect } from 'react-redux';
 import { Button, Col, Container, Input, Row } from 'reactstrap';
 import Localized from 'components/Localized/Localized';
 import ButtonWithLoading from 'components/ButtonWithLoading/ButtonWithLoading';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router-dom';
 import { database, databaseServerTimestamp } from 'services/firebase';
-import { setJoinPlayerAction, setJoinRoomIdAction } from 'actions/joinRoom';
-import { setJoinedRoomAction } from 'actions/session';
 import { showError } from 'utils/toast';
 import { ID_LENGTH } from 'consts';
 import { logEvent } from 'utils/analytics';
+import { useJoinRoomId } from 'selectors/joinRoomId';
+import { useJoinPlayer } from 'selectors/joinPlayer';
+import { useUserId } from 'selectors/userId';
+import { useJoinedRoom } from 'selectors/sessionJoinedRoom';
 
 import RoomClient from './RoomClient';
 
-export const JoinRoom = ({ userId, joinRoomId, setJoinRoomId, joinPlayer, setJoinPlayer, joinedRoom, setJoinedRoom }) => {
+export const JoinRoom = () => {
   const [t] = useTranslation();
 
+  const [userId] = useUserId();
+  const [joinRoomId, setJoinRoomId] = useJoinRoomId();
+  const [joinPlayer, setJoinPlayer] = useJoinPlayer();
+  const [joinedRoom, setJoinedRoom] = useJoinedRoom();
   const [loading, setLoading] = useState(false);
   const { roomId } = useParams();
   const canJoin = joinRoomId && joinPlayer;
@@ -87,17 +92,4 @@ const styles = {
   }),
 };
 
-const mapStateToProps = (state) => ({
-  userId: state.root.userId,
-  joinRoomId: state.joinRoom.roomId,
-  joinPlayer: state.joinRoom.player,
-  joinedRoom: state.session.joinedRoom,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  setJoinRoomId: (roomId) => dispatch(setJoinRoomIdAction(roomId)),
-  setJoinPlayer: (player) => dispatch(setJoinPlayerAction(player)),
-  setJoinedRoom: (joined) => dispatch(setJoinedRoomAction(joined)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(JoinRoom);
+export default React.memo(JoinRoom);

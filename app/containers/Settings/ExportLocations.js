@@ -1,7 +1,6 @@
 import _ from 'lodash';
-import React, { useState, useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { css } from 'emotion';
-import { connect } from 'react-redux';
 import { Button, Col, Input, Row } from 'reactstrap';
 import ButtonWithLoading from 'components/ButtonWithLoading/ButtonWithLoading';
 import Localized from 'components/Localized/Localized';
@@ -10,12 +9,17 @@ import roomIdGenerator from 'services/roomIdGenerator';
 import { GoClippy } from 'react-icons/go';
 import { useTranslation } from 'react-i18next';
 import copyToClipboard from 'utils/copyToClipboard';
-import { setCustomLocations, setSelectedLocations } from 'actions/config';
 import { SHADES } from 'styles/consts';
 import { showError, showSuccess } from 'utils/toast';
 import { ID_LENGTH } from 'consts';
+import { useCustomLocations } from 'selectors/customLocations';
+import { useSelectedLocations } from 'selectors/selectedLocations';
+import { useUserId } from 'selectors/userId';
 
-export const ExportLocations = ({ userId, customLocations, selectedLocations, ...props }) => {
+export const ExportLocations = () => {
+  const [userId] = useUserId();
+  const { customLocations, setCustomLocations } = useCustomLocations();
+  const [selectedLocations, setSelectedLocations] = useSelectedLocations();
   const [loading, setLoading] = useState(false);
   const [exported, setExported] = useState(false);
   const [importing, setImporting] = useState(false);
@@ -49,8 +53,8 @@ export const ExportLocations = ({ userId, customLocations, selectedLocations, ..
       const snapshot = await database.ref(`exports/${importId}`).once('value');
       if (snapshot.exists()) {
         const data = snapshot.val();
-        props.setCustomLocations(data.customLocations || {});
-        props.setSelectedLocations(data.selectedLocations || {});
+        setCustomLocations(data.customLocations || {});
+        setSelectedLocations(data.selectedLocations || {});
         showSuccess();
       } else {
         showError();
@@ -158,15 +162,4 @@ const styles = {
   }),
 };
 
-const mapStateToProps = (state) => ({
-  userId: state.root.userId,
-  customLocations: state.config.customLocations,
-  selectedLocations: state.config.selectedLocations,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  setCustomLocations: (customLocations) => dispatch(setCustomLocations(customLocations)),
-  setSelectedLocations: (selectedLocations) => dispatch(setSelectedLocations(selectedLocations)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(ExportLocations);
+export default React.memo(ExportLocations);

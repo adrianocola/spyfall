@@ -2,21 +2,23 @@ import _ from 'lodash';
 import shortid from 'shortid';
 import React, { useMemo, useState } from 'react';
 import { css } from 'emotion';
-import { connect } from 'react-redux';
 import { Button, Col, Row } from 'reactstrap';
 import Localized from 'components/Localized/Localized';
 import { useTranslation } from 'react-i18next';
-import gameLocationsSelector from 'selectors/gameLocations';
+import { useGameLocations } from 'selectors/gameLocations';
 import { DEFAULT_LOCATIONS, GAME_STATES, MAX_PLAYERS, MAX_ROLES, MIN_PLAYERS, SPY_ROLE } from 'consts';
 import usePresence from 'hooks/usePresence';
 import { updateGame } from 'services/game';
 import { store } from 'store';
 import { logEvent } from 'utils/analytics';
+import { useRoomId } from 'selectors/roomId';
+import { useRoomConnected } from 'selectors/sessionRoomConnected';
+import { useConfigPlayersCount } from 'selectors/configPlayersCount';
 
 import ResultPopup from './ResultPopup';
 
 const getSpiesNamesOrIds = (spiesIds, remotePlayers) =>
-  _.map(spiesIds, (idOrName) => (remotePlayers[idOrName] ? remotePlayers[idOrName].name : idOrName));
+  _.map(spiesIds, (idOrName) => (remotePlayers?.[idOrName] ? remotePlayers[idOrName].name : idOrName));
 
 const getAllSpiesRoles = (allPlayers, remotePlayers) => {
   const newPlayersRoles = allPlayers.reduce((obj, playerId) => {
@@ -48,8 +50,12 @@ const getPlayerRoles = (location, allPlayers, availableRoles, remotePlayers = {}
   return getRegularPlayerRoles(allPlayers, availableRoles, remotePlayers);
 };
 
-export const GameManager = ({ started, roomId, roomConnected, remotePlayers, gameLocations, playersCount }) => {
+export const GameManager = ({ started, remotePlayers }) => {
   const [t] = useTranslation();
+  const [roomId] = useRoomId();
+  const [roomConnected] = useRoomConnected();
+  const playersCount = useConfigPlayersCount();
+  const gameLocations = useGameLocations();
   const [showResultPopup, setShowResultPopup] = useState(false);
   const totalNumberOfPlayers = useMemo(() => playersCount + _.size(remotePlayers), [playersCount, remotePlayers]);
   const canStartGame = useMemo(() => totalNumberOfPlayers >= MIN_PLAYERS && totalNumberOfPlayers <= MAX_PLAYERS, [totalNumberOfPlayers]);
@@ -145,11 +151,4 @@ const styles = {
   }),
 };
 
-const mapStateToProps = (state) => ({
-  roomId: state.room.id,
-  gameLocations: gameLocationsSelector(state),
-  roomConnected: state.session.roomConnected,
-  playersCount: state.config.players.length,
-});
-
-export default connect(mapStateToProps)(GameManager);
+export default React.memo(GameManager);

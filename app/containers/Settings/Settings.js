@@ -1,14 +1,13 @@
 import React, { useCallback, useState } from 'react';
 import { css } from 'emotion';
-import { connect } from 'react-redux';
 import { Button, Col, Input, Row } from 'reactstrap';
 import Localized from 'components/Localized/Localized';
 import LocationsCount from 'components/LocationsCount/LocationsCount';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { TiDelete } from 'react-icons/ti';
-import { deselectAllLocationsAction, selectAllLocationsAction } from 'actions/config';
 import { SHADES } from 'styles/consts';
+import { useSelectAll } from 'selectors/selectAll';
 
 import DefaultLocationsList from './DefaultLocationsList';
 import CustomLocationsList from './CustomLocationsList';
@@ -16,9 +15,10 @@ import FilteredLocationsList from './FilteredLocationsList';
 import ExportLocations from './ExportLocations';
 import DownloadLocations from './DownloadLocations';
 
-export const Settings = ({ selectAllLocations, deselectAllLocations }) => {
+export const Settings = () => {
   const [t] = useTranslation();
   const [filter, setFilter] = useState('');
+  const { selectAllLocations, deselectAllLocations } = useSelectAll();
   const onFilterChange = useCallback((event) => {
     setFilter(event.target.value);
   }, []);
@@ -93,9 +93,4 @@ const styles = {
   }),
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  selectAllLocations: (locationsIds) => dispatch(selectAllLocationsAction(locationsIds)),
-  deselectAllLocations: (locationsIds) => dispatch(deselectAllLocationsAction(locationsIds)),
-});
-
-export default connect(null, mapDispatchToProps)(Settings);
+export default React.memo(Settings);

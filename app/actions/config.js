@@ -12,6 +12,7 @@ export const REM_PLAYER = 'CONFIG_REM_PLAYER';
 export const UPDATE_PLAYER = 'CONFIG_UPDATE_PLAYER';
 export const SET_TIME = 'CONFIG_SET_TIME';
 export const SET_SPY_COUNT = 'CONFIG_SET_SPY_COUNT';
+export const SET_MODERATOR_MODE = 'CONFIG_SET_MODERATOR_MODE';
 
 export const selectLocationAction = (locationId) => ({
   type: SELECT_LOCATION,
@@ -47,7 +48,7 @@ export const remCustomLocationAction = (id) => ({
   payload: id,
 });
 
-export const setCustomLocations = (customLocations) => ({
+export const setCustomLocationsAction = (customLocations) => ({
   type: SET_CUSTOM_LOCATIONS,
   payload: customLocations,
 });
@@ -78,4 +79,9 @@ export const setTimeAction = (time) => ({
 export const setSpyCountAction = (spyCount) => ({
   type: SET_SPY_COUNT,
   payload: spyCount,
+});
+
+export const setModeratorModeAction = (moderatorMode) => ({
+  type: SET_MODERATOR_MODE,
+  payload: moderatorMode,
 });

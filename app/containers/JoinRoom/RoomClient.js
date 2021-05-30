@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { css } from 'emotion';
-import { connect } from 'react-redux';
 import { Button, Col, Container, Row } from 'reactstrap';
 import Localized from 'components/Localized/Localized';
 
@@ -9,7 +8,6 @@ import Locations from 'components/Locations/Locations';
 import RolePopup from 'components/RolePopup/RolePopup';
 import ResultsSpies from 'components/ResultsSpies/ResultsSpies';
 import { database } from 'services/firebase';
-import { setJoinedRoomAction } from 'actions/session';
 import SpyIcon from 'components/SpyIcon/SpyIcon';
 import Timer from 'components/Timer/Timer';
 import Spinner from 'components/Spinner/Spinner';
@@ -17,8 +15,12 @@ import { showError } from 'utils/toast';
 import usePresence from 'hooks/usePresence';
 import { GAME_STATES } from 'consts';
 import { logEvent } from 'utils/analytics';
+import { useUserId } from 'selectors/userId';
+import { useJoinedRoom } from 'selectors/sessionJoinedRoom';
 
-export const RoomClient = ({ userId, roomId, player, joinedRoom, setJoinedRoom }) => {
+export const RoomClient = ({ roomId, player }) => {
+  const [userId] = useUserId();
+  const [joinedRoom, setJoinedRoom] = useJoinedRoom();
   const [room, setRoom] = useState(null);
   const [gameLocations, setGameLocations] = useState({});
   const [showRole, setShowRole] = useState(false);
@@ -153,13 +155,4 @@ const styles = {
   }),
 };
 
-const mapStateToProps = (state) => ({
-  userId: state.root.userId,
-  joinedRoom: state.session.joinedRoom,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  setJoinedRoom: (joined) => dispatch(setJoinedRoomAction(joined)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(RoomClient);
+export default React.memo(RoomClient);

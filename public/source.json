@@ -44,6 +44,7 @@
   "interface.done": "Done!",
   "interface.error": "Error!",
   "interface.link_copied": "Link copied to clipboard!",
+  "interface.moderator_mode": "Moderator mode",
   "location.airplane": "Airplane",
   "location.airplane.role1": "First Class Passenger",
   "location.airplane.role2": "Air Marshall",

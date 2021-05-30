@@ -1,17 +1,15 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import selectedLocationsCountSelector from 'selectors/selectedLocationsCount';
-import totalLocationsCountSelector from 'selectors/totalLocationsCount';
+import { useSelectedLocationsCount } from 'selectors/selectedLocationsCount';
+import { useTotalLocationsCount } from 'selectors/totalLocationsCount';
 
-export const LocationsCount = ({ className, style, selectedLocationsCount, totalLocationsCount }) => (
-  <span className={className} style={style}>
-    {selectedLocationsCount}/{totalLocationsCount}
-  </span>
-);
+export const LocationsCount = ({ className, style }) => {
+  const selectedLocationsCount = useSelectedLocationsCount();
+  const totalLocationsCount = useTotalLocationsCount();
+  return (
+    <span className={className} style={style}>
+      {selectedLocationsCount}/{totalLocationsCount}
+    </span>
+  );
+};
 
-const mapStateToProps = (state) => ({
-  selectedLocationsCount: selectedLocationsCountSelector(state),
-  totalLocationsCount: totalLocationsCountSelector(state),
-});
-
-export default connect(mapStateToProps)(LocationsCount);
+export default React.memo(LocationsCount);

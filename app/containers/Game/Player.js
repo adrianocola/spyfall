@@ -1,12 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { css } from 'emotion';
-import { connect } from 'react-redux';
-import { Col, Input, Row, Button } from 'reactstrap';
+import { Button, Col, Input, Row } from 'reactstrap';
 import { logEvent } from 'utils/analytics';
+import { useConfigPlayer } from 'selectors/configPlayer';
+import { useGamePlayerRole } from 'selectors/gamePlayerRole';
+import { useGameLocation } from 'selectors/gameLocation';
+import { useCustomLocations } from 'selectors/customLocations';
+import { useConfigPlayersCount } from 'selectors/configPlayersCount';
 
 import RolePopup from 'components/RolePopup/RolePopup';
 
-export const Player = ({ index, player, started, location, role, customLocations, onPlayerChange, localPlayerAmount }) => {
+export const Player = ({ index, started, onPlayerChange }) => {
+  const [player] = useConfigPlayer(index);
+  const role = useGamePlayerRole(player);
+  const location = useGameLocation();
+  const { customLocations } = useCustomLocations();
+  const localPlayerAmount = useConfigPlayersCount();
   const [showRole, setShowRole] = useState(false);
   const [showedRole, setShowedRole] = useState(false);
 
@@ -44,15 +53,4 @@ const styles = {
   }),
 };
 
-const mapStateToProps = (state, ownProps) => {
-  const player = state.config.players[ownProps.index];
-  return {
-    player,
-    role: state.game.playersRoles[player],
-    location: state.game.location,
-    customLocations: state.config.customLocations,
-    localPlayerAmount: state.config.players.length,
-  };
-};
-
-export default connect(mapStateToProps)(Player);
+export default React.memo(Player);

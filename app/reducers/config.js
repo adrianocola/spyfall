@@ -17,6 +17,7 @@ import {
   SET_SPY_COUNT,
   SET_TIME,
   UPDATE_PLAYER,
+  SET_MODERATOR_MODE,
 } from 'actions/config';
 
 const defaultSelectedLocations =
@@ -124,6 +125,8 @@ export default (state = initialState, action) => {
       return { ...state, time: action.payload };
     case SET_SPY_COUNT:
       return { ...state, spyCount: action.payload };
+    case SET_MODERATOR_MODE:
+      return { ...state, moderatorMode: action.payload };
     default: return state;
   }
 };

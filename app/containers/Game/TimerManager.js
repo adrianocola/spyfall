@@ -1,13 +1,16 @@
 import React from 'react';
 import { css } from 'emotion';
-import { connect } from 'react-redux';
 import { Button, Col, Row } from 'reactstrap';
 import Localized from 'components/Localized/Localized';
 import Timer from 'components/Timer/Timer';
 import { updateGame } from 'services/game';
 import { logEvent } from 'utils/analytics';
+import { useConfigTime } from 'selectors/configTime';
+import { useGameTimeRunning } from 'selectors/gameTimeRunning';
 
-export const TimerManager = ({ time, timerRunning }) => {
+export const TimerManager = () => {
+  const [time] = useConfigTime();
+  const timerRunning = useGameTimeRunning();
   const toggleTimer = () => {
     logEvent(timerRunning ? 'TIMER_STOP' : 'TIMER_START');
     updateGame({ timerRunning: !timerRunning });
@@ -38,9 +41,4 @@ const styles = {
   }),
 };
 
-const mapStateToProps = (state) => ({
-  time: state.config.time,
-  timerRunning: state.game.timerRunning,
-});
-
-export default connect(mapStateToProps)(TimerManager);
+export default React.memo(TimerManager);

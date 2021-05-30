@@ -3,13 +3,15 @@ import React, { useMemo } from 'react';
 import { Col, Row } from 'reactstrap';
 import { DEFAULT_LOCATIONS } from 'consts';
 import { useTranslation } from 'react-i18next';
-import { connect } from 'react-redux';
 import { css } from 'emotion';
+import { useCustomLocations } from 'selectors/customLocations';
 
 import Location from './Location';
 
-export const FilteredLocationsList = ({ customLocations, filter }) => {
+export const FilteredLocationsList = ({ filter }) => {
   const [t] = useTranslation();
+  const { customLocations } = useCustomLocations();
+
   const filteredLocations = useMemo(() => {
     const filtered = [];
     const lcFilter = filter?.toLowerCase();
@@ -63,8 +65,4 @@ const styles = {
   }),
 };
 
-const mapStateToProps = (state) => ({
-  customLocations: state.config.customLocations,
-});
-
-export default connect(mapStateToProps)(FilteredLocationsList);
+export default React.memo(FilteredLocationsList);
