@@ -44,6 +44,8 @@
   "interface.done": "Hotovo!",
   "interface.error": "Chyba!",
   "interface.link_copied": "Link copied to clipboard!",
+  "interface.moderator_mode": "Moderator mode",
+  "interface.auto_start_timer": "Start timer on game start",
   "location.airplane": "Lietadlo",
   "location.airplane.role1": "Pasažier v prvej triede",
   "location.airplane.role2": "Ochranka v utajení",
