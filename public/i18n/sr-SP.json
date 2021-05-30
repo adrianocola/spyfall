@@ -44,6 +44,8 @@
   "interface.done": "Завршено!",
   "interface.error": "Грешка!",
   "interface.link_copied": "Link copied to clipboard!",
+  "interface.moderator_mode": "Moderator mode",
+  "interface.auto_start_timer": "Start timer on game start",
   "location.airplane": "Авион",
   "location.airplane.role1": "Путник прве класе",
   "location.airplane.role2": "Ваздушни Маршал",
