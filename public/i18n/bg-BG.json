@@ -44,6 +44,8 @@
   "interface.done": "Готово!",
   "interface.error": "Грешка!",
   "interface.link_copied": "Link copied to clipboard!",
+  "interface.moderator_mode": "Moderator mode",
+  "interface.auto_start_timer": "Start timer on game start",
   "location.airplane": "Самолет",
   "location.airplane.role1": "Пътник Първа Класа",
   "location.airplane.role2": "Въздушна охрана под прикритие",
