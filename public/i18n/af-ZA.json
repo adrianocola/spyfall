@@ -44,6 +44,8 @@
   "interface.done": "Klaar!",
   "interface.error": "Vout!",
   "interface.link_copied": "Link copied to clipboard!",
+  "interface.moderator_mode": "Moderator mode",
+  "interface.auto_start_timer": "Start timer on game start",
   "location.airplane": "Vliegtuig",
   "location.airplane.role1": "Eerste Klas Passasier",
   "location.airplane.role2": "Air Marshall",
