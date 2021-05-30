@@ -44,6 +44,8 @@
   "interface.done": "Готово!",
   "interface.error": "Ошибка!",
   "interface.link_copied": "Link copied to clipboard!",
+  "interface.moderator_mode": "Moderator mode",
+  "interface.auto_start_timer": "Start timer on game start",
   "location.airplane": "Самолёт",
   "location.airplane.role1": "Пассажир первого класса",
   "location.airplane.role2": "Безбилетник",
