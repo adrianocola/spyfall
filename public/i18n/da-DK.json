@@ -44,6 +44,8 @@
   "interface.done": "Færdig!",
   "interface.error": "Fejl!",
   "interface.link_copied": "Link copied to clipboard!",
+  "interface.moderator_mode": "Moderator mode",
+  "interface.auto_start_timer": "Start timer on game start",
   "location.airplane": "Fly",
   "location.airplane.role1": "Førsteklassespassager",
   "location.airplane.role2": "Luftsherif",
