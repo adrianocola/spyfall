@@ -46,6 +46,7 @@
   "interface.link_copied": "Link copied to clipboard!",
   "interface.moderator_mode": "Moderator mode",
   "interface.auto_start_timer": "Start timer on game start",
+  "interface.hide_spy_count": "Hide spy count",
   "location.airplane": "Repülőgép",
   "location.airplane.role1": "Első osztályú utas",
   "location.airplane.role2": "Légi marsall",
