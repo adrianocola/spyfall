@@ -70,7 +70,7 @@ export const Game = () => {
         <GameInfo />
       )}
       <GameManager remotePlayers={remotePlayers} started={started} />
-      <Room />
+      <Room started={started} />
       <LocationsPopup isOpen={showLocationsPopup} toggle={() => setShowLocationsPopup(false)} />
     </div>
   );

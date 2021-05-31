@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { useRoomConnected } from 'selectors/sessionRoomConnected';
 import { useRoomId } from 'selectors/roomId';
 
-export const Room = () => {
+export const Room = ({ started }) => {
   const [loading, setLoading] = useState(false);
   const [roomId, refreshRoomId] = useRoomId();
   const [roomConnected, setRoomConnected] = useRoomConnected();
@@ -73,6 +73,8 @@ export const Room = () => {
       </Row>
     );
   }
+
+  if (started) return null;
 
   return (
     <Row className={styles.roomControllerContainer}>
