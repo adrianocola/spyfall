@@ -67,29 +67,19 @@ export const RoomClient = ({ roomId, player }) => {
 
   if (!room) return <Row><Col className="text-center"><div className={styles.loading}><Spinner /></div></Col></Row>;
 
-  if (!room.online) {
-    return (
-      <Container className={styles.container}>
-        <Row className={styles.stateContainer}>
-          <Col>
-            <Button color="warning" disabled block onClick={toggleShowRole}><Localized name="interface.error_room_connection" /></Button>
-          </Col>
-        </Row>
-        <Row className={`${styles.linkContainer} justify-content-center`}>
-          <Col>
-            <Button color="danger" block onClick={onLeaveRoom}><Localized name="interface.leave_room" /></Button>
-          </Col>
-        </Row>
-      </Container>
-    );
-  }
-
   const started = room.state === GAME_STATES.STARTED;
   const stopped = room.state === GAME_STATES.STOPPED;
   const locationsSize = Object.keys(gameLocations).length;
 
   return (
     <Container className={styles.container}>
+      {!room.online && (
+        <Row className={styles.stateContainer}>
+          <Col>
+            <Button color="warning" disabled block><Localized name="interface.error_room_connection" /></Button>
+          </Col>
+        </Row>
+      )}
       <Row className={styles.stateContainer}>
         <Col>
           {started && <Button color="success" block onClick={toggleShowRole}>{player} - <Localized name="interface.show_my_role" /></Button>}
