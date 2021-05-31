@@ -29,7 +29,7 @@ export const RemotePlayer = ({ roomId, playerUserId, remotePlayer, started }) =>
         {!remotePlayer.online && <Badge pill color="danger" className={styles.isOffline} onClick={onRemove}>✘</Badge>}
       </Col>
       {!started && moderatorMode && (
-        <Col xs={6} md={5}>
+        <Col>
           <GameModeratorRoleSelector
             moderatorRole={remotePlayer.moderatorRole}
             onModeratorRoleChange={onSetRemovePlayerModeratorRole}
@@ -48,13 +48,13 @@ const styles = {
   isOnline: css({
     position: 'absolute',
     right: 25,
-    top: 7,
+    top: 10,
     fontSize: 16,
   }),
   isOffline: css({
     position: 'absolute',
     right: 25,
-    top: 7,
+    top: 10,
     fontSize: 16,
     cursor: 'pointer',
   }),

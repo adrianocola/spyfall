@@ -8,4 +8,4 @@ const ButtonWithLoading = (props) => (
   </Button>
 );
 
-export default ButtonWithLoading;
+export default React.memo(ButtonWithLoading);

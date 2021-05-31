@@ -73,14 +73,14 @@ export const GameConfig = () => {
           </div>
           <div>
             <Label check className={styles.check}>
-              <Input type="checkbox" checked={autoStartTimer} onChange={() => setAutoStartTimer(!autoStartTimer)} />
-              {t('interface.auto_start_timer')}
+              <Input type="checkbox" checked={hideSpyCount} onChange={() => setHideSpyCount(!hideSpyCount)} />
+              {t('interface.hide_spy_count')}
             </Label>
           </div>
           <div>
             <Label check className={styles.check}>
-              <Input type="checkbox" checked={hideSpyCount} onChange={() => setHideSpyCount(!hideSpyCount)} />
-              {t('interface.hide_spy_count')}
+              <Input type="checkbox" checked={autoStartTimer} onChange={() => setAutoStartTimer(!autoStartTimer)} />
+              {t('interface.auto_start_timer')}
             </Label>
           </div>
         </Col>
@@ -95,6 +95,7 @@ const styles = {
   }),
   check: css({
     cursor: 'pointer',
+    marginTop: 5,
   }),
 };
 

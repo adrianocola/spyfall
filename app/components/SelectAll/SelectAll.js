@@ -3,7 +3,7 @@ import { css } from 'emotion';
 import { Row, Col } from 'reactstrap';
 import { SHADES } from 'styles/consts';
 
-export default ({ checked, onClick }) => (
+const SelectAll = ({ checked, onClick }) => (
   <Row className="justify-content-center align-items-center">
     <Col xs="auto" className={styles.checksContainer} onClick={onClick}>
       <input type="checkbox" checked={checked} disabled className={styles.checkbox} />
@@ -30,3 +30,5 @@ const styles = {
     pointerEvents: 'none',
   }),
 };
+
+export default React.memo(SelectAll);

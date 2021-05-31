@@ -62,4 +62,4 @@ const styles = {
   }),
 };
 
-export default DefaultLocationsList;
+export default React.memo(DefaultLocationsList);

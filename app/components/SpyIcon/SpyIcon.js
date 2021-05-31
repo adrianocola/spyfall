@@ -6,10 +6,10 @@ const SpyIcon = (props) => (
   <img src={SpyIconImage} className={`${styles.spyIcon} ${props.className}`} style={props.style} width={20} alt="Spy icon" />
 );
 
-export default SpyIcon;
-
 const styles = {
   spyIcon: css({
     marginRight: 5,
   }),
 };
+
+export default React.memo(SpyIcon);

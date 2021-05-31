@@ -18,7 +18,7 @@ const resetLocationsState = (locations, prevLocation) => {
   return state;
 };
 
-export const Locations = React.memo(({ matchId, location, locations = {}, prevLocation }) => {
+export const Locations = ({ matchId, location, locations = {}, prevLocation }) => {
   const sortedLocations = useSortedLocationsList(locations);
 
   const [locationsState, setLocationsState] = useState({});
@@ -88,6 +88,6 @@ export const Locations = React.memo(({ matchId, location, locations = {}, prevLo
       </Row>
     </Container>
   );
-});
+};
 
-export default Locations;
+export default React.memo(Locations);

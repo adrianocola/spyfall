@@ -5,7 +5,7 @@ import { css } from 'emotion';
 import cn from 'classnames';
 import { DARK_COLORS, SHADES } from 'styles/consts';
 
-export const Locations = React.memo(({ locationObj, crossOutLocation, state }) => {
+export const Location = ({ locationObj, crossOutLocation, state }) => {
   const className = cn(styles.location, {
     [styles.previous]: state?.previous,
     [styles.crossedOut]: state?.crossedOut,
@@ -21,7 +21,7 @@ export const Locations = React.memo(({ locationObj, crossOutLocation, state }) =
       </Col>
     </Row>
   );
-});
+};
 
 const styles = {
   location: css({
@@ -46,4 +46,4 @@ const styles = {
   }),
 };
 
-export default Locations;
+export default React.memo(Location);

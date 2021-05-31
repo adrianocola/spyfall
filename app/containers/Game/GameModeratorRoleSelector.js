@@ -1,33 +1,13 @@
-import _ from 'lodash';
-import React, { useMemo } from 'react';
+import React from 'react';
 import { Input } from 'reactstrap';
-import { useCustomLocations } from 'selectors/customLocations';
-import { useConfigModeratorLocation } from 'selectors/configModeratorLocation';
 import { useTranslation } from 'react-i18next';
-import { MAX_ROLES, RANDOM, SPY_ROLE } from 'consts';
+import { RANDOM, SPY_ROLE } from 'consts';
+import { useModeratorRolesList } from 'selectors/moderatorRolesList';
 
 export const GameModeratorRoleSelector = ({ moderatorRole, onModeratorRoleChange }) => {
   const [t] = useTranslation();
-  const { customLocations } = useCustomLocations();
-  const [moderatorLocation] = useConfigModeratorLocation();
 
-  const moderatorRolesList = useMemo(() => {
-    const customLocation = customLocations?.[moderatorLocation];
-    if (customLocation?.allSpies) return [];
-
-    const list = [];
-    _.times(MAX_ROLES, (roleIndex) => {
-      const defaultRoleKey = `location.${moderatorLocation}.role${roleIndex}`;
-      const roleValue = customLocation ? customLocation[`role${roleIndex}`] : t(defaultRoleKey);
-      if (roleValue && roleValue !== defaultRoleKey) {
-        list.push({
-          index: roleIndex,
-          role: roleValue,
-        });
-      }
-    });
-    return list;
-  }, [moderatorLocation, customLocations, t]);
+  const moderatorRolesList = useModeratorRolesList();
 
   const onSetPlayerModeratorRole = (evt) => {
     onModeratorRoleChange(evt.target.value);

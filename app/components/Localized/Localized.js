@@ -11,4 +11,4 @@ const Localized = (props) => {
   );
 };
 
-export default Localized;
+export default React.memo(Localized);

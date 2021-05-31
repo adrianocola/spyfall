@@ -10,4 +10,4 @@ const LocalizedLocation = ({ location, customLocations }) => {
   return <span>{customLocations[location].name}</span>;
 };
 
-export default LocalizedLocation;
+export default React.memo(LocalizedLocation);

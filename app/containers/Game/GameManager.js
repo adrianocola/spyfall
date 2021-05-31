@@ -116,6 +116,8 @@ export const GameManager = ({ started, remotePlayers }) => {
     if (moderatorMode && !allSpies) {
       const checkPlayer = (playerId, playerName, moderatorRole) => {
         if (!moderatorRole || moderatorRole === RANDOM) return;
+
+        // reserve spy role
         if (moderatorRole === SPY_ROLE) {
           _.pull(availablePlayers, playerId);
           reservedPlayersRoles[playerId] = SPY_ROLE;
@@ -123,8 +125,12 @@ export const GameManager = ({ started, remotePlayers }) => {
           return;
         }
 
+        // if random location, don't reserve roles
+        if (moderatorLocation === RANDOM) return;
+
         const defaultRoleKey = `location.${moderatorLocation}.role${moderatorRole}`;
         const roleValue = selectedLocation[`role${moderatorRole}`] ?? t(defaultRoleKey);
+        // if a valid location role, reserve this role
         if (roleValue && roleValue !== defaultRoleKey) {
           const intModeratorRole = parseInt(moderatorRole, 10);
           _.pull(availableLocationRoles, intModeratorRole);

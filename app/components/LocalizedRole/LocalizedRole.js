@@ -10,4 +10,4 @@ const LocalizedRole = ({ role, location, customLocations }) => {
   return <span>{customLocations[location][`role${role}`]}</span>;
 };
 
-export default LocalizedRole;
+export default React.memo(LocalizedRole);
