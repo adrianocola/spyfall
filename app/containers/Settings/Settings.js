@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import { TiDelete } from 'react-icons/ti';
 import { SHADES } from 'styles/consts';
 import { useSelectAll } from 'selectors/selectAll';
+import { logEvent } from 'utils/analytics';
 
 import DefaultLocationsList from './DefaultLocationsList';
 import CustomLocationsList from './CustomLocationsList';
@@ -19,11 +20,16 @@ export const Settings = () => {
   const [t] = useTranslation();
   const [filter, setFilter] = useState('');
   const { selectAllLocations, deselectAllLocations } = useSelectAll();
+
   const onFilterChange = useCallback((event) => {
+    logEvent('LOCATIONS_FILTER');
     setFilter(event.target.value);
   }, []);
 
-  const onClearFilter = useCallback(() => setFilter(''), []);
+  const onClearFilter = useCallback(() => {
+    logEvent('LOCATIONS_FILTER_CLEAR');
+    setFilter('');
+  }, []);
 
   return (
     <Row className={`${styles.container} justify-content-center`}>

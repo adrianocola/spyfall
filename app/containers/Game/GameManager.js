@@ -9,7 +9,7 @@ import { useGameLocations } from 'selectors/gameLocations';
 import { DEFAULT_LOCATIONS, GAME_STATES, MAX_PLAYERS, MAX_ROLES, MIN_PLAYERS, RANDOM, SPY_ROLE } from 'consts';
 import usePresence from 'hooks/usePresence';
 import { updateGame } from 'services/game';
-import { logEvent } from 'utils/analytics';
+import { logDataEvent, logEvent } from 'utils/analytics';
 import { useRoomId } from 'selectors/roomId';
 import { useRoomConnected } from 'selectors/sessionRoomConnected';
 import { useConfigPlayersCount } from 'selectors/configPlayersCount';
@@ -166,7 +166,12 @@ export const GameManager = ({ started, remotePlayers }) => {
     const playersRoles = { ...reservedPlayersRoles, ...newPlayersRoles };
     const spies = [...reservedSpies, ...newSpies];
 
-    logEvent('GAME_STARTED', DEFAULT_LOCATIONS[selectedLocationId] ? selectedLocationId : 'CUSTOM_LOCATION');
+    logDataEvent('GAME_STARTED', {
+      event: DEFAULT_LOCATIONS[selectedLocationId] ? selectedLocationId : 'CUSTOM_LOCATION',
+      moderatorMode,
+      hideSpyCount,
+      autoStartTimer,
+    });
     updateGame({
       matchId: shortid.generate(),
       state: newState,

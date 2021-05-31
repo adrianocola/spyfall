@@ -4,6 +4,7 @@ import { css } from 'emotion';
 import { Button } from 'reactstrap';
 import beep from 'services/beep';
 import { DARK_COLORS, SHADES } from 'styles/consts';
+import { logEvent } from 'utils/analytics';
 
 import Countdown from './Countdown';
 
@@ -19,6 +20,7 @@ export const Timer = ({ initialValue, showCountdown, running, onComplete, onCoun
   const timerIntervalRef = useRef();
 
   const toggleEndAnimation = () => {
+    logEvent(animateEnd ? 'TIMER_END_ANIMATION_STOP' : 'TIMER_END_ANIMATION_START');
     setAnimateEnd((prevAnimateEnd) => !prevAnimateEnd);
   };
 

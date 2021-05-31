@@ -11,35 +11,40 @@ import { logEvent } from 'utils/analytics';
 import { useSelectedLocation } from 'selectors/selectedLocation';
 import { useCustomLocations } from 'selectors/customLocations';
 
-export const Location = React.memo(({ locationId, description, disabled, ...props }) => {
+export const Location = React.memo(({ locationId, location, description, disabled }) => {
   const [t] = useTranslation();
   const { selected, selectLocation, deselectLocation } = useSelectedLocation(locationId);
   const { saveCustomLocation, remCustomLocation } = useCustomLocations();
   const [isOpen, setIsOpen] = useState(false);
-  const [location, setLocation] = useState(props.location);
+  const [localLocation, setLocalLocation] = useState(location);
 
   const toggle = () => {
     setIsOpen((prevIsOpen) => !prevIsOpen);
   };
 
   const updateLocation = (field, value) => {
-    setLocation((prevLocation) => ({
+    setLocalLocation((prevLocation) => ({
       ...prevLocation,
       [field]: value,
     }));
   };
 
   const onToggleAllSpies = () => {
-    if (!location.allSpies) {
+    if (!localLocation.allSpies) {
+      logEvent('SETTINGS_LOCATION_ALL_SPIES_ON');
       updateLocation('name', SPY_LOCATION);
+      updateLocation('prevName', localLocation.name);
+    } else {
+      logEvent('SETTINGS_LOCATION_ALL_SPIES_OFF');
+      updateLocation('name', localLocation.prevName);
     }
-    updateLocation('allSpies', !location.allSpies);
+    updateLocation('allSpies', !localLocation.allSpies);
   };
 
   const onSave = (evt) => {
     logEvent('SETTINGS_SAVE_LOCATION');
     evt.preventDefault();
-    saveCustomLocation(locationId, location);
+    saveCustomLocation(locationId, localLocation);
     setIsOpen(false);
   };
 
@@ -57,7 +62,7 @@ export const Location = React.memo(({ locationId, description, disabled, ...prop
           <Col xs="auto" className="align-items-center">
             <Label check className={styles.check}>
               <Input type="checkbox" checked={selected} onChange={selected ? () => deselectLocation() : () => selectLocation()} />
-              {disabled ? ReactHtmlParser(t(`location.${locationId}`)) : props.location.name}
+              {disabled ? ReactHtmlParser(t(`location.${locationId}`)) : location.name}
             </Label>
             {!!description && <div className={styles.description}>{description}</div>}
           </Col>
@@ -76,9 +81,9 @@ export const Location = React.memo(({ locationId, description, disabled, ...prop
                   <Input
                     bsSize="sm"
                     className={styles.input}
-                    value={disabled ? ReactHtmlParser(t(`location.${locationId}`, ' ')) : location.name}
+                    value={disabled ? ReactHtmlParser(t(`location.${locationId}`, ' ')) : localLocation.name}
                     onChange={(evt) => updateLocation('name', evt.target.value)}
-                    disabled={disabled || location.allSpies}
+                    disabled={disabled || localLocation.allSpies}
                   />
                 </Col>
               </Row>
@@ -91,9 +96,9 @@ export const Location = React.memo(({ locationId, description, disabled, ...prop
                     <Input
                       bsSize="sm"
                       className={styles.input}
-                      value={disabled ? ReactHtmlParser(t(`location.${locationId}.role${index + 1}`, ' ')) : location[`role${index + 1}`] || ''}
+                      value={disabled ? ReactHtmlParser(t(`location.${locationId}.role${index + 1}`, ' ')) : localLocation[`role${index + 1}`] || ''}
                       onChange={(evt) => updateLocation(`role${index + 1}`, evt.target.value)}
-                      disabled={disabled || location.allSpies}
+                      disabled={disabled || localLocation.allSpies}
                     />
                   </Col>
                 </Row>
@@ -104,7 +109,7 @@ export const Location = React.memo(({ locationId, description, disabled, ...prop
                   <Row className={`${styles.linksContainer} justify-content-center text-center`}>
                     <Col xs={12}>
                       <Label check className={styles.check}>
-                        <Input type="checkbox" checked={location.allSpies} onChange={onToggleAllSpies} />
+                        <Input type="checkbox" checked={localLocation.allSpies ?? false} onChange={onToggleAllSpies} />
                         {ReactHtmlParser(t('interface.all_spies'))}
                       </Label>
                     </Col>

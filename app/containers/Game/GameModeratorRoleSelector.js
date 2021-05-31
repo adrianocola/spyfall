@@ -3,6 +3,7 @@ import { Input } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { RANDOM, SPY_ROLE } from 'consts';
 import { useModeratorRolesList } from 'selectors/moderatorRolesList';
+import { logEvent } from 'utils/analytics';
 
 export const GameModeratorRoleSelector = ({ moderatorRole, onModeratorRoleChange }) => {
   const [t] = useTranslation();
@@ -10,7 +11,9 @@ export const GameModeratorRoleSelector = ({ moderatorRole, onModeratorRoleChange
   const moderatorRolesList = useModeratorRolesList();
 
   const onSetPlayerModeratorRole = (evt) => {
-    onModeratorRoleChange(evt.target.value);
+    const newModeratorRole = evt.target.value;
+    logEvent('GAME_SET_MODERATOR_ROLE', newModeratorRole);
+    onModeratorRoleChange(newModeratorRole);
   };
 
   return (
