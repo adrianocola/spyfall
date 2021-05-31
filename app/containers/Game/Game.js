@@ -11,6 +11,7 @@ import { logEvent } from 'utils/analytics';
 import { useRoomId } from 'selectors/roomId';
 import { useRoomConnected } from 'selectors/sessionRoomConnected';
 import { useGameState } from 'selectors/gameState';
+import { useConfigModeratorMode } from 'selectors/configModeratorMode';
 
 import GamePlayers from './GamePlayers';
 import GamePlayersController from './GamePlayersController';
@@ -19,11 +20,13 @@ import GameInfo from './GameInfo';
 import LocationsPopup from './LocationsPopup';
 import GameManager from './GameManager';
 import Room from './Room';
+import GameModeratorLocationSelector from './GameModeratorLocationSelector';
 
 export const Game = () => {
   const [roomId] = useRoomId();
   const [roomConnected] = useRoomConnected();
   const [gameState] = useGameState();
+  const [moderatorMode] = useConfigModeratorMode();
   const [remotePlayers, setRemotePlayers] = useState({});
   const [showLocationsPopup, setShowLocationsPopup] = useState(false);
 
@@ -46,12 +49,15 @@ export const Game = () => {
   return (
     <div className={styles.container}>
       {!started && (
-        <Row className={styles.locationsContainer}>
-          <Col className="text-center">
-            <a href="#" onClick={() => { setShowLocationsPopup(true) }}><Localized name="interface.game_locations" /> (<LocationsCount />)</a>
-            <Link to="/settings"><CogIcon className={styles.cogIcon} /></Link>
-          </Col>
-        </Row>
+        <>
+          <Row className={styles.locationsContainer}>
+            <Col className="text-center">
+              <a href="#" onClick={() => { setShowLocationsPopup(true) }}><Localized name="interface.game_locations" /> (<LocationsCount />)</a>
+              <Link to="/settings"><CogIcon className={styles.cogIcon} /></Link>
+            </Col>
+          </Row>
+          {moderatorMode && <GameModeratorLocationSelector started={started} />}
+        </>
       )}
       <GamePlayers started={started} remotePlayers={remotePlayers} />
       {!started && (
@@ -60,8 +66,9 @@ export const Game = () => {
           <GameConfig />
         </>
       )}
-      {started &&
-        <GameInfo />}
+      {started && (
+        <GameInfo />
+      )}
       <GameManager remotePlayers={remotePlayers} started={started} />
       <Room />
       <LocationsPopup isOpen={showLocationsPopup} toggle={() => setShowLocationsPopup(false)} />

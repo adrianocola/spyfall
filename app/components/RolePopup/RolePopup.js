@@ -7,10 +7,10 @@ import LocalizedLocation from 'components/LocalizedLocation/LocalizedLocation';
 import LocalizedRole from 'components/LocalizedRole/LocalizedRole';
 import { SPY_ROLE, SPY_LOCATION } from 'consts';
 
-export default ({ isOpen, toggle, player, location, role, customLocations }) => (
+export const RolePopup = ({ isOpen, toggle, player, location, role, customLocations }) => (
   <Modal centered isOpen={isOpen} toggle={toggle}>
     <ModalHeader tag="h3" toggle={toggle} className={`${styles.header} justify-content-center`} close={<button type="button" className="close" onClick={toggle}>&times;</button>}>
-      {player}
+      {player.name ?? player}
     </ModalHeader>
     <ModalBody className={styles.body}>
       <Row className={styles.roleLine}>
@@ -48,3 +48,5 @@ const styles = {
     fontSize: '1.4rem',
   }),
 };
+
+export default React.memo(RolePopup);

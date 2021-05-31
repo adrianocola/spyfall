@@ -6,15 +6,22 @@ import { Button, Col, Row } from 'reactstrap';
 import Localized from 'components/Localized/Localized';
 import { useTranslation } from 'react-i18next';
 import { useGameLocations } from 'selectors/gameLocations';
-import { DEFAULT_LOCATIONS, GAME_STATES, MAX_PLAYERS, MAX_ROLES, MIN_PLAYERS, SPY_ROLE } from 'consts';
+import { DEFAULT_LOCATIONS, GAME_STATES, MAX_PLAYERS, MAX_ROLES, MIN_PLAYERS, RANDOM, SPY_ROLE } from 'consts';
 import usePresence from 'hooks/usePresence';
 import { updateGame } from 'services/game';
-import { store } from 'store';
 import { logEvent } from 'utils/analytics';
 import { useRoomId } from 'selectors/roomId';
 import { useRoomConnected } from 'selectors/sessionRoomConnected';
 import { useConfigPlayersCount } from 'selectors/configPlayersCount';
-import { useConfigAutoStartTimer } from 'selectors/configAutoStartTimer';
+import { getConfigAutoStartTimer } from 'selectors/configAutoStartTimer';
+import { getConfigPlayers } from 'selectors/configPlayers';
+import { getConfigSpyCount } from 'selectors/configSpyCount';
+import { getCustomLocations } from 'selectors/customLocations';
+import { getGameLocation } from 'selectors/gameLocation';
+import { getGameSpies } from 'selectors/gameSpies';
+import { getConfigModeratorMode } from 'selectors/configModeratorMode';
+import { getConfigModeratorLocation } from 'selectors/configModeratorLocation';
+import { getConfigHideSpyCount } from 'selectors/configHideSpyCount';
 
 import ResultPopup from './ResultPopup';
 
@@ -57,24 +64,34 @@ export const GameManager = ({ started, remotePlayers }) => {
   const [roomConnected] = useRoomConnected();
   const playersCount = useConfigPlayersCount();
   const gameLocations = useGameLocations();
-  const [autoStartTimer] = useConfigAutoStartTimer();
   const [showResultPopup, setShowResultPopup] = useState(false);
   const totalNumberOfPlayers = useMemo(() => playersCount + _.size(remotePlayers), [playersCount, remotePlayers]);
   const canStartGame = useMemo(() => totalNumberOfPlayers >= MIN_PLAYERS && totalNumberOfPlayers <= MAX_PLAYERS, [totalNumberOfPlayers]);
 
   const onStartGame = async () => {
-    const {
-      game: { location, spies },
-      config: { players, spyCount, customLocations },
-    } = store.getState();
+    const prevLocation = getGameLocation();
+    const prevSpies = getGameSpies();
+    const players = getConfigPlayers();
+    const spyCount = getConfigSpyCount();
+    const customLocations = getCustomLocations();
+    const moderatorMode = getConfigModeratorMode();
+    const moderatorLocation = getConfigModeratorLocation();
+    const hideSpyCount = getConfigHideSpyCount();
+    const autoStartTimer = getConfigAutoStartTimer();
 
     const newState = GAME_STATES.STARTED;
-    const allPlayers = [...players];
+    const allPlayers = _.map(players, 'name');
     _.forEach(remotePlayers, (remotePlayer, remotePlayerId) => {
       allPlayers.push(remotePlayerId);
     });
-    const gameLocationsIds = _.keys(gameLocations);
-    const selectedLocationId = _.sample(gameLocationsIds.length > 1 ? _.without(gameLocationsIds, location) : gameLocationsIds);
+    let selectedLocationId;
+    if (moderatorMode && moderatorLocation && moderatorLocation !== RANDOM && (DEFAULT_LOCATIONS[moderatorLocation] || customLocations[moderatorLocation])) {
+      selectedLocationId = moderatorLocation;
+    } else {
+      const gameLocationsIds = _.keys(gameLocations);
+      selectedLocationId = _.sample(gameLocationsIds.length > 1 ? _.without(gameLocationsIds, prevLocation) : gameLocationsIds);
+    }
+
     let selectedLocation;
     let locationRoles;
 
@@ -90,28 +107,70 @@ export const GameManager = ({ started, remotePlayers }) => {
       locationRoles = _.compact(_.times(MAX_ROLES).map((index) => selectedLocation[`role${index + 1}`] && index + 1));
     }
 
+    const allSpies = selectedLocation.allSpies ?? false;
+
+    const availableLocationRoles = [...locationRoles];
+    const availablePlayers = [...allPlayers];
+    const reservedPlayersRoles = {};
+    const reservedSpies = [];
+    if (moderatorMode && !allSpies) {
+      const checkPlayer = (playerId, playerName, moderatorRole) => {
+        if (!moderatorRole || moderatorRole === RANDOM) return;
+        if (moderatorRole === SPY_ROLE) {
+          _.pull(availablePlayers, playerId);
+          reservedPlayersRoles[playerId] = SPY_ROLE;
+          reservedSpies.push(playerName);
+          return;
+        }
+
+        const defaultRoleKey = `location.${moderatorLocation}.role${moderatorRole}`;
+        const roleValue = selectedLocation[`role${moderatorRole}`] ?? t(defaultRoleKey);
+        if (roleValue && roleValue !== defaultRoleKey) {
+          const intModeratorRole = parseInt(moderatorRole, 10);
+          _.pull(availableLocationRoles, intModeratorRole);
+          _.pull(availablePlayers, playerId);
+          reservedPlayersRoles[playerId] = intModeratorRole;
+        }
+      };
+
+      _.forEach(players, (player) => {
+        checkPlayer(player.name, player.name, player.moderatorRole);
+      });
+      _.forEach(remotePlayers, (player, playerId) => {
+        checkPlayer(playerId, player.name, player.moderatorRole);
+      });
+    }
+
+    const spyRoles = _.times(spyCount - reservedSpies.length).map(() => SPY_ROLE);
+    const uniqueRoles = _.sampleSize(availableLocationRoles, availablePlayers.length - spyRoles.length);
+    const repeatedRoles = _.times(availablePlayers.length - availableLocationRoles.length - spyRoles.length, () => _.sample(locationRoles) || '');
+
     const availableRoles = [
-      ..._.times(spyCount).map(() => SPY_ROLE),
-      ..._.sampleSize(locationRoles, allPlayers.length - spyCount),
-      ..._.times(allPlayers.length - locationRoles.length - spyCount, () => _.sample(locationRoles) || ''),
+      ...spyRoles,
+      ...uniqueRoles,
+      ...repeatedRoles,
     ];
 
-    let { newPlayersRoles, newSpies } = getPlayerRoles(selectedLocation, allPlayers, availableRoles, remotePlayers);
-    // if the same spies, try again (keeping new results)
-    if (_.isEqual(_.sortBy(newSpies), _.sortBy(spies))) {
-      const rolesResult = getPlayerRoles(selectedLocation, allPlayers, availableRoles, remotePlayers);
-      ({ newPlayersRoles, newSpies } = rolesResult.newPlayersRoles);
+    let { newPlayersRoles, newSpies } = getPlayerRoles(selectedLocation, availablePlayers, availableRoles, remotePlayers);
+    // if the same spies, try again (keep new results)
+    if (!allSpies && _.isEqual(_.sortBy(newSpies), _.sortBy(prevSpies))) {
+      ({ newPlayersRoles, newSpies } = getPlayerRoles(selectedLocation, availablePlayers, availableRoles, remotePlayers));
     }
+
+    const playersRoles = { ...reservedPlayersRoles, ...newPlayersRoles };
+    const spies = [...reservedSpies, ...newSpies];
 
     logEvent('GAME_STARTED', DEFAULT_LOCATIONS[selectedLocationId] ? selectedLocationId : 'CUSTOM_LOCATION');
     updateGame({
       matchId: shortid.generate(),
       state: newState,
-      playersRoles: newPlayersRoles,
+      playersRoles,
       location: selectedLocationId,
-      prevLocation: location,
-      spies: newSpies,
+      prevLocation,
+      spies,
       showCountdown: autoStartTimer,
+      hideSpyCount,
+      allSpies,
     });
   };
 

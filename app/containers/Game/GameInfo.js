@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import React from 'react';
 import { css } from 'emotion';
 import { Col, Row } from 'reactstrap';
@@ -9,23 +8,31 @@ import { useSelectedLocationsCount } from 'selectors/selectedLocationsCount';
 import { useConfigSpyCount } from 'selectors/configSpyCount';
 import { useGamePrevLocation } from 'selectors/gamePrevLocation';
 import { useGameMatchId } from 'selectors/gameMatchId';
-
-import SpyIcon from 'components/SpyIcon/SpyIcon';
+import SpyCount from 'components/SpyCount/SpyCount';
+import { useGameSpies } from 'selectors/gameSpies';
+import { useConfigHideSpyCount } from 'selectors/configHideSpyCount';
+import { useGameAllSpies } from 'selectors/gameAllSpies';
 import TimerManager from './TimerManager';
 
 export const GameInfo = () => {
   const [spyCount] = useConfigSpyCount();
   const prevLocation = useGamePrevLocation();
   const matchId = useGameMatchId();
+  const spies = useGameSpies();
+  const [hideSpyCount] = useConfigHideSpyCount();
+  const allSpies = useGameAllSpies();
   const selectedLocationsCount = useSelectedLocationsCount();
   const gameLocations = useGameLocations();
+
   return (
     <div>
-      <Row className={styles.spiesCountContainer}>
-        <Col className="text-center">
-          {_.times(spyCount).map((i) => <SpyIcon key={i} />)}
-        </Col>
-      </Row>
+      <SpyCount
+        spyCount={spyCount}
+        spies={spies}
+        allSpies={allSpies}
+        hideSpyCount={hideSpyCount}
+        className={styles.spiesCountContainer}
+      />
       <Row className={styles.locationsContainer}>
         <Col className="text-center">
           <h4><Localized name="interface.game_locations" /> ({selectedLocationsCount})</h4>

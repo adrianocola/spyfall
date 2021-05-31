@@ -1,5 +1,6 @@
 import { useSelector } from 'react-redux';
 import { useDispatcher } from 'hooks/useDispatcher';
+import { store } from 'store';
 import {
   createCustomLocationAction,
   remCustomLocationAction,
@@ -8,6 +9,8 @@ import {
 } from 'actions/config';
 
 export const customLocationsSelector = (state) => state.config.customLocations;
+
+export const getCustomLocations = () => customLocationsSelector(store.getState());
 
 export const useCustomLocations = () => {
   const customLocations = useSelector(customLocationsSelector);

@@ -1,8 +1,7 @@
 import _ from 'lodash';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Col, Container, Row } from 'reactstrap';
-import { useTranslation } from 'react-i18next';
-import { DEFAULT_LOCATIONS } from 'consts';
+import useSortedLocationsList from 'hooks/useSortedLocationsList';
 
 import Location from './Location';
 
@@ -20,16 +19,7 @@ const resetLocationsState = (locations, prevLocation) => {
 };
 
 export const Locations = React.memo(({ matchId, location, locations = {}, prevLocation }) => {
-  const [t] = useTranslation();
-
-  const sortedLocations = useMemo(() => {
-    const locationsArray = _.map(locations, (locationObj, locationId) => ({
-      ...locationObj,
-      locationId,
-      name: DEFAULT_LOCATIONS[locationId] ? t(`location.${locationId}`) : locationObj.name,
-    }));
-    return _.orderBy(locationsArray, 'name');
-  }, [locations, t]);
+  const sortedLocations = useSortedLocationsList(locations);
 
   const [locationsState, setLocationsState] = useState({});
 

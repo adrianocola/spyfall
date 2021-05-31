@@ -7,6 +7,8 @@ import { useConfigTime } from 'selectors/configTime';
 import { useConfigSpyCount } from 'selectors/configSpyCount';
 import { useTranslation } from 'react-i18next';
 import { useConfigAutoStartTimer } from 'selectors/configAutoStartTimer';
+import { useConfigModeratorMode } from 'selectors/configModeratorMode';
+import { useConfigHideSpyCount } from 'selectors/configHideSpyCount';
 
 import SpyIcon from 'components/SpyIcon/SpyIcon';
 
@@ -14,7 +16,9 @@ export const GameConfig = () => {
   const [t] = useTranslation();
   const [time, setTime] = useConfigTime();
   const [spyCount, setSpyCount] = useConfigSpyCount();
+  const [moderatorMode, setModeratorMode] = useConfigModeratorMode();
   const [autoStartTimer, setAutoStartTimer] = useConfigAutoStartTimer();
+  const [hideSpyCount, setHideSpyCount] = useConfigHideSpyCount();
   const onChangeSpyCount = (count) => () => {
     logEvent('GAME_SET_SPIES', count);
     setSpyCount(count);
@@ -28,8 +32,8 @@ export const GameConfig = () => {
 
   return (
     <>
-      <Row className={`${styles.container} align-items-center justify-content-center`}>
-        <Col>
+      <Row className="align-items-center justify-content-center">
+        <Col xs={12} sm={6} className={styles.container}>
           <Row className="align-items-center justify-content-center text-center">
             <Col xs="auto">
               <Input type="radio" name="single" checked={spyCount === 1} onChange={onChangeSpyCount(1)} />
@@ -42,7 +46,7 @@ export const GameConfig = () => {
             </Col>
           </Row>
         </Col>
-        <Col>
+        <Col xs={12} sm={6} className={styles.container}>
           <Row className="align-items-center justify-content-center">
             <Col xs="auto" className="text-center">
               <Localized name="interface.timer" />
@@ -61,10 +65,24 @@ export const GameConfig = () => {
       </Row>
       <Row className={`${styles.container} align-items-center justify-content-center`}>
         <Col xs="auto" className="text-center">
-          <Label check className={styles.check}>
-            <Input type="checkbox" checked={autoStartTimer} onChange={() => setAutoStartTimer(!autoStartTimer)} />
-            {t('interface.auto_start_timer')}
-          </Label>
+          <div>
+            <Label check className={styles.check}>
+              <Input type="checkbox" checked={moderatorMode} onChange={() => setModeratorMode(!moderatorMode)} />
+              {t('interface.moderator_mode')}
+            </Label>
+          </div>
+          <div>
+            <Label check className={styles.check}>
+              <Input type="checkbox" checked={autoStartTimer} onChange={() => setAutoStartTimer(!autoStartTimer)} />
+              {t('interface.auto_start_timer')}
+            </Label>
+          </div>
+          <div>
+            <Label check className={styles.check}>
+              <Input type="checkbox" checked={hideSpyCount} onChange={() => setHideSpyCount(!hideSpyCount)} />
+              {t('interface.hide_spy_count')}
+            </Label>
+          </div>
         </Col>
       </Row>
     </>

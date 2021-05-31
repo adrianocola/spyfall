@@ -1,5 +1,6 @@
+import _ from 'lodash';
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
-import { persistStore, persistReducer } from 'redux-persist';
+import { persistStore, persistReducer, createMigrate } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 
@@ -12,11 +13,27 @@ import joinRoom from 'reducers/joinRoom';
 
 const middlewares = [];
 
+const migrations = {
+  0: (state) => state,
+  1: (state) => {
+    const players = _.map(state.config.players, (name) => ({ name }));
+    return {
+      ...state,
+      config: {
+        ...state.config,
+        players,
+      },
+    };
+  },
+};
+
 const persistConfig = {
   key: 'persistor',
+  version: 1,
   storage,
   blacklist: ['session', 'game'],
   stateReconciler: autoMergeLevel2,
+  migrate: createMigrate(migrations, { debug: false }),
 };
 
 /* eslint-disable no-underscore-dangle */

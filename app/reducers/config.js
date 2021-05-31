@@ -17,8 +17,10 @@ import {
   SET_SPY_COUNT,
   SET_TIME,
   UPDATE_PLAYER,
-  SET_MODERATOR_MODE,
   SET_AUTO_START_TIMER,
+  SET_HIDE_SPY_COUNT,
+  SET_MODERATOR_MODE,
+  SET_MODERATOR_LOCATION,
 } from 'actions/config';
 
 const defaultSelectedLocations =
@@ -30,7 +32,7 @@ const initialState = {
   selectedLocations: defaultSelectedLocations,
   customLocations: {},
   roomId: roomIdGenerator(),
-  players: ['P1'],
+  players: [{ name: 'P1' }],
   time: 480,
   spyCount: 1,
 };
@@ -64,16 +66,22 @@ export default (state = initialState, action) => {
       });
       return { ...state, selectedLocations };
     }
-    case CREATE_CUSTOM_LOCATION:
+    case CREATE_CUSTOM_LOCATION: {
+      const locationId = shortid.generate();
       return {
         ...state,
         customLocations: {
           ...state.customLocations,
-          [shortid.generate()]: {
+          [locationId]: {
             name: i18n.t('interface.location'),
           },
         },
+        selectedLocations: {
+          ...state.selectedLocations,
+          [locationId]: true,
+        },
       };
+    }
     case SAVE_CUSTOM_LOCATION:
       return {
         ...state,
@@ -100,7 +108,7 @@ export default (state = initialState, action) => {
       return { ...state, customLocations, selectedLocations };
     }
     case ADD_PLAYER: {
-      const players = [...state.players, `P${state.players.length + 1}`];
+      const players = [...state.players, { name: `P${state.players.length + 1}` }];
       return {
         ...state,
         players,
@@ -113,23 +121,33 @@ export default (state = initialState, action) => {
         players,
       };
     }
-    case UPDATE_PLAYER:
+    case UPDATE_PLAYER: {
+      const player = state.players[action.payload.playerIndex];
+      const updatedPlayer = {
+        ...player,
+        ...action.payload.player,
+      };
       return {
         ...state,
         players: [
           ...state.players.slice(0, action.payload.playerIndex),
-          action.payload.player,
+          updatedPlayer,
           ...state.players.slice(action.payload.playerIndex + 1),
         ],
       };
+    }
     case SET_TIME:
       return { ...state, time: action.payload };
     case SET_SPY_COUNT:
       return { ...state, spyCount: action.payload };
-    case SET_MODERATOR_MODE:
-      return { ...state, moderatorMode: action.payload };
     case SET_AUTO_START_TIMER:
       return { ...state, autoStartTimer: action.payload };
+    case SET_HIDE_SPY_COUNT:
+      return { ...state, hideSpyCount: action.payload };
+    case SET_MODERATOR_MODE:
+      return { ...state, moderatorMode: action.payload };
+    case SET_MODERATOR_LOCATION:
+      return { ...state, moderatorLocation: action.payload };
     default: return state;
   }
 };

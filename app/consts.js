@@ -5,6 +5,7 @@ export const MAX_ROLES = MAX_PLAYERS - 2;
 export const MAX_ROLES_ARRAY = new Array(MAX_ROLES).fill('');
 export const SPY_ROLE = 'spy';
 export const SPY_LOCATION = '?????';
+export const RANDOM = '__random__';
 export const ID_LENGTH = 5;
 
 export const GAME_STATES = {

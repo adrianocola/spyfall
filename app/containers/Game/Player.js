@@ -7,13 +7,16 @@ import { useGamePlayerRole } from 'selectors/gamePlayerRole';
 import { useGameLocation } from 'selectors/gameLocation';
 import { useCustomLocations } from 'selectors/customLocations';
 import { useConfigPlayersCount } from 'selectors/configPlayersCount';
+import { useConfigModeratorMode } from 'selectors/configModeratorMode';
 
 import RolePopup from 'components/RolePopup/RolePopup';
+import GameModeratorRoleSelector from './GameModeratorRoleSelector';
 
 export const Player = ({ index, started, onPlayerChange }) => {
   const [player] = useConfigPlayer(index);
-  const role = useGamePlayerRole(player);
+  const role = useGamePlayerRole(player.name);
   const location = useGameLocation();
+  const [moderatorMode] = useConfigModeratorMode();
   const { customLocations } = useCustomLocations();
   const localPlayerAmount = useConfigPlayersCount();
   const [showRole, setShowRole] = useState(false);
@@ -29,6 +32,14 @@ export const Player = ({ index, started, onPlayerChange }) => {
     setShowRole((prevShowRole) => !prevShowRole);
   };
 
+  const onPlayerUpdateName = (evt) => {
+    onPlayerChange(index, { name: evt.target.value });
+  };
+
+  const onSetPlayerModeratorRole = (moderatorRole) => {
+    onPlayerChange(index, { moderatorRole });
+  };
+
   useEffect(() => {
     setShowedRole(false);
   }, [started]);
@@ -36,12 +47,29 @@ export const Player = ({ index, started, onPlayerChange }) => {
   return (
     <Row className={styles.player}>
       <Col>
-        {!started &&
-          <Input type="text" name={`player_${index}`} id={`player_${index}`} placeholder="Player" value={player} onChange={(evt) => onPlayerChange(index, evt.target.value)} />}
-        {!!started &&
-          <Button color="success" disabled={showedRole} outline={showedRole} block onClick={toggle}>{player}</Button>}
+        {!started && (
+          <Input type="text" name={`player_${index}`} id={`player_${index}`} placeholder="Player" value={player.name} onChange={onPlayerUpdateName} />
+        )}
+        {!!started && (
+          <Button color="success" disabled={showedRole} outline={showedRole} block onClick={toggle}>{player.name}</Button>
+        )}
       </Col>
-      <RolePopup isOpen={showRole} toggle={toggle} player={player} location={location} role={role} customLocations={customLocations} />
+      {!started && moderatorMode && (
+        <Col>
+          <GameModeratorRoleSelector
+            moderatorRole={player.moderatorRole}
+            onModeratorRoleChange={onSetPlayerModeratorRole}
+          />
+        </Col>
+      )}
+      <RolePopup
+        isOpen={showRole}
+        toggle={toggle}
+        player={player}
+        location={location}
+        role={role}
+        customLocations={customLocations}
+      />
     </Row>
   );
 };

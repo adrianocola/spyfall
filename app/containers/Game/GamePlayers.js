@@ -13,12 +13,23 @@ export const GamePlayers = ({ started, remotePlayers }) => {
   const { updatePlayer } = useConfigPlayers();
   return (
     <>
-      {_.map(remotePlayers, (player, playerUserId) =>
-        <RemotePlayer key={playerUserId} roomId={roomId} playerUserId={playerUserId} remotePlayer={player} started={started} />
-      )}
-      {_.times(playersCount).map((index) =>
-        <Player key={index} started={started} index={index} onPlayerChange={updatePlayer} />
-      )}
+      {_.map(remotePlayers, (player, playerUserId) => (
+        <RemotePlayer
+          key={playerUserId}
+          roomId={roomId}
+          playerUserId={playerUserId}
+          remotePlayer={player}
+          started={started}
+        />
+      ))}
+      {_.times(playersCount).map((index) => (
+        <Player
+          key={index}
+          started={started}
+          index={index}
+          onPlayerChange={updatePlayer}
+        />
+      ))}
     </>
   );
 };

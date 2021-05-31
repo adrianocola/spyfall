@@ -6,7 +6,7 @@ import SpyIcon from 'components/SpyIcon/SpyIcon';
 const CogIcon = ({ className, spies = [], remotePlayers = {} }) => (
   <Row className={className}>
     {spies.map((playerId) => (
-      <Col key={playerId} className="text-center">
+      <Col xs={12} key={playerId} className={`${styles.item} text-center`}>
         <SpyIcon className={styles.spyIcon} /><span>{remotePlayers && remotePlayers[playerId] ? remotePlayers[playerId].name : playerId}</span>
       </Col>
     )
@@ -17,6 +17,9 @@ const CogIcon = ({ className, spies = [], remotePlayers = {} }) => (
 export default CogIcon;
 
 const styles = {
+  item: css({
+    marginTop: 5,
+  }),
   spyIcon: css({
     marginRight: 10,
   }),

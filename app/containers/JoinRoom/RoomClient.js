@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { css } from 'emotion';
 import { Button, Col, Container, Row } from 'reactstrap';
@@ -8,7 +7,6 @@ import Locations from 'components/Locations/Locations';
 import RolePopup from 'components/RolePopup/RolePopup';
 import ResultsSpies from 'components/ResultsSpies/ResultsSpies';
 import { database } from 'services/firebase';
-import SpyIcon from 'components/SpyIcon/SpyIcon';
 import Timer from 'components/Timer/Timer';
 import Spinner from 'components/Spinner/Spinner';
 import { showError } from 'utils/toast';
@@ -17,6 +15,8 @@ import { GAME_STATES } from 'consts';
 import { logEvent } from 'utils/analytics';
 import { useUserId } from 'selectors/userId';
 import { useJoinedRoom } from 'selectors/sessionJoinedRoom';
+
+import SpyCount from 'components/SpyCount/SpyCount';
 
 export const RoomClient = ({ roomId, player }) => {
   const [userId] = useUserId();
@@ -98,11 +98,7 @@ export const RoomClient = ({ roomId, player }) => {
         </Col>
       </Row>
       {started && (
-        <Row className={styles.spiesCountContainer}>
-          <Col className="text-center">
-            {_.times(room.spyCount).map((i) => <SpyIcon key={i} />)}
-          </Col>
-        </Row>
+        <SpyCount spyCount={room.spyCount} spies={room.spies} allSpies={room.allSpies} hideSpyCount={room.hideSpyCount} />
       )}
       {started && <RolePopup isOpen={showRole} toggle={toggleShowRole} player={player} location={room.location} role={room.playersRoles[userId]} customLocations={gameLocations} />}
       <Row className={styles.stateContainer}>
@@ -118,8 +114,9 @@ export const RoomClient = ({ roomId, player }) => {
           </Col>
         </Row>
       )}
-      {!started &&
-        <ResultsSpies className={styles.spiesContainer} spies={room.spies} />}
+      {!started && (
+        <ResultsSpies className={styles.spiesContainer} spies={room.spies} />
+      )}
       <Row className={`${styles.linkContainer} justify-content-center`}>
         <Col>
           <Button color="danger" block onClick={onLeaveRoom}><Localized name="interface.leave_room" /></Button>
