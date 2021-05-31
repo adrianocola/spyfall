@@ -16,6 +16,8 @@ import { useJoinedRoom } from 'selectors/sessionJoinedRoom';
 
 import RoomClient from './RoomClient';
 
+const ROOM_REGEX = new RegExp(`join/([0-9a-zA-Z]{${ID_LENGTH}})$`);
+
 export const JoinRoom = () => {
   const [t] = useTranslation();
 
@@ -49,6 +51,21 @@ export const JoinRoom = () => {
     setLoading(false);
   };
 
+  const onPasteRoomId = (evt) => {
+    if (!evt?.clipboardData?.getData) return;
+
+    evt.preventDefault();
+    evt.stopPropagation();
+    const pastedText = evt.clipboardData.getData('text/plain');
+    if (!pastedText) return setJoinRoomId('');
+
+    const match = pastedText.match(ROOM_REGEX);
+    if (match) {
+      return setJoinRoomId(match[1]);
+    }
+    setJoinRoomId(pastedText.substr(0, ID_LENGTH).toUpperCase());
+  };
+
   if (joinedRoom) {
     return (
       <RoomClient roomId={joinRoomId} player={joinPlayer} />
@@ -59,13 +76,34 @@ export const JoinRoom = () => {
     <Container>
       <Row className={`${styles.container} justify-content-center`}>
         <Col xs={12} md={4}>
-          <Input maxLength={ID_LENGTH} type="text" placeholder={t('interface.room')} value={joinRoomId} onChange={(evt) => setJoinRoomId(evt.target.value)} />
+          <Input
+            maxLength={ID_LENGTH}
+            type="text"
+            placeholder={t('interface.room')}
+            value={joinRoomId}
+            onChange={(evt) => setJoinRoomId(evt.target.value)}
+            onPaste={onPasteRoomId}
+          />
         </Col>
         <Col xs={12} md={4}>
-          <Input maxLength={20} type="text" placeholder={t('interface.player')} value={joinPlayer} onChange={(evt) => setJoinPlayer(evt.target.value)} />
+          <Input
+            maxLength={20}
+            type="text"
+            placeholder={t('interface.player')}
+            value={joinPlayer}
+            onChange={(evt) => setJoinPlayer(evt.target.value)}
+          />
         </Col>
         <Col xs={12} md={4}>
-          <ButtonWithLoading color="success" block onClick={onJoinRoom} loading={loading} disabled={!canJoin}><Localized name="interface.join" /></ButtonWithLoading>
+          <ButtonWithLoading
+            color="success"
+            block
+            onClick={onJoinRoom}
+            loading={loading}
+            disabled={!canJoin}
+          >
+            <Localized name="interface.join" />
+          </ButtonWithLoading>
         </Col>
       </Row>
       <Row className={`${styles.container} justify-content-center`}>
