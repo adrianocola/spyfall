@@ -11,7 +11,7 @@ export const setLanguageAction = (language) => ({
   payload: language,
 });
 
-export const setTranslations = (translations) => ({
+export const setTranslationsAction = (translations) => ({
   type: SET_TRANSLATIONS,
   payload: translations,
 });

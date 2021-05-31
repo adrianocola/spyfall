@@ -1,49 +1,52 @@
-import React, {useState} from 'react';
-import {css} from 'emotion';
-import {connect} from 'react-redux';
-import {Col, Row} from 'reactstrap';
+import React, { useState } from 'react';
+import { css } from 'emotion';
+import { Col, Row } from 'reactstrap';
 import ButtonWithLoading from 'components/ButtonWithLoading/ButtonWithLoading';
 import Localized from 'components/Localized/Localized';
-import {useDropzone} from 'react-dropzone';
-import {setCustomLocations, setSelectedLocations} from 'actions/config';
-import {showError, showSuccess} from 'utils/toast';
+import { useDropzone } from 'react-dropzone';
+import { showError, showSuccess } from 'utils/toast';
+import { useCustomLocations } from 'selectors/customLocations';
+import { useSelectedLocations } from 'selectors/selectedLocations';
 
-export const ExportLocations = ({customLocations, selectedLocations, ...props}) => {
+export const ExportLocations = () => {
+  const { customLocations, setCustomLocations } = useCustomLocations();
+  const [selectedLocations, setSelectedLocations] = useSelectedLocations();
   const [loading, setLoading] = useState(false);
 
   const onDownload = async () => {
     setLoading(true);
-    try{
-      const dataStr = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify({custom_locations: customLocations || {}, selected_locations: selectedLocations || {}}, null, 2))}`;
+    try {
+      // eslint-disable-next-line camelcase
+      const dataStr = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify({ custom_locations: customLocations || {}, selected_locations: selectedLocations || {} }, null, 2))}`;
       const downloadAnchorNode = document.createElement('a');
       downloadAnchorNode.setAttribute('href', dataStr);
       downloadAnchorNode.setAttribute('download', 'spyfall.json');
       downloadAnchorNode.click();
       downloadAnchorNode.remove();
       showSuccess();
-    }catch(err){
+    } catch (err) {
       showError(null, err);
     }
     setLoading(false);
   };
 
   const onDrop = async (files) => {
-    try{
+    try {
       const reader = new FileReader();
       reader.onload = (evt) => {
         const data = JSON.parse(evt.target.result);
-        props.setCustomLocations(data.custom_locations || {});
-        props.setSelectedLocations(data.selected_locations || {});
+        setCustomLocations(data.custom_locations || {});
+        setSelectedLocations(data.selected_locations || {});
         showSuccess();
       };
       reader.readAsText(files[0]);
-    }catch(err){
+    } catch (err) {
       showError(null, err);
     }
     setLoading(false);
   };
 
-  const {getRootProps, getInputProps} = useDropzone({onDrop, multiple: false, accept: ['text/json', 'application/json']});
+  const { getRootProps, getInputProps } = useDropzone({ onDrop, multiple: false, accept: ['text/json', 'application/json'] });
 
   return (
     <Row className={styles.exportContainer}>
@@ -71,14 +74,4 @@ const styles = {
   }),
 };
 
-const mapStateToProps = (state) => ({
-  customLocations: state.config.customLocations,
-  selectedLocations: state.config.selectedLocations,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  setCustomLocations: (customLocations) => dispatch(setCustomLocations(customLocations)),
-  setSelectedLocations: (selectedLocations) => dispatch(setSelectedLocations(selectedLocations)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(ExportLocations);
+export default React.memo(ExportLocations);

@@ -9,11 +9,11 @@ const initialState = {
 };
 
 export default (state = initialState, action) => {
-  switch(action.type){
+  switch (action.type) {
     case SET_ROOM_CONNECTED:
-      return {...state, roomConnected: action.payload};
+      return { ...state, roomConnected: action.payload };
     case SET_JOINED_ROOM:
-      return {...state, joinedRoom: action.payload};
+      return { ...state, joinedRoom: action.payload };
     default: return state;
   }
 };

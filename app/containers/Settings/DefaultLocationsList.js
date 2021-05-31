@@ -1,14 +1,22 @@
-import React, {useState} from 'react';
-import {css} from 'emotion';
-import {Col, Row} from 'reactstrap';
+import React, { useState } from 'react';
+import { css } from 'emotion';
+import { Col, Row } from 'reactstrap';
 import SelectAll from 'components/SelectAll/SelectAll';
-import {DEFAULT_LOCATIONS} from 'consts';
-import {logEvent} from 'utils/analytics';
+import { DEFAULT_LOCATIONS } from 'consts';
+import { logEvent } from 'utils/analytics';
 
 import Location from './Location';
 
-export const DefaultLocationsList = ({version, onSelectAll, onDeselectAll}) => {
-  const [locations] = useState(() => Object.entries(DEFAULT_LOCATIONS).filter(([key, value]) => value === version).map(([key]) => key));
+export const DefaultLocationsList = ({ version, onSelectAll, onDeselectAll }) => {
+  const [locations] = useState(() => {
+    const initialLocations = [];
+    Object.entries(DEFAULT_LOCATIONS).forEach(([key, value]) => {
+      if (value === version) {
+        initialLocations.push(key);
+      }
+    });
+    return initialLocations;
+  });
 
   const onSelectAllClick = () => {
     logEvent('SETTINGS_ON_SELECT_ALL');
@@ -25,7 +33,7 @@ export const DefaultLocationsList = ({version, onSelectAll, onDeselectAll}) => {
       <Col>
         <Row className={styles.locationsListNameContainer}>
           <Col className="text-center">
-            <h5>Spyfall{version === 1 ? '' : ` ${version}`}</h5>
+            <h5>Spyfall {version}</h5>
           </Col>
         </Row>
         <Row className={styles.checksContainer}>
@@ -54,4 +62,4 @@ const styles = {
   }),
 };
 
-export default DefaultLocationsList;
+export default React.memo(DefaultLocationsList);

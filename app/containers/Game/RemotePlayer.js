@@ -1,14 +1,24 @@
 import React from 'react';
-import {css} from 'emotion';
-import {Col, Row, Button, Badge } from 'reactstrap';
-import {database} from 'services/firebase';
-import {logEvent} from 'utils/analytics';
+import { css } from 'emotion';
+import { Col, Row, Button, Badge } from 'reactstrap';
+import { database } from 'services/firebase';
+import { logEvent } from 'utils/analytics';
+import { useConfigModeratorMode } from 'selectors/configModeratorMode';
 
-export const RemotePlayer = ({roomId, playerUserId, remotePlayer, started}) => {
+import GameModeratorRoleSelector from './GameModeratorRoleSelector';
+
+export const RemotePlayer = ({ roomId, playerUserId, remotePlayer, started }) => {
+  const [moderatorMode] = useConfigModeratorMode();
+
+  const remotePlayerRefPath = `roomsRemotePlayers/${roomId}/${playerUserId}`;
   const onRemove = () => {
-    if(started) return;
+    if (started) return;
     logEvent('ROOM_PLAYER_REMOVED');
-    database.ref(`roomsRemotePlayers/${roomId}/${playerUserId}`).remove();
+    database.ref(remotePlayerRefPath).remove();
+  };
+
+  const onSetRemovePlayerModeratorRole = (moderatorRole) => {
+    database.ref(`${remotePlayerRefPath}/moderatorRole`).set(moderatorRole);
   };
 
   return (
@@ -18,6 +28,14 @@ export const RemotePlayer = ({roomId, playerUserId, remotePlayer, started}) => {
         {remotePlayer.online && <Badge pill color="success" className={styles.isOnline}>✓</Badge>}
         {!remotePlayer.online && <Badge pill color="danger" className={styles.isOffline} onClick={onRemove}>✘</Badge>}
       </Col>
+      {!started && moderatorMode && (
+        <Col>
+          <GameModeratorRoleSelector
+            moderatorRole={remotePlayer.moderatorRole}
+            onModeratorRoleChange={onSetRemovePlayerModeratorRole}
+          />
+        </Col>
+      )}
     </Row>
   );
 };
@@ -30,17 +48,16 @@ const styles = {
   isOnline: css({
     position: 'absolute',
     right: 25,
-    top: 7,
+    top: 10,
     fontSize: 16,
   }),
   isOffline: css({
     position: 'absolute',
     right: 25,
-    top: 7,
+    top: 10,
     fontSize: 16,
     cursor: 'pointer',
   }),
 };
 
-
-export default RemotePlayer;
+export default React.memo(RemotePlayer);

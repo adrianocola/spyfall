@@ -1,5 +1,5 @@
-import {useEffect} from 'react';
-import {database, databaseServerTimestamp} from 'services/firebase';
+import { useEffect } from 'react';
+import { database, databaseServerTimestamp } from 'services/firebase';
 
 export const isOfflineForDatabase = {
   online: false,
@@ -13,7 +13,7 @@ export const isOnlineForDatabase = {
 
 export const usePresence = (path, check) => {
   useEffect(() => {
-    if(check){
+    if (check) {
       const presenceRef = database.ref('.info/connected');
       const pathRef = database.ref(path);
       let onDisconnect;
@@ -28,7 +28,7 @@ export const usePresence = (path, check) => {
         }).catch((err) => console.log('onDisconnect error', err)); // eslint-disable-line no-console
       });
       return () => {
-        if(onDisconnect){
+        if (onDisconnect) {
           onDisconnect.cancel();
         }
         presenceRef.off();

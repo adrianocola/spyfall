@@ -1,50 +1,57 @@
 import React, { useState } from 'react';
 import { css } from 'emotion';
-import { Row, Col, Collapse, Input, Label } from 'reactstrap';
+import { Col, Collapse, Input, Label, Row } from 'reactstrap';
 import { MAX_ROLES_ARRAY, SPY_LOCATION } from 'consts';
-import { connect } from 'react-redux';
 import CogIcon from 'components/CogIcon/CogIcon';
 import ReactHtmlParser from 'react-html-parser';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { SHADES, COLORS } from 'styles/consts';
-import { selectLocationAction, deselectLocationAction, saveCustomLocationAction, remCustomLocationAction } from 'actions/config';
-import {logEvent} from 'utils/analytics';
+import { COLORS, SHADES } from 'styles/consts';
+import { logEvent } from 'utils/analytics';
+import { useSelectedLocation } from 'selectors/selectedLocation';
+import { useCustomLocations } from 'selectors/customLocations';
 
-export const Location = React.memo(({locationId, disabled, selected = false, selectLocation, deselectLocation, ...props}) => {
+export const Location = React.memo(({ locationId, location, description, disabled }) => {
   const [t] = useTranslation();
+  const { selected, selectLocation, deselectLocation } = useSelectedLocation(locationId);
+  const { saveCustomLocation, remCustomLocation } = useCustomLocations();
   const [isOpen, setIsOpen] = useState(false);
-  const [location, setLocation] = useState(props.location);
+  const [localLocation, setLocalLocation] = useState(location);
 
   const toggle = () => {
     setIsOpen((prevIsOpen) => !prevIsOpen);
   };
 
   const updateLocation = (field, value) => {
-    setLocation((prevLocation) => ({
+    setLocalLocation((prevLocation) => ({
       ...prevLocation,
       [field]: value,
     }));
   };
 
   const onToggleAllSpies = () => {
-    if(!location.allSpies){
+    if (!localLocation.allSpies) {
+      logEvent('SETTINGS_LOCATION_ALL_SPIES_ON');
       updateLocation('name', SPY_LOCATION);
+      updateLocation('prevName', localLocation.name);
+    } else {
+      logEvent('SETTINGS_LOCATION_ALL_SPIES_OFF');
+      updateLocation('name', localLocation.prevName);
     }
-    updateLocation('allSpies', !location.allSpies);
+    updateLocation('allSpies', !localLocation.allSpies);
   };
 
   const onSave = (evt) => {
     logEvent('SETTINGS_SAVE_LOCATION');
     evt.preventDefault();
-    props.saveCustomLocation(locationId, location);
+    saveCustomLocation(locationId, localLocation);
     setIsOpen(false);
   };
 
   const onDelete = (evt) => {
     logEvent('SETTINGS_DELETE_LOCATION');
     evt.preventDefault();
-    props.remCustomLocation(locationId);
+    remCustomLocation(locationId);
     setIsOpen(false);
   };
 
@@ -52,11 +59,12 @@ export const Location = React.memo(({locationId, disabled, selected = false, sel
     <Row className={`${styles.container} justify-content-center`}>
       <Col xs={10}>
         <Row className="justify-content-between">
-          <Col xs="auto">
+          <Col xs="auto" className="align-items-center">
             <Label check className={styles.check}>
-              <Input type="checkbox" checked={selected} onChange={selected ? () => deselectLocation(locationId) : () => selectLocation(locationId)} />
-              {disabled ? ReactHtmlParser(t(`location.${locationId}`)) : props.location.name}
+              <Input type="checkbox" checked={selected} onChange={selected ? () => deselectLocation() : () => selectLocation()} />
+              {disabled ? ReactHtmlParser(t(`location.${locationId}`)) : location.name}
             </Label>
+            {!!description && <div className={styles.description}>{description}</div>}
           </Col>
           <Col xs="auto" onClick={toggle}>
             <CogIcon />
@@ -73,13 +81,13 @@ export const Location = React.memo(({locationId, disabled, selected = false, sel
                   <Input
                     bsSize="sm"
                     className={styles.input}
-                    value={disabled ? ReactHtmlParser(t(`location.${locationId}`, ' ')) : location.name}
+                    value={disabled ? ReactHtmlParser(t(`location.${locationId}`, ' ')) : localLocation.name}
                     onChange={(evt) => updateLocation('name', evt.target.value)}
-                    disabled={disabled || location.allSpies}
+                    disabled={disabled || localLocation.allSpies}
                   />
                 </Col>
               </Row>
-              { MAX_ROLES_ARRAY.map((r, index) =>
+              { MAX_ROLES_ARRAY.map((r, index) => (
                 <Row key={index} className={`${styles.fields} align-items-center justify-content-center`}>
                   <Col xs={4} className="text-right">
                     Role {index + 1}:
@@ -88,19 +96,20 @@ export const Location = React.memo(({locationId, disabled, selected = false, sel
                     <Input
                       bsSize="sm"
                       className={styles.input}
-                      value={disabled ? ReactHtmlParser(t(`location.${locationId}.role${index + 1}`, ' ')) : location[`role${index + 1}`] || ''}
+                      value={disabled ? ReactHtmlParser(t(`location.${locationId}.role${index + 1}`, ' ')) : localLocation[`role${index + 1}`] || ''}
                       onChange={(evt) => updateLocation(`role${index + 1}`, evt.target.value)}
-                      disabled={disabled || location.allSpies}
+                      disabled={disabled || localLocation.allSpies}
                     />
                   </Col>
                 </Row>
+              )
               )}
-              {!disabled &&
+              {!disabled && (
                 <>
                   <Row className={`${styles.linksContainer} justify-content-center text-center`}>
                     <Col xs={12}>
                       <Label check className={styles.check}>
-                        <Input type="checkbox" checked={location.allSpies} onChange={onToggleAllSpies} />
+                        <Input type="checkbox" checked={localLocation.allSpies ?? false} onChange={onToggleAllSpies} />
                         {ReactHtmlParser(t('interface.all_spies'))}
                       </Label>
                     </Col>
@@ -114,7 +123,7 @@ export const Location = React.memo(({locationId, disabled, selected = false, sel
                     </Col>
                   </Row>
                 </>
-              }
+              )}
             </Collapse>
           </Col>
         </Row>
@@ -145,17 +154,12 @@ const styles = {
   deleteLocation: css({
     color: COLORS.red,
   }),
+  description: css({
+    display: 'inline-block',
+    color: SHADES.light2,
+    marginLeft: 10,
+    fontSize: 12,
+  }),
 };
 
-const mapStateToProps = (state, ownProps) => ({
-  selected: state.config.selectedLocations[ownProps.locationId],
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  selectLocation: (locationId) => dispatch(selectLocationAction(locationId)),
-  deselectLocation: (locationId) => dispatch(deselectLocationAction(locationId)),
-  saveCustomLocation: (locationId, location) => dispatch(saveCustomLocationAction(locationId, location)),
-  remCustomLocation: (locationId) => dispatch(remCustomLocationAction(locationId)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Location);
+export default React.memo(Location);

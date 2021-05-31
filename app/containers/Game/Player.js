@@ -1,21 +1,43 @@
-import React, { useState, useEffect } from 'react';
-import {css} from 'emotion';
-import { connect } from 'react-redux';
-import {Col, Input, Row, Button } from 'reactstrap';
-import {logEvent} from 'utils/analytics';
+import React, { useEffect, useState } from 'react';
+import { css } from 'emotion';
+import { Button, Col, Input, Row } from 'reactstrap';
+import { logEvent } from 'utils/analytics';
+import { useConfigPlayer } from 'selectors/configPlayer';
+import { useGamePlayerRole } from 'selectors/gamePlayerRole';
+import { useGameLocation } from 'selectors/gameLocation';
+import { useCustomLocations } from 'selectors/customLocations';
+import { useConfigPlayersCount } from 'selectors/configPlayersCount';
+import { useConfigModeratorMode } from 'selectors/configModeratorMode';
 
 import RolePopup from 'components/RolePopup/RolePopup';
+import GameModeratorRoleSelector from './GameModeratorRoleSelector';
 
-export const Player = ({index, player, started, location, role, customLocations, onPlayerChange}) => {
+export const Player = ({ index, started, onPlayerChange }) => {
+  const [player] = useConfigPlayer(index);
+  const role = useGamePlayerRole(player.name);
+  const location = useGameLocation();
+  const [moderatorMode] = useConfigModeratorMode();
+  const { customLocations } = useCustomLocations();
+  const localPlayerAmount = useConfigPlayersCount();
   const [showRole, setShowRole] = useState(false);
   const [showedRole, setShowedRole] = useState(false);
 
   const toggle = () => {
-    if(!showedRole){
-      setShowedRole(true);
+    if (!showedRole) {
+      if (localPlayerAmount > 1) {
+        setShowedRole(true); // Only disable showing role if there are other local players as per issue #172
+      }
     }
-    if(!showRole) logEvent('PLAYER_VIEW_ROLE');
+    if (!showRole) logEvent('PLAYER_VIEW_ROLE');
     setShowRole((prevShowRole) => !prevShowRole);
+  };
+
+  const onPlayerUpdateName = (evt) => {
+    onPlayerChange(index, { name: evt.target.value });
+  };
+
+  const onSetPlayerModeratorRole = (moderatorRole) => {
+    onPlayerChange(index, { moderatorRole });
   };
 
   useEffect(() => {
@@ -25,14 +47,29 @@ export const Player = ({index, player, started, location, role, customLocations,
   return (
     <Row className={styles.player}>
       <Col>
-        {!started &&
-          <Input type="text" name={`player_${index}`} id={`player_${index}`} placeholder="Player" value={player} onChange={(evt) => onPlayerChange(index, evt.target.value)} />
-        }
-        {!!started &&
-          <Button color="success" disabled={showedRole} outline={showedRole} block onClick={toggle}>{player}</Button>
-        }
+        {!started && (
+          <Input type="text" name={`player_${index}`} id={`player_${index}`} placeholder="Player" value={player.name} onChange={onPlayerUpdateName} />
+        )}
+        {!!started && (
+          <Button color="success" disabled={showedRole} outline={showedRole} block onClick={toggle}>{player.name}</Button>
+        )}
       </Col>
-      <RolePopup isOpen={showRole} toggle={toggle} player={player} location={location} role={role} customLocations={customLocations} />
+      {!started && moderatorMode && (
+        <Col>
+          <GameModeratorRoleSelector
+            moderatorRole={player.moderatorRole}
+            onModeratorRoleChange={onSetPlayerModeratorRole}
+          />
+        </Col>
+      )}
+      <RolePopup
+        isOpen={showRole}
+        toggle={toggle}
+        player={player}
+        location={location}
+        role={role}
+        customLocations={customLocations}
+      />
     </Row>
   );
 };
@@ -44,14 +81,4 @@ const styles = {
   }),
 };
 
-const mapStateToProps = (state, ownProps) => {
-  const player = state.config.players[ownProps.index];
-  return {
-    player,
-    role: state.game.playersRoles[player],
-    location: state.game.location,
-    customLocations: state.config.customLocations,
-  };
-};
-
-export default connect(mapStateToProps)(Player);
+export default React.memo(Player);

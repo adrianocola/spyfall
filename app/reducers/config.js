@@ -1,7 +1,7 @@
 import shortid from 'shortid';
 import i18n from 'i18n';
 import roomIdGenerator from 'services/roomIdGenerator';
-import {DEFAULT_LOCATIONS} from 'consts';
+import { DEFAULT_LOCATIONS } from 'consts';
 import {
   ADD_PLAYER,
   CREATE_CUSTOM_LOCATION,
@@ -17,21 +17,28 @@ import {
   SET_SPY_COUNT,
   SET_TIME,
   UPDATE_PLAYER,
+  SET_AUTO_START_TIMER,
+  SET_HIDE_SPY_COUNT,
+  SET_MODERATOR_MODE,
+  SET_MODERATOR_LOCATION,
 } from 'actions/config';
 
-const defaultSelectedLocations = Object.entries(DEFAULT_LOCATIONS).filter(([key, value]) => value === 1).reduce((obj, [key]) => {obj[key] = true; return obj}, {});
+const defaultSelectedLocations =
+  Object.entries(DEFAULT_LOCATIONS)
+    .filter(([, value]) => value === 1)
+    .reduce((obj, [key]) => { obj[key] = true; return obj }, {});
 
 const initialState = {
   selectedLocations: defaultSelectedLocations,
   customLocations: {},
   roomId: roomIdGenerator(),
-  players: ['P1'],
+  players: [{ name: 'P1' }],
   time: 480,
   spyCount: 1,
 };
 
 export default (state = initialState, action) => {
-  switch(action.type){
+  switch (action.type) {
     case SELECT_LOCATION:
       return {
         ...state,
@@ -41,34 +48,40 @@ export default (state = initialState, action) => {
         },
       };
     case DESELECT_LOCATION: {
-      const selectedLocations = {...state.selectedLocations};
+      const selectedLocations = { ...state.selectedLocations };
       delete selectedLocations[action.payload];
-      return {...state, selectedLocations};
+      return { ...state, selectedLocations };
     }
     case SELECT_ALL_LOCATIONS: {
-      const selectedLocations = {...state.selectedLocations};
+      const selectedLocations = { ...state.selectedLocations };
       action.payload.forEach((locationId) => {
         selectedLocations[locationId] = true;
       });
-      return {...state, selectedLocations};
+      return { ...state, selectedLocations };
     }
     case DESELECT_ALL_LOCATIONS: {
-      const selectedLocations = {...state.selectedLocations};
+      const selectedLocations = { ...state.selectedLocations };
       action.payload.forEach((locationId) => {
         delete selectedLocations[locationId];
       });
-      return {...state, selectedLocations};
+      return { ...state, selectedLocations };
     }
-    case CREATE_CUSTOM_LOCATION:
+    case CREATE_CUSTOM_LOCATION: {
+      const locationId = shortid.generate();
       return {
         ...state,
         customLocations: {
           ...state.customLocations,
-          [shortid.generate()]: {
+          [locationId]: {
             name: i18n.t('interface.location'),
           },
         },
+        selectedLocations: {
+          ...state.selectedLocations,
+          [locationId]: true,
+        },
       };
+    }
     case SAVE_CUSTOM_LOCATION:
       return {
         ...state,
@@ -88,14 +101,14 @@ export default (state = initialState, action) => {
         selectedLocations: action.payload,
       };
     case REM_CUSTOM_LOCATION: {
-      const customLocations = {...state.customLocations};
-      const selectedLocations = {...state.selectedLocations};
+      const customLocations = { ...state.customLocations };
+      const selectedLocations = { ...state.selectedLocations };
       delete customLocations[action.payload];
       delete selectedLocations[action.payload];
-      return {...state, customLocations, selectedLocations};
+      return { ...state, customLocations, selectedLocations };
     }
     case ADD_PLAYER: {
-      const players = [...state.players, `P${state.players.length + 1}`];
+      const players = [...state.players, { name: `P${state.players.length + 1}` }];
       return {
         ...state,
         players,
@@ -108,19 +121,33 @@ export default (state = initialState, action) => {
         players,
       };
     }
-    case UPDATE_PLAYER:
+    case UPDATE_PLAYER: {
+      const player = state.players[action.payload.playerIndex];
+      const updatedPlayer = {
+        ...player,
+        ...action.payload.player,
+      };
       return {
         ...state,
         players: [
           ...state.players.slice(0, action.payload.playerIndex),
-          action.payload.player,
+          updatedPlayer,
           ...state.players.slice(action.payload.playerIndex + 1),
         ],
       };
+    }
     case SET_TIME:
-      return {...state, time: action.payload};
+      return { ...state, time: action.payload };
     case SET_SPY_COUNT:
-      return {...state, spyCount: action.payload};
+      return { ...state, spyCount: action.payload };
+    case SET_AUTO_START_TIMER:
+      return { ...state, autoStartTimer: action.payload };
+    case SET_HIDE_SPY_COUNT:
+      return { ...state, hideSpyCount: action.payload };
+    case SET_MODERATOR_MODE:
+      return { ...state, moderatorMode: action.payload };
+    case SET_MODERATOR_LOCATION:
+      return { ...state, moderatorLocation: action.payload };
     default: return state;
   }
 };

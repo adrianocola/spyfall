@@ -1,49 +1,82 @@
 import _ from 'lodash';
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { css } from 'emotion';
 import { Button } from 'reactstrap';
 import beep from 'services/beep';
-import {SHADES} from 'styles/consts';
+import { DARK_COLORS, SHADES } from 'styles/consts';
+import { logEvent } from 'utils/analytics';
 
-export default ({initialValue, running, onComplete}) => {
+import Countdown from './Countdown';
+
+const END_ANIMATION = 'animate__animated animate__flash animate__infinite animate__slow';
+
+export const Timer = ({ initialValue, showCountdown, running, onComplete, onCountdownComplete }) => {
   const prevRunningRef = useRef();
   const prevRunning = prevRunningRef.current;
 
-  const [initialTime, setInitialTime] = useState(initialValue);
   const [time, setTime] = useState(initialValue);
   const [finishedRunning, setFinishedRunning] = useState(false);
+  const [animateEnd, setAnimateEnd] = useState(true);
+  const timerIntervalRef = useRef();
 
-  // handles start and pauses
+  const toggleEndAnimation = () => {
+    logEvent(animateEnd ? 'TIMER_END_ANIMATION_STOP' : 'TIMER_END_ANIMATION_START');
+    setAnimateEnd((prevAnimateEnd) => !prevAnimateEnd);
+  };
+
+  const clearTimer = useCallback(() => {
+    if (timerIntervalRef.current) {
+      clearInterval(timerIntervalRef.current);
+      timerIntervalRef.current = null;
+    }
+  }, []);
+
+  const startTimer = useCallback(() => {
+    timerIntervalRef.current = setInterval(() => {
+      setTime((prevTime) => prevTime - 1);
+    }, 1000);
+    return clearTimer;
+  }, [clearTimer]);
+
+  // started/resumed...
   useEffect(() => {
-    prevRunningRef.current = running;
-    // started...
-    if(!prevRunning && running){
-      const startTime = Date.now();
-      const timeout = setInterval(() => {
-        setTime(initialTime - Math.floor((Date.now() - startTime) / 1000));
-      }, 1000);
-      return () => clearInterval(timeout);
+    if (!prevRunning && running) {
+      return startTimer();
     }
-    // paused...
-    if(prevRunning && !running){
-      setInitialTime(time);
-    }
-  }, [running]);
+  }, [prevRunning, running, startTimer]);
 
+  // paused...
+  useEffect(() => {
+    if (prevRunning && !running) {
+      clearTimer();
+    }
+  }, [clearTimer, prevRunning, running]);
 
   // handle timer completion
   useEffect(() => {
-    if(time <= 0){
-      setFinishedRunning(true);
+    if (time <= 0) {
       beep(2);
-      if(onComplete) onComplete();
+      setFinishedRunning(true);
+      if (onComplete) onComplete();
     }
-  }, [time]);
+  }, [onComplete, time]);
 
   return (
-    <Button color="secondary" disabled outline block className={styles.timer}>
-      {!finishedRunning && <span>{Math.floor(time / 60)}:{_.padStart(time % 60, 2, '0')}</span>}
-      {finishedRunning && <span>--:--</span>}
+    <Button color={finishedRunning ? 'danger' : 'secondary'} disabled outline block className={styles.timer}>
+      {!finishedRunning && (
+        <div>
+          <span>{Math.floor(time / 60)}:{_.padStart(time % 60, 2, '0')}</span>
+          <Countdown showCountdown={showCountdown} running={running} onCountdownComplete={onCountdownComplete} />
+        </div>
+      )}
+      {finishedRunning && (
+        <div
+          className={`${styles.finished} ${animateEnd ? END_ANIMATION : ''}`}
+          onMouseUp={toggleEndAnimation}
+        >
+          0:00
+        </div>
+      )}
     </Button>
   );
 };
@@ -52,4 +85,9 @@ const styles = {
   timer: css({
     color: `${SHADES.darker} !important`,
   }),
+  finished: css({
+    color: `${DARK_COLORS.red} !important`,
+  }),
 };
+
+export default React.memo(Timer);

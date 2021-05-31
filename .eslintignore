@@ -1,0 +1,5 @@
+/node_modules/*
+/build/*
+/.firebase/*
+/functions/lib/*
+/coverage/*

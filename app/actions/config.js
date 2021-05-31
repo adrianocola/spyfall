@@ -12,6 +12,10 @@ export const REM_PLAYER = 'CONFIG_REM_PLAYER';
 export const UPDATE_PLAYER = 'CONFIG_UPDATE_PLAYER';
 export const SET_TIME = 'CONFIG_SET_TIME';
 export const SET_SPY_COUNT = 'CONFIG_SET_SPY_COUNT';
+export const SET_AUTO_START_TIMER = 'CONFIG_SET_AUTO_START_TIMER';
+export const SET_HIDE_SPY_COUNT = 'CONFIG_SET_HIDE_SPY_COUNT';
+export const SET_MODERATOR_MODE = 'CONFIG_SET_MODERATOR_MODE';
+export const SET_MODERATOR_LOCATION = 'CONFIG_MODERATOR_LOCATION';
 
 export const selectLocationAction = (locationId) => ({
   type: SELECT_LOCATION,
@@ -39,7 +43,7 @@ export const createCustomLocationAction = () => ({
 
 export const saveCustomLocationAction = (id, location) => ({
   type: SAVE_CUSTOM_LOCATION,
-  payload: {id, location},
+  payload: { id, location },
 });
 
 export const remCustomLocationAction = (id) => ({
@@ -47,7 +51,7 @@ export const remCustomLocationAction = (id) => ({
   payload: id,
 });
 
-export const setCustomLocations = (customLocations) => ({
+export const setCustomLocationsAction = (customLocations) => ({
   type: SET_CUSTOM_LOCATIONS,
   payload: customLocations,
 });
@@ -67,7 +71,7 @@ export const remPlayerAction = () => ({
 
 export const updatePlayerAction = (playerIndex, player) => ({
   type: UPDATE_PLAYER,
-  payload: {playerIndex, player},
+  payload: { playerIndex, player },
 });
 
 export const setTimeAction = (time) => ({
@@ -78,4 +82,24 @@ export const setTimeAction = (time) => ({
 export const setSpyCountAction = (spyCount) => ({
   type: SET_SPY_COUNT,
   payload: spyCount,
+});
+
+export const setAutoStarTimerAction = (autoStartTimer) => ({
+  type: SET_AUTO_START_TIMER,
+  payload: autoStartTimer,
+});
+
+export const setHideSpyCountAction = (hideSpyCount) => ({
+  type: SET_HIDE_SPY_COUNT,
+  payload: hideSpyCount,
+});
+
+export const setModeratorModeAction = (moderatorMode) => ({
+  type: SET_MODERATOR_MODE,
+  payload: moderatorMode,
+});
+
+export const setModeratorLocationAction = (moderatorLocation) => ({
+  type: SET_MODERATOR_LOCATION,
+  payload: moderatorLocation,
 });

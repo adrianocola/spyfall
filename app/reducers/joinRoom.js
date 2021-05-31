@@ -9,11 +9,11 @@ const initialState = {
 };
 
 export default (state = initialState, action) => {
-  switch(action.type){
+  switch (action.type) {
     case SET_ROOM_ID:
-      return {...state, roomId: (action.payload || '').toUpperCase()};
+      return { ...state, roomId: (action.payload || '').toUpperCase() };
     case SET_PLAYER_ID:
-      return {...state, player: (action.payload || '').toUpperCase()};
+      return { ...state, player: (action.payload || '').toUpperCase() };
     default: return state;
   }
 };

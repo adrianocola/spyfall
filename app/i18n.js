@@ -3,7 +3,7 @@ import XHR from 'i18next-xhr-backend';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { initReactI18next } from 'react-i18next';
 
-i18n
+export const i18nInit = i18n
 // load translation using xhr -> see /public/locales
 // learn more: https://github.com/i18next/i18next-xhr-backend
   .use(XHR)

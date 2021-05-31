@@ -7,6 +7,7 @@ const DynamicCdnWebpackPlugin = require('dynamic-cdn-webpack-plugin');
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const REACT_VERSION = require('react/package.json').version;
+const env = require('../env/prod');
 
 const resolvers = require('./resolvers');
 
@@ -26,7 +27,8 @@ module.exports = require('./webpack.base.babel')({
   plugins: [
     // Minify and optimize the index.html
     new HtmlWebpackPlugin({
-      template: 'app/index.html',
+      template: 'app/index.ejs',
+      templateParameters: env,
       minify: {
         removeComments: true,
         collapseWhitespace: true,
@@ -43,9 +45,9 @@ module.exports = require('./webpack.base.babel')({
     }),
     new DynamicCdnWebpackPlugin({
       // verbose: true,
-      resolver: (moduleName, version, options) => {
+      resolver: (moduleName, version) => {
         const res = resolvers[moduleName];
-        if(!res) return null;
+        if (!res) return null;
         return {
           name: moduleName,
           var: res.var,

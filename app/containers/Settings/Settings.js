@@ -1,20 +1,35 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { css } from 'emotion';
-import { connect } from 'react-redux';
-import { Row, Col, Input, Button} from 'reactstrap';
+import { Button, Col, Input, Row } from 'reactstrap';
 import Localized from 'components/Localized/Localized';
 import LocationsCount from 'components/LocationsCount/LocationsCount';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { selectAllLocationsAction, deselectAllLocationsAction } from 'actions/config';
+import { TiDelete } from 'react-icons/ti';
+import { SHADES } from 'styles/consts';
+import { useSelectAll } from 'selectors/selectAll';
+import { logEvent } from 'utils/analytics';
 
 import DefaultLocationsList from './DefaultLocationsList';
 import CustomLocationsList from './CustomLocationsList';
+import FilteredLocationsList from './FilteredLocationsList';
 import ExportLocations from './ExportLocations';
 import DownloadLocations from './DownloadLocations';
 
-export const Settings = ({selectAllLocations, deselectAllLocations}) => {
+export const Settings = () => {
   const [t] = useTranslation();
+  const [filter, setFilter] = useState('');
+  const { selectAllLocations, deselectAllLocations } = useSelectAll();
+
+  const onFilterChange = useCallback((event) => {
+    logEvent('LOCATIONS_FILTER');
+    setFilter(event.target.value);
+  }, []);
+
+  const onClearFilter = useCallback(() => {
+    logEvent('LOCATIONS_FILTER_CLEAR');
+    setFilter('');
+  }, []);
 
   return (
     <Row className={`${styles.container} justify-content-center`}>
@@ -26,12 +41,18 @@ export const Settings = ({selectAllLocations, deselectAllLocations}) => {
         </Row>
         <Row className={`${styles.filterContainer} justify-content-center`}>
           <Col className="text-center">
-            <Input placeholder={t('interface.filter')} />
+            <Input placeholder={t('interface.filter')} value={filter} onChange={onFilterChange} />
+            {!!filter && <TiDelete className={styles.clearFilter} onClick={onClearFilter} />}
           </Col>
         </Row>
-        <DefaultLocationsList version={1} onSelectAll={selectAllLocations} onDeselectAll={deselectAllLocations} />
-        <DefaultLocationsList version={2} onSelectAll={selectAllLocations} onDeselectAll={deselectAllLocations} />
-        <CustomLocationsList onSelectAll={selectAllLocations} onDeselectAll={deselectAllLocations} />
+        {!filter && (
+          <>
+            <DefaultLocationsList version={1} onSelectAll={selectAllLocations} onDeselectAll={deselectAllLocations} />
+            <DefaultLocationsList version={2} onSelectAll={selectAllLocations} onDeselectAll={deselectAllLocations} />
+            <CustomLocationsList onSelectAll={selectAllLocations} onDeselectAll={deselectAllLocations} />
+          </>
+        )}
+        {!!filter && <FilteredLocationsList filter={filter} />}
         <ExportLocations />
         <DownloadLocations />
         <Row className={`${styles.backContainer} justify-content-center`}>
@@ -65,11 +86,17 @@ const styles = {
       textDecoration: 'none',
     },
   }),
+  clearFilter: css({
+    position: 'absolute',
+    right: 25,
+    top: 8,
+    fontSize: 22,
+    color: SHADES.light,
+    cursor: 'pointer',
+    '&:hover': {
+      color: SHADES.darker,
+    },
+  }),
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  selectAllLocations: (locationsIds) => dispatch(selectAllLocationsAction(locationsIds)),
-  deselectAllLocations: (locationsIds) => dispatch(deselectAllLocationsAction(locationsIds)),
-});
-
-export default connect(null, mapDispatchToProps)(Settings);
+export default React.memo(Settings);

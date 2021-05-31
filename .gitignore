@@ -7,4 +7,7 @@ secret.json
 .firebaserc.json
 .firebase/
 build/
+env/dev.js
+env/prod.js
 functions/lib/*.js
+firebase-debug.log

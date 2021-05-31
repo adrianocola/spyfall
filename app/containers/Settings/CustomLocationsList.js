@@ -1,15 +1,15 @@
 import React from 'react';
 import { css } from 'emotion';
-import { connect } from 'react-redux';
-import { Row, Col, Button} from 'reactstrap';
+import { Button, Col, Row } from 'reactstrap';
 import Localized from 'components/Localized/Localized';
 import SelectAll from 'components/SelectAll/SelectAll';
-import { createCustomLocationAction } from 'actions/config';
-import {logEvent} from 'utils/analytics';
+import { useCustomLocations } from 'selectors/customLocations';
+import { logEvent } from 'utils/analytics';
 
 import Location from './Location';
 
-export const CustomLocationsList = ({customLocations, onSelectAll, onDeselectAll, createCustomLocation}) => {
+export const CustomLocationsList = ({ onSelectAll, onDeselectAll }) => {
+  const { customLocations, createCustomLocation } = useCustomLocations();
   const onSelectAllClick = () => {
     logEvent('SETTINGS_ON_SELECT_ALL');
     onSelectAll(Object.keys(customLocations));
@@ -62,12 +62,4 @@ const styles = {
   }),
 };
 
-const mapStateToProps = (state) => ({
-  customLocations: state.config.customLocations,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  createCustomLocation: () => dispatch(createCustomLocationAction()),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(CustomLocationsList);
+export default React.memo(CustomLocationsList);

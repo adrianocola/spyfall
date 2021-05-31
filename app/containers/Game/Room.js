@@ -1,32 +1,35 @@
 import React, { useState } from 'react';
 import { css } from 'emotion';
-import { Row, Col, Button } from 'reactstrap';
-import { connect } from 'react-redux';
-import {SHADES} from 'styles/consts';
+import { Button, Col, Row } from 'reactstrap';
+import { SHADES } from 'styles/consts';
 import { Link } from 'react-router-dom';
 import { GoClippy } from 'react-icons/go';
-import { setRoomConnectedAction } from 'actions/session';
-import { refreshRoomId } from 'actions/room';
 import ButtonWithLoading from 'components/ButtonWithLoading/ButtonWithLoading';
 import Localized from 'components/Localized/Localized';
-import { resetGame, deleteGame } from 'services/game';
+import { deleteGame, resetGame } from 'services/game';
 import copyToClipboard from 'utils/copyToClipboard';
-import {showError} from 'utils/toast';
-import {logEvent} from 'utils/analytics';
+import { showError, showSuccess } from 'utils/toast';
+import { logEvent } from 'utils/analytics';
+import { useTranslation } from 'react-i18next';
+import { useRoomConnected } from 'selectors/sessionRoomConnected';
+import { useRoomId } from 'selectors/roomId';
 
-export const Room = ({roomId, roomConnected, setRoomConnected, ...props}) => {
+export const Room = ({ started }) => {
   const [loading, setLoading] = useState(false);
+  const [roomId, refreshRoomId] = useRoomId();
+  const [roomConnected, setRoomConnected] = useRoomConnected();
+  const [t] = useTranslation();
 
   const onCreateRoom = async () => {
     logEvent('ROOM_CREATE');
     setLoading(true);
 
-    try{
+    try {
       await resetGame(true);
       setRoomConnected(true);
-    }catch(err){
+    } catch (err) {
       showError(null, err);
-      props.refreshRoomId();
+      refreshRoomId();
     }
 
     setLoading(false);
@@ -35,7 +38,7 @@ export const Room = ({roomId, roomConnected, setRoomConnected, ...props}) => {
   const onRefreshRoom = async () => {
     logEvent('ROOM_REFRESH');
     await deleteGame();
-    props.refreshRoomId();
+    refreshRoomId();
     await onCreateRoom();
   };
 
@@ -45,11 +48,16 @@ export const Room = ({roomId, roomConnected, setRoomConnected, ...props}) => {
     setRoomConnected(false);
   };
 
-  if(roomConnected){
+  const onRoomCopy = () => {
+    copyToClipboard(`${window.location.origin}/join/${roomId}`);
+    showSuccess(t('interface.link_copied'));
+  };
+
+  if (roomConnected) {
     return (
       <Row className={styles.roomControllerContainer}>
         <Col xs={12} sm={5}>
-          <ButtonWithLoading outline color="secondary" loading={loading} block className={styles.roomId} onClick={() => copyToClipboard(roomId)}>
+          <ButtonWithLoading outline color="secondary" loading={loading} block className={styles.roomId} onClick={onRoomCopy}>
             <Localized name="interface.room" />
             {': '}
             <span>{roomId}</span>
@@ -65,6 +73,8 @@ export const Room = ({roomId, roomConnected, setRoomConnected, ...props}) => {
       </Row>
     );
   }
+
+  if (started) return null;
 
   return (
     <Row className={styles.roomControllerContainer}>
@@ -123,15 +133,4 @@ const styles = {
   }),
 };
 
-const mapStateToProps = (state) => ({
-  roomId: state.room.id,
-  roomConnected: state.session.roomConnected,
-  userId: state.root.userId,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  setRoomConnected: (connected) => dispatch(setRoomConnectedAction(connected)),
-  refreshRoomId: () => dispatch(refreshRoomId()),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Room);
+export default React.memo(Room);

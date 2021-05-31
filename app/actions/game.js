@@ -5,7 +5,6 @@ export const resetGameAction = () => ({
   type: RESET_GAME,
 });
 
-
 export const updateGameAction = (game) => ({
   type: UPDATE_GAME,
   payload: game,
