@@ -24,6 +24,7 @@
     "release": "npm run build && npm run deploy-functions && npm run deploy-translations",
     "release-prod": "npm run build-prod && npm run deploy-functions-prod && npm run deploy-translations-prod",
     "start": "cross-env NODE_ENV=development webpack-dev-server --hot --config config/webpack.dev.babel.js --port 4000",
+    "start-prod": "cross-env NODE_ENV=production webpack-dev-server --hot --config config/webpack.prod.babel.js --port 4000",
     "clean": "npm run test:clean && npm run build:clean",
     "lint": "npm run lint:js",
     "lint:eslint": "eslint --ignore-path .gitignore",

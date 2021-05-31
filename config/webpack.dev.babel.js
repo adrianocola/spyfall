@@ -7,9 +7,10 @@ const path = require('path');
 // const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
-const env = require('../env/dev');
+const env = require('../env/dev'); // eslint-disable-line import/no-unresolved
 
 module.exports = require('./webpack.base.babel')({
+  env,
   mode: 'development',
   // Add hot reloading in development
   entry: _.compact([

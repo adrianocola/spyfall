@@ -7,11 +7,12 @@ const DynamicCdnWebpackPlugin = require('dynamic-cdn-webpack-plugin');
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const REACT_VERSION = require('react/package.json').version;
-const env = require('../env/prod');
+const env = require('../env/prod'); // eslint-disable-line import/no-unresolved
 
 const resolvers = require('./resolvers');
 
 module.exports = require('./webpack.base.babel')({
+  env,
   mode: 'production',
   // In production, we skip all hot-reloading stuff
   entry: [
@@ -20,8 +21,8 @@ module.exports = require('./webpack.base.babel')({
 
   // Utilize long-term caching by adding content hashes (not compilation hashes) to compiled assets
   output: {
-    filename: '[name].[chunkhash].js',
-    chunkFilename: '[name].[chunkhash].chunk.js',
+    filename: '[name].[hash].js',
+    chunkFilename: '[name].[hash].chunk.js',
   },
 
   plugins: [
