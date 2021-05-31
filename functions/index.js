@@ -34,8 +34,8 @@ const updateTranslations = async () => {
   return status;
 };
 
-// once per day
-exports.deleteOld = functions.runWith({ timeoutSeconds: 120, memory: '512MB' }).pubsub.schedule('0 0 * * *').onRun(async () => {
+// every hour
+exports.deleteOld = functions.runWith({ timeoutSeconds: 120, memory: '256MB' }).pubsub.schedule('0 * * * *').onRun(async () => {
   const limit = promiseLimit(10);
   const timeAgo = moment.utc().subtract(2, 'weeks').valueOf();
 
