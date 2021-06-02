@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { css } from 'emotion';
 import { Button, Col, Row } from 'reactstrap';
-import { SHADES } from 'styles/consts';
 import { Link } from 'react-router-dom';
 import { GoClippy } from 'react-icons/go';
 import ButtonWithLoading from 'components/ButtonWithLoading/ButtonWithLoading';
@@ -65,10 +64,10 @@ export const Room = ({ started }) => {
             <GoClippy className={styles.copy} />
           </ButtonWithLoading>
         </Col>
-        <Col xs={12} sm={7} className={styles.roomHelp}>
+        <Col xs={12} sm={7} className={`${styles.roomHelp} text-secondary`}>
           <Localized name="interface.room_instructions" />
-          <div className={styles.refresh} onClick={onRefreshRoom}>↻</div>
-          <div className={styles.close} onClick={onCloseRoom}>✘</div>
+          <div className={`${styles.refresh} text-dark`} onClick={onRefreshRoom}>↻</div>
+          <div className={`${styles.close} text-dark`} onClick={onCloseRoom}>✘</div>
         </Col>
       </Row>
     );
@@ -108,7 +107,6 @@ const styles = {
   }),
   roomHelp: css({
     fontSize: '0.7rem',
-    color: SHADES.light,
     textAlign: 'center',
   }),
   copy: css({
@@ -119,17 +117,11 @@ const styles = {
     display: 'inline-block',
     marginLeft: 10,
     cursor: 'pointer',
-    '&:hover': {
-      color: SHADES.darker,
-    },
   }),
   close: css({
     display: 'inline-block',
     marginLeft: 10,
     cursor: 'pointer',
-    '&:hover': {
-      color: SHADES.darker,
-    },
   }),
 };
 

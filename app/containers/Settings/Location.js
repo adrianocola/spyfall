@@ -6,7 +6,6 @@ import CogIcon from 'components/CogIcon/CogIcon';
 import ReactHtmlParser from 'react-html-parser';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { COLORS, SHADES } from 'styles/consts';
 import { logEvent } from 'utils/analytics';
 import { useSelectedLocation } from 'selectors/selectedLocation';
 import { useCustomLocations } from 'selectors/customLocations';
@@ -56,7 +55,7 @@ export const Location = React.memo(({ locationId, location, description, disable
   };
 
   return (
-    <Row className={`${styles.container} justify-content-center`}>
+    <Row className={`${styles.container} border-bottom justify-content-center`}>
       <Col xs={10}>
         <Row className="justify-content-between">
           <Col xs="auto" className="align-items-center">
@@ -64,7 +63,7 @@ export const Location = React.memo(({ locationId, location, description, disable
               <Input type="checkbox" checked={selected} onChange={selected ? () => deselectLocation() : () => selectLocation()} />
               {disabled ? ReactHtmlParser(t(`location.${locationId}`)) : location.name}
             </Label>
-            {!!description && <div className={styles.description}>{description}</div>}
+            {!!description && <div className={`${styles.description} text-muted`}>{description}</div>}
           </Col>
           <Col xs="auto" onClick={toggle}>
             <CogIcon />
@@ -119,7 +118,7 @@ export const Location = React.memo(({ locationId, location, description, disable
                       <Link to="#" onClick={onSave}>Save</Link>
                     </Col>
                     <Col xs={6}>
-                      <Link className={styles.deleteLocation} to="#" onClick={onDelete}>Delete</Link>
+                      <Link className="text-danger" to="#" onClick={onDelete}>Delete</Link>
                     </Col>
                   </Row>
                 </>
@@ -136,7 +135,6 @@ const styles = {
   container: css({
     paddingTop: 10,
     paddingBottom: 10,
-    borderBottom: `1px solid ${SHADES.lighter}`,
   }),
   fields: css({
     marginTop: 3,
@@ -151,12 +149,8 @@ const styles = {
   linksContainer: css({
     marginTop: 20,
   }),
-  deleteLocation: css({
-    color: COLORS.red,
-  }),
   description: css({
     display: 'inline-block',
-    color: SHADES.light2,
     marginLeft: 10,
     fontSize: 12,
   }),

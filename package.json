@@ -118,7 +118,7 @@
     "react-router-dom": "5.2.0",
     "react-spinners": "0.11.0",
     "react-test-renderer": "17.0.1",
-    "react-toastify": "5.5.0",
+    "react-toastify": "7.0.4",
     "reactstrap": "8.9.0",
     "redux": "4.1.0",
     "redux-persist": "5.10.0",

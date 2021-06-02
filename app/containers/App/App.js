@@ -3,7 +3,6 @@ import { Helmet } from 'react-helmet';
 import { Link, Route, Switch } from 'react-router-dom';
 import { css } from 'emotion';
 import i18n, { i18nInit } from 'i18n';
-import { MEDIA, SHADES } from 'styles/consts';
 import { ToastContainer } from 'react-toastify';
 import Loadable from 'react-loadable';
 import { Col, Container, Input, Row } from 'reactstrap';
@@ -67,13 +66,13 @@ export const App = () => {
       <Row className="justify-content-center">
         <Col xs={12} md={8} lg={6}>
           <Row className="align-items-center justify-content-center">
-            <Col xs="12" sm="4" className="text-center">
+            <Col xs="12" sm="4" className={`${styles.topItems} text-center`}>
               <Link to="/">
                 <SpyIcon />
                 Spyfall
               </Link>
             </Col>
-            <Col xs="12" sm="8" className={`${styles.languageSelector} text-center`}>
+            <Col xs="12" sm="8" className={`${styles.topItems} text-center`}>
               <Input type="select" name="languages" id="languages" value={language} onChange={(evt) => changeLanguage(evt.target.value)}>
                 {TRANSLATIONS.map((translation) =>
                   <option key={translation.id} value={translation.id}>{translation.name} - {translations[translation.id] || 0}%</option>
@@ -103,7 +102,7 @@ export const App = () => {
               </a>
             </Col>
           </Row>
-          <Row className={styles.footer}>
+          <Row className={`${styles.footer} text-secondary`}>
             <Col className="text-center">
               <Row>
                 <Col>
@@ -133,10 +132,8 @@ const styles = {
   container: css({
     paddingTop: 50,
   }),
-  languageSelector: css({
-    [MEDIA.xsOnly]: {
-      marginTop: 10,
-    },
+  topItems: css({
+    marginTop: 10,
   }),
   localizationContainer: css({
     marginTop: 40,
@@ -155,7 +152,6 @@ const styles = {
     marginTop: 20,
     marginBottom: 30,
     fontSize: '0.8rem',
-    color: SHADES.light,
   }),
 };
 

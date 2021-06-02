@@ -3,13 +3,12 @@ import { Col, Row } from 'reactstrap';
 import ReactHtmlParser from 'react-html-parser';
 import { css } from 'emotion';
 import cn from 'classnames';
-import { DARK_COLORS, SHADES } from 'styles/consts';
 
 export const Location = ({ locationObj, crossOutLocation, state }) => {
-  const className = cn(styles.location, {
+  const className = cn(styles.location, 'border-bottom', {
     [styles.previous]: state?.previous,
     [styles.crossedOut]: state?.crossedOut,
-    [styles.highlight]: state?.highlight,
+    'font-weight-bold text-danger': state?.highlight,
   });
 
   return (
@@ -25,7 +24,6 @@ export const Location = ({ locationObj, crossOutLocation, state }) => {
 
 const styles = {
   location: css({
-    borderBottom: `1px solid ${SHADES.lighter}`,
     textAlign: 'center',
     paddingLeft: 10,
     paddingRight: 10,
@@ -39,10 +37,6 @@ const styles = {
   }),
   crossedOut: css({
     textDecoration: 'line-through',
-  }),
-  highlight: css({
-    fontWeight: 'bold',
-    color: DARK_COLORS.red,
   }),
 };
 

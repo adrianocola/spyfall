@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { css } from 'emotion';
-import { DARK_COLORS, SHADES } from 'styles/consts';
 
 const COUNTDOWN_TIME_SEC = 15;
 
@@ -40,22 +39,15 @@ export const Countdown = ({ showCountdown, running, onCountdownComplete }) => {
 
   if (!showCountdown) return null;
 
-  return <div className={styles.countdown}>{countdown}</div>;
+  return <div className={`${styles.countdown} text-danger`}>{countdown}</div>;
 };
 
 const styles = {
-  timer: css({
-    color: `${SHADES.darker} !important`,
-  }),
   countdown: css({
     position: 'absolute',
     top: 9,
     right: 25,
     fontSize: 14,
-    color: `${DARK_COLORS.red} !important`,
-  }),
-  finished: css({
-    color: `${DARK_COLORS.red} !important`,
   }),
 };
 

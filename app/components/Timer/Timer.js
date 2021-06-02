@@ -1,9 +1,7 @@
 import _ from 'lodash';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { css } from 'emotion';
 import { Button } from 'reactstrap';
 import beep from 'services/beep';
-import { DARK_COLORS, SHADES } from 'styles/consts';
 import { logEvent } from 'utils/analytics';
 
 import Countdown from './Countdown';
@@ -62,7 +60,7 @@ export const Timer = ({ initialValue, showCountdown, running, onComplete, onCoun
   }, [onComplete, time]);
 
   return (
-    <Button color={finishedRunning ? 'danger' : 'secondary'} disabled outline block className={styles.timer}>
+    <Button color={finishedRunning ? 'danger' : 'secondary'} disabled outline block className="text-dark">
       {!finishedRunning && (
         <div>
           <span>{Math.floor(time / 60)}:{_.padStart(time % 60, 2, '0')}</span>
@@ -71,7 +69,7 @@ export const Timer = ({ initialValue, showCountdown, running, onComplete, onCoun
       )}
       {finishedRunning && (
         <div
-          className={`${styles.finished} ${animateEnd ? END_ANIMATION : ''}`}
+          className={`text-danger ${animateEnd ? END_ANIMATION : ''}`}
           onMouseUp={toggleEndAnimation}
         >
           0:00
@@ -79,15 +77,6 @@ export const Timer = ({ initialValue, showCountdown, running, onComplete, onCoun
       )}
     </Button>
   );
-};
-
-const styles = {
-  timer: css({
-    color: `${SHADES.darker} !important`,
-  }),
-  finished: css({
-    color: `${DARK_COLORS.red} !important`,
-  }),
 };
 
 export default React.memo(Timer);

@@ -6,7 +6,6 @@ import LocationsCount from 'components/LocationsCount/LocationsCount';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { TiDelete } from 'react-icons/ti';
-import { SHADES } from 'styles/consts';
 import { useSelectAll } from 'selectors/selectAll';
 import { logEvent } from 'utils/analytics';
 
@@ -42,7 +41,7 @@ export const Settings = () => {
         <Row className={`${styles.filterContainer} justify-content-center`}>
           <Col className="text-center">
             <Input placeholder={t('interface.filter')} value={filter} onChange={onFilterChange} />
-            {!!filter && <TiDelete className={styles.clearFilter} onClick={onClearFilter} />}
+            {!!filter && <TiDelete className={`${styles.clearFilter} text-dark`} onClick={onClearFilter} />}
           </Col>
         </Row>
         {!filter && (
@@ -91,11 +90,7 @@ const styles = {
     right: 25,
     top: 8,
     fontSize: 22,
-    color: SHADES.light,
     cursor: 'pointer',
-    '&:hover': {
-      color: SHADES.darker,
-    },
   }),
 };
 

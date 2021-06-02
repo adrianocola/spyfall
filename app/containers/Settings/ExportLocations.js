@@ -9,7 +9,6 @@ import roomIdGenerator from 'services/roomIdGenerator';
 import { GoClippy } from 'react-icons/go';
 import { useTranslation } from 'react-i18next';
 import copyToClipboard from 'utils/copyToClipboard';
-import { SHADES } from 'styles/consts';
 import { showError, showSuccess } from 'utils/toast';
 import { ID_LENGTH } from 'consts';
 import { useCustomLocations } from 'selectors/customLocations';
@@ -84,7 +83,7 @@ export const ExportLocations = () => {
             <GoClippy className={styles.copy} />
           </Button>
         </Col>
-        <Col xs={12} sm={6} className={styles.exportHelp}>
+        <Col xs={12} sm={6} className={`${styles.exportHelp} text-secondary`}>
           <Localized name="interface.export_help" />
           <div className={styles.close} onClick={onCloseExported}>✘</div>
         </Col>
@@ -101,7 +100,7 @@ export const ExportLocations = () => {
               <Input type="text" placeholder={t('interface.export_id')} value={importId} maxLength={ID_LENGTH} onChange={(evt) => setImportId(_.toUpper(evt.target.value))} />
             </Col>
             <Col xs={2}>
-              <span className={styles.close} onClick={onCloseImporting}>✘</span>
+              <span className={`${styles.close} text-secondary`} onClick={onCloseImporting}>✘</span>
             </Col>
           </Row>
 
@@ -145,7 +144,6 @@ const styles = {
   }),
   exportHelp: css({
     fontSize: '0.7rem',
-    color: SHADES.light,
     textAlign: 'center',
   }),
   copy: css({
@@ -156,9 +154,6 @@ const styles = {
     display: 'inline-block',
     marginLeft: 10,
     cursor: 'pointer',
-    '&:hover': {
-      color: SHADES.darker,
-    },
   }),
 };
 

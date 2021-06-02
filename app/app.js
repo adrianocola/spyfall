@@ -1,5 +1,6 @@
 import 'babel-polyfill';
 import 'react-hot-loader';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import 'animate.css';
 
 // Import all the third party stuff
