@@ -12,6 +12,7 @@ import SpyCount from 'components/SpyCount/SpyCount';
 import { useGameSpies } from 'selectors/gameSpies';
 import { useConfigHideSpyCount } from 'selectors/configHideSpyCount';
 import { useGameAllSpies } from 'selectors/gameAllSpies';
+
 import TimerManager from './TimerManager';
 
 export const GameInfo = () => {

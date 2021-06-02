@@ -9,6 +9,7 @@ import ResultsSpies from 'components/ResultsSpies/ResultsSpies';
 import { database } from 'services/firebase';
 import Timer from 'components/Timer/Timer';
 import Spinner from 'components/Spinner/Spinner';
+import ModeratorMode from 'components/ModeratorMode/ModeratorMode';
 import { showError } from 'utils/toast';
 import usePresence from 'hooks/usePresence';
 import { GAME_STATES } from 'consts';
@@ -80,6 +81,7 @@ export const RoomClient = ({ roomId, player }) => {
           </Col>
         </Row>
       )}
+      {started && room.moderatorMode && <ModeratorMode />}
       <Row className={styles.stateContainer}>
         <Col>
           {started && <Button color="success" block onClick={toggleShowRole}>{player} - <Localized name="interface.show_my_role" /></Button>}
@@ -88,9 +90,11 @@ export const RoomClient = ({ roomId, player }) => {
         </Col>
       </Row>
       {started && (
-        <SpyCount spyCount={room.spyCount} spies={room.spies} allSpies={room.allSpies} hideSpyCount={room.hideSpyCount} />
+        <>
+          <SpyCount spyCount={room.spyCount} spies={room.spies} allSpies={room.allSpies} hideSpyCount={room.hideSpyCount} />
+          <RolePopup isOpen={showRole} toggle={toggleShowRole} player={player} location={room.location} role={room.playersRoles[userId]} customLocations={gameLocations} />
+        </>
       )}
-      {started && <RolePopup isOpen={showRole} toggle={toggleShowRole} player={player} location={room.location} role={room.playersRoles[userId]} customLocations={gameLocations} />}
       <Row className={styles.stateContainer}>
         <Col className="text-center">
           <h4><Localized name="interface.game_locations" /> ({locationsSize})</h4>

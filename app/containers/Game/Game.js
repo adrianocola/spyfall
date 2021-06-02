@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Col, Row } from 'reactstrap';
 import Localized from 'components/Localized/Localized';
 import LocationsCount from 'components/LocationsCount/LocationsCount';
+import ModeratorMode from 'components/ModeratorMode/ModeratorMode';
 import { database } from 'services/firebase';
 import { GAME_STATES } from 'consts';
 import CogIcon from 'components/CogIcon/CogIcon';
@@ -59,6 +60,7 @@ export const Game = () => {
           {moderatorMode && <GameModeratorLocationSelector started={started} />}
         </>
       )}
+      {started && moderatorMode && <ModeratorMode />}
       <GamePlayers started={started} remotePlayers={remotePlayers} />
       {!started && (
         <>
