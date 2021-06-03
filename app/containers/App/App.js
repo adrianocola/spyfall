@@ -15,6 +15,7 @@ import { useTranslations } from 'selectors/translations';
 import { useUserId } from 'selectors/userId';
 import { useTranslationsImportTime } from 'selectors/translationsImportTime';
 import useDarkMode from 'hooks/useDarkMode';
+import { logEvent } from 'utils/analytics';
 
 import SpinnerModal from 'components/SpinnerModal/SpinnerModal';
 import SpyIcon from 'components/SpyIcon/SpyIcon';
@@ -56,6 +57,10 @@ export const App = () => {
       importTranslations();
     });
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    logEvent('THEME', darkMode.value ? 'dark' : 'light');
+  }, [darkMode.value]);
 
   if (loading) return null;
 
