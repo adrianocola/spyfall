@@ -5,7 +5,7 @@ import Localized from 'components/Localized/Localized';
 import LocationsCount from 'components/LocationsCount/LocationsCount';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { TiDelete } from 'react-icons/ti';
+import { GoX } from 'react-icons/go';
 import { useSelectAll } from 'selectors/selectAll';
 import { logEvent } from 'utils/analytics';
 
@@ -41,7 +41,7 @@ export const Settings = () => {
         <Row className={`${styles.filterContainer} justify-content-center`}>
           <Col className="text-center">
             <Input placeholder={t('interface.filter')} value={filter} onChange={onFilterChange} />
-            {!!filter && <TiDelete className={`${styles.clearFilter} text-dark`} onClick={onClearFilter} />}
+            {!!filter && <GoX className={`${styles.clearFilter} text-dark`} onClick={onClearFilter} />}
           </Col>
         </Row>
         {!filter && (

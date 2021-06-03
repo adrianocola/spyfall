@@ -60,7 +60,7 @@ export const Timer = ({ initialValue, showCountdown, running, onComplete, onCoun
   }, [onComplete, time]);
 
   return (
-    <Button color={finishedRunning ? 'danger' : 'secondary'} disabled outline block className="text-dark">
+    <Button color={finishedRunning ? 'danger' : 'secondary'} disabled outline block>
       {!finishedRunning && (
         <div>
           <span>{Math.floor(time / 60)}:{_.padStart(time % 60, 2, '0')}</span>

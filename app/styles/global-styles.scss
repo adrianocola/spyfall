@@ -5,6 +5,7 @@ body {
 }
 
 body {
+  transition: all 0.5s ease;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
@@ -13,7 +14,6 @@ body.fontLoaded {
 }
 
 #app {
-  background-color: #fafafa;
   min-height: 100%;
   min-width: 100%;
 }
@@ -21,4 +21,13 @@ body.fontLoaded {
 p,
 label {
   line-height: 1.5em;
+}
+
+.bootstrap-dark input, .bootstrap-dark select {
+  background-color: #171717 !important;
+  color: #ffffff !important;
+}
+
+.bootstrap-dark a {
+  color: #007bff !important;
 }

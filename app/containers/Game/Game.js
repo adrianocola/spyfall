@@ -51,7 +51,7 @@ export const Game = () => {
     <div className={styles.container}>
       {!started && (
         <>
-          <Row className={styles.locationsContainer}>
+          <Row className={`${styles.locationsContainer} align-items-center justify-content-center`}>
             <Col className="text-center">
               <a href="#" onClick={() => { setShowLocationsPopup(true) }}><Localized name="interface.game_locations" /> (<LocationsCount />)</a>
               <Link to="/settings"><CogIcon className={styles.cogIcon} /></Link>
@@ -83,7 +83,8 @@ const styles = {
     marginTop: 20,
   }),
   cogIcon: css({
-    marginLeft: 5,
+    marginLeft: 7,
+    marginBottom: 2,
   }),
 };
 

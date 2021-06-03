@@ -5,14 +5,16 @@ import { css } from 'emotion';
 import i18n, { i18nInit } from 'i18n';
 import { ToastContainer } from 'react-toastify';
 import Loadable from 'react-loadable';
+import { DarkModeSwitch } from 'react-toggle-dark-mode';
 import { Col, Container, Input, Row } from 'reactstrap';
 import { auth, database } from 'services/firebase';
-import { TRANSLATIONS } from 'consts';
+import { DARK, LIGHT, TRANSLATIONS } from 'consts';
 import Discord from 'images/discord.png';
 import { useLanguage } from 'selectors/language';
 import { useTranslations } from 'selectors/translations';
 import { useUserId } from 'selectors/userId';
 import { useTranslationsImportTime } from 'selectors/translationsImportTime';
+import useDarkMode from 'hooks/useDarkMode';
 
 import SpinnerModal from 'components/SpinnerModal/SpinnerModal';
 import SpyIcon from 'components/SpyIcon/SpyIcon';
@@ -27,6 +29,7 @@ export const App = () => {
   const [language, setLanguage] = useLanguage();
   const [translations, setTranslations] = useTranslations();
   const translationsImportTime = useTranslationsImportTime();
+  const darkMode = useDarkMode();
 
   const changeLanguage = (newLanguage) => {
     i18n.changeLanguage(newLanguage);
@@ -66,13 +69,22 @@ export const App = () => {
       <Row className="justify-content-center">
         <Col xs={12} md={8} lg={6}>
           <Row className="align-items-center justify-content-center">
-            <Col xs="12" sm="4" className={`${styles.topItems} text-center`}>
+            <Col xs="8" sm="3" className={`${styles.topItems} text-left`}>
               <Link to="/">
                 <SpyIcon />
                 Spyfall
               </Link>
             </Col>
-            <Col xs="12" sm="8" className={`${styles.topItems} text-center`}>
+            <Col xs="4" sm="2" className={`${styles.topItems} text-right`}>
+              <DarkModeSwitch
+                onChange={darkMode.toggle}
+                checked={darkMode.value}
+                sunColor={DARK}
+                moonColor={LIGHT}
+                size={24}
+              />
+            </Col>
+            <Col xs="12" sm="7" className={`${styles.topItems} text-center`}>
               <Input type="select" name="languages" id="languages" value={language} onChange={(evt) => changeLanguage(evt.target.value)}>
                 {TRANSLATIONS.map((translation) =>
                   <option key={translation.id} value={translation.id}>{translation.name} - {translations[translation.id] || 0}%</option>

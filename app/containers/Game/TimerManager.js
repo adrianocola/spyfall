@@ -23,7 +23,7 @@ export const TimerManager = () => {
   const stopTimer = useCallback(() => {
     setTimerCompleted(true);
     logEvent('TIMER_END');
-    updateGame({ timerRunning: false, showCountdown: false });
+    updateGame({ time: 0, timerRunning: false, showCountdown: false });
   }, []);
 
   return (

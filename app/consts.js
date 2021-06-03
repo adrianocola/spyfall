@@ -13,6 +13,9 @@ export const GAME_STATES = {
   STOPPED: 'STOPPED',
 };
 
+export const LIGHT = '#DDDDDD';
+export const DARK = '#333333';
+
 export const DEFAULT_LOCATIONS = {
   // spyfall 1
   airplane: 1,

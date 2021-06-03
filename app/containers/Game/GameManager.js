@@ -23,6 +23,7 @@ import { getConfigModeratorMode } from 'selectors/configModeratorMode';
 import { getConfigModeratorLocation } from 'selectors/configModeratorLocation';
 import { getConfigHideSpyCount } from 'selectors/configHideSpyCount';
 
+import { getConfigTime } from 'selectors/configTime';
 import ResultPopup from './ResultPopup';
 
 const getSpiesNamesOrIds = (spiesIds, remotePlayers) =>
@@ -73,6 +74,7 @@ export const GameManager = ({ started, remotePlayers }) => {
     const prevSpies = getGameSpies();
     const players = getConfigPlayers();
     const spyCount = getConfigSpyCount();
+    const time = getConfigTime();
     const customLocations = getCustomLocations();
     const moderatorMode = getConfigModeratorMode();
     const moderatorLocation = getConfigModeratorLocation();
@@ -179,6 +181,7 @@ export const GameManager = ({ started, remotePlayers }) => {
       location: selectedLocationId,
       prevLocation,
       spies,
+      time,
       showCountdown: autoStartTimer,
       hideSpyCount,
       allSpies,
