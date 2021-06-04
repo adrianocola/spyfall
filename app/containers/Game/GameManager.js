@@ -170,9 +170,18 @@ export const GameManager = ({ started, remotePlayers }) => {
 
     logDataEvent('GAME_STARTED', {
       event: DEFAULT_LOCATIONS[selectedLocationId] ? selectedLocationId : 'CUSTOM_LOCATION',
+      selectedLocationsCount: _.size(gameLocations),
+      customLocationsCount: _.size(customLocations),
+      localPlayersCount: _.size(players),
+      remotePlayersCount: _.size(remotePlayers),
+      playersCount: _.size(players) + _.size(remotePlayers),
+      realSpyCount: spies.length,
+      spyCount,
       moderatorMode,
       hideSpyCount,
       autoStartTimer,
+      time,
+      roomConnected,
     });
     updateGame({
       matchId: shortid.generate(),
