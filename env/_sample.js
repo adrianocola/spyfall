@@ -5,4 +5,5 @@ module.exports = {
   FIREBASE_APP_ID: '',
   FIREBASE_MEASUREMENT_ID: '',
   ADSENSE_CLIENT_ID: '',
+  GOOGLE_ANALYTICS: '',
 };

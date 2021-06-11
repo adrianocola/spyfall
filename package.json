@@ -108,6 +108,7 @@
     "pre-commit": "1.2.2",
     "react": "17.0.1",
     "react-dropzone": "10.2.2",
+    "react-ga": "3.3.0",
     "react-helmet": "5.2.1",
     "react-hot-loader": "4.13.0",
     "react-html-parser": "2.0.2",
