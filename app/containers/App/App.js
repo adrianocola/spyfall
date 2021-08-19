@@ -19,6 +19,7 @@ import { logEvent } from 'utils/analytics';
 
 import SpinnerModal from 'components/SpinnerModal/SpinnerModal';
 import SpyIcon from 'components/SpyIcon/SpyIcon';
+import { AdBanner } from 'components/AdBanner/AdBanner';
 
 const LoadableSettings = Loadable({ loader: () => import('../Settings/Settings'), loading: SpinnerModal });
 const LoadableGame = Loadable({ loader: () => import('../Game/Game'), loading: SpinnerModal });
@@ -97,6 +98,7 @@ export const App = () => {
               </Input>
             </Col>
           </Row>
+          <AdBanner />
           <Switch>
             <Route exact path="/settings" component={LoadableSettings} />
             <Route exact path="/join" component={LoadableJoinRoom} />
