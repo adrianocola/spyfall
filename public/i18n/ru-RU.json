@@ -2,7 +2,7 @@
   "spy": "Шпион",
   "interface.spy": "Шпион",
   "interface.close": "Закрыть",
-  "interface.location": "Локация",
+  "interface.location": "Местоположение/Локация",
   "interface.game_locations": "Локации в игре",
   "interface.game_locations_custom": "Свои локации",
   "interface.role": "Роль",
