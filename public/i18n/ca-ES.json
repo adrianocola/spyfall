@@ -29,7 +29,7 @@
   "interface.error_room_connection": "Error de connexió o sala no vàlida!",
   "interface.error_room_invalid_player": "Demana al propietari de la sala crear un jugador amb el teu nom!",
   "interface.add_location": "Afegir lloc a mida",
-  "interface.all_spies": "All players are spies at this location",
+  "interface.all_spies": "Tots els jugadors són espies en aquesta localització",
   "interface.back_to_game": "Retorna al Joc",
   "interface.save": "Guardar",
   "interface.delete": "Eliminar",
