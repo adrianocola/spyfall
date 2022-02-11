@@ -101,7 +101,7 @@
     "lodash": "4.17.21",
     "ncp": "2.0.0",
     "node-plop": "0.26.2",
-    "node-sass": "4.14.1",
+    "node-sass": "7.0.0",
     "null-loader": "3.0.0",
     "patch-package": "6.4.7",
     "plop": "2.7.4",
