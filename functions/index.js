@@ -4,7 +4,7 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const moment = require('moment');
 const promiseLimit = require('promise-limit');
-const fetch = require('node-fetch');
+const axios = require('axios').default;
 
 const translationsMap = require('./lib/translations.js');
 
@@ -18,7 +18,7 @@ const CROWDIN_API = functions.config().crowdin.api;
 admin.initializeApp();
 
 const getCrowdinTranslations = () =>
-  fetch(`https://api.crowdin.com/api/project/adrianocola-spyfall/status?key=${CROWDIN_API}&json`).then((response) => response.json());
+  axios.get(`https://api.crowdin.com/api/project/adrianocola-spyfall/status?key=${CROWDIN_API}&json`).then((response) => response.data);
 
 const updateTranslations = async () => {
   const status = {};
