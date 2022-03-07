@@ -128,7 +128,7 @@
     "rimraf": "3.0.2",
     "sanitize.css": "10.0.0",
     "sass-loader": "7.3.1",
-    "shelljs": "0.8.4",
+    "shelljs": "0.8.5",
     "shortid": "2.2.16",
     "style-loader": "0.23.1",
     "terser-webpack-plugin": "2.3.8",
