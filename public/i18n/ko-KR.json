@@ -43,7 +43,7 @@
   "interface.export_help": "생성된 내보내기 ID를 사용하여 다른 기계에서 장소목록을 가져오시면 됩니다.",
   "interface.done": "완료!",
   "interface.error": "에러!",
-  "interface.link_copied": "Link copied to clipboard!",
+  "interface.link_copied": "URL이 복사되었습니다.",
   "interface.moderator_mode": "Moderator mode",
   "interface.auto_start_timer": "Start timer on game start",
   "interface.hide_spy_count": "Hide spy count",
