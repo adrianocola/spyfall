@@ -13,20 +13,28 @@ const translationsShortMap = _.reduce(translationsMap, (obj, translation) => {
   return obj;
 }, {});
 
-const CROWDIN_API = functions.config().crowdin.api;
+const CROWDIN_ACCESS_TOKEN = functions.config().crowdin.accesstoken;
 
 admin.initializeApp();
 
 const getCrowdinTranslations = () =>
-  axios.get(`https://api.crowdin.com/api/project/adrianocola-spyfall/status?key=${CROWDIN_API}&json`).then((response) => response.data);
+  axios.get('https://api.crowdin.com/api/v2/projects/285998/languages/progress', {
+    headers: {
+      Authorization: `Bearer ${CROWDIN_ACCESS_TOKEN}`,
+    },
+  }).then((response) => response.data.data);
 
 const updateTranslations = async () => {
   const status = {};
   const translations = await getCrowdinTranslations();
-  _.each(translations, (translation) => {
-    const code = translationsShortMap[translation.code];
-    if (!code) console.log('CODE NOT FOUND', translation.code);
-    status[code] = Math.round(100 * (translation.approved / translation.phrases));
+  _.each(translations, (translationData) => {
+    const translation = translationData.data;
+    const code = translationsShortMap[translation.languageId];
+    if (!code) {
+      console.log('CODE NOT FOUND', translation.languageId);
+      return;
+    }
+    status[code] = translation.translationProgress;
   });
 
   await admin.database().ref('translations').set(status);
