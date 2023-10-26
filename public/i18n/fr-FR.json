@@ -26,7 +26,7 @@
   "interface.game_connected": "Connecté à la partie",
   "interface.game_stopped": "Partie arrêtée",
   "interface.show_my_role": "Dévoiler mon rôle",
-  "interface.error_room_connection": "Erreur de connection ou partie invalide!",
+  "interface.error_room_connection": "Erreur de connexion ou partie invalide",
   "interface.error_room_invalid_player": "Demander à l'hôte de la partie de créer un joueur avec votre nom!",
   "interface.add_location": "Ajouter un lieu personnalisé",
   "interface.all_spies": "Tous les joueurs sont espions dans ce lieu.",
