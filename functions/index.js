@@ -18,7 +18,7 @@ const CROWDIN_ACCESS_TOKEN = functions.config().crowdin.accesstoken;
 admin.initializeApp();
 
 const getCrowdinTranslations = () =>
-  axios.get('https://api.crowdin.com/api/v2/projects/285998/languages/progress', {
+  axios.get('https://api.crowdin.com/api/v2/projects/285998/languages/progress?limit=500', {
     headers: {
       Authorization: `Bearer ${CROWDIN_ACCESS_TOKEN}`,
     },
