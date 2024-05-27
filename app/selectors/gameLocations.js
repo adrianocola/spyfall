@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
-import { DEFAULT_LOCATIONS } from 'consts';
+import { DEFAULT_LOCATIONS } from '@app/consts';
 import { selectedLocationsSelector } from './selectedLocations';
 import { customLocationsSelector } from './customLocations';
 

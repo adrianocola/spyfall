@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import { useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
-import { MAX_ROLES } from 'consts';
-import i18n from 'i18n';
+import { MAX_ROLES } from '@app/consts';
+import i18n from '@app/i18n';
 import { customLocationsSelector } from './customLocations';
 import { configModeratorLocationSelector } from './configModeratorLocation';
 import { languageSelector } from './language';

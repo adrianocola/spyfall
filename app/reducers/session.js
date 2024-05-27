@@ -1,7 +1,7 @@
 import {
   SET_ROOM_CONNECTED,
   SET_JOINED_ROOM,
-} from 'actions/session';
+} from '@actions/session';
 
 const initialState = {
   roomConnected: false,

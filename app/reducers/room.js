@@ -1,8 +1,8 @@
-import roomIdGenerator from 'services/roomIdGenerator';
+import roomIdGenerator from '@services/roomIdGenerator';
 
 import {
   REFRESH_ROOM_ID,
-} from 'actions/room';
+} from '@actions/room';
 
 const initialState = {
   id: roomIdGenerator(),

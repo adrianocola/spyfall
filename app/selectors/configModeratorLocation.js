@@ -1,6 +1,6 @@
-import { useSelectorAndDispatcher } from 'hooks/useSelectorAndDispatcher';
-import { setModeratorLocationAction } from 'actions/config';
-import { store } from 'store';
+import { useSelectorAndDispatcher } from '@hooks/useSelectorAndDispatcher';
+import { setModeratorLocationAction } from '@actions/config';
+import { store } from '@app/store';
 
 export const configModeratorLocationSelector = (state) => state.config.moderatorLocation;
 

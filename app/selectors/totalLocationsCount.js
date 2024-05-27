@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { createSelector } from 'reselect';
-import { DEFAULT_LOCATIONS } from 'consts';
+import { DEFAULT_LOCATIONS } from '@app/consts';
 import { useSelector } from 'react-redux';
 
 const getCustomLocations = (state) => state.config.customLocations;

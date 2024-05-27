@@ -1,6 +1,6 @@
-import { setSpyCountAction } from 'actions/config';
-import { useSelectorAndDispatcher } from 'hooks/useSelectorAndDispatcher';
-import { store } from 'store';
+import { setSpyCountAction } from '@actions/config';
+import { useSelectorAndDispatcher } from '@hooks/useSelectorAndDispatcher';
+import { store } from '@app/store';
 
 export const configSpyCountSelector = (state) => state.config.spyCount;
 

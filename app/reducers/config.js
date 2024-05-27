@@ -1,7 +1,7 @@
 import shortid from 'shortid';
-import i18n from 'i18n';
-import roomIdGenerator from 'services/roomIdGenerator';
-import { DEFAULT_LOCATIONS } from 'consts';
+import i18n from '@app/i18n';
+import roomIdGenerator from '@services/roomIdGenerator';
+import { DEFAULT_LOCATIONS } from '@app/consts';
 import {
   ADD_PLAYER,
   CREATE_CUSTOM_LOCATION,
@@ -21,7 +21,7 @@ import {
   SET_HIDE_SPY_COUNT,
   SET_MODERATOR_MODE,
   SET_MODERATOR_LOCATION,
-} from 'actions/config';
+} from '@actions/config';
 
 const defaultSelectedLocations =
   Object.entries(DEFAULT_LOCATIONS)

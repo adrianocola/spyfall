@@ -1,8 +1,8 @@
-import firebase from 'firebase/app';
-import 'firebase/analytics';
-import 'firebase/database';
-import 'firebase/auth';
-import env from 'env';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/analytics';
+import 'firebase/compat/database';
+import 'firebase/compat/auth';
+import env from '@app/env';
 
 const config = {
   apiKey: env.FIREBASE_API_KEY,

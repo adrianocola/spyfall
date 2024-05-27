@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux';
 import { useCallback } from 'react';
-import { updatePlayerAction } from 'actions/config';
+import { updatePlayerAction } from '@actions/config';
 import { useConfigPlayers } from './configPlayers';
 
 export const useConfigPlayer = (playerIndex) => {

@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
-import { useDispatcher } from 'hooks/useDispatcher';
-import { addPlayerAction, remPlayerAction, updatePlayerAction } from 'actions/config';
-import { store } from 'store';
+import { useDispatcher } from '@hooks/useDispatcher';
+import { addPlayerAction, remPlayerAction, updatePlayerAction } from '@actions/config';
+import { store } from '@app/store';
 
 export const configPlayersSelector = (state) => state.config.players;
 

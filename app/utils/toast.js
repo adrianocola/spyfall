@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify';
-import i18n from 'i18n';
+import i18n from '@app/i18n';
 
 export const showError = (msg, err) => {
   if (err) console.error(err); // eslint-disable-line no-console

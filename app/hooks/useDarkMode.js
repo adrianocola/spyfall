@@ -1,10 +1,5 @@
-import useDarkModeLib from 'use-dark-mode';
+import { useDarkMode as useDarkModeLib } from 'usehooks-ts'
 
-const DARK_MODE_CONFIG = {
-  classNameDark: 'bootstrap-dark',
-  classNameLight: 'bootstrap',
-};
-
-const useDarkMode = () => useDarkModeLib(undefined, DARK_MODE_CONFIG);
+const useDarkMode = () => useDarkModeLib({ localStorageKey: 'darkMode' });
 
 export default useDarkMode;

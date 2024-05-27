@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DEFAULT_LOCATIONS } from 'consts';
+import { DEFAULT_LOCATIONS } from '@app/consts';
 
 const useSortedLocationsList = (locations) => {
   const [t] = useTranslation();

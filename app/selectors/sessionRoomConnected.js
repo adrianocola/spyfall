@@ -1,5 +1,5 @@
-import { useSelectorAndDispatcher } from 'hooks/useSelectorAndDispatcher';
-import { setRoomConnectedAction } from 'actions/session';
+import { useSelectorAndDispatcher } from '@hooks/useSelectorAndDispatcher';
+import { setRoomConnectedAction } from '@actions/session';
 
 export const roomConnectedSelector = (state) => state.session.roomConnected ?? false;
 

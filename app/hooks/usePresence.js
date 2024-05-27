@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { database, databaseServerTimestamp } from 'services/firebase';
+import { database, databaseServerTimestamp } from '@services/firebase';
 
 export const isOfflineForDatabase = {
   online: false,

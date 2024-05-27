@@ -1,7 +1,7 @@
 import {
   SET_ROOM_ID,
   SET_PLAYER_ID,
-} from 'actions/joinRoom';
+} from '@actions/joinRoom';
 
 const initialState = {
   roomId: '',

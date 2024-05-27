@@ -7,7 +7,29 @@ secret.json
 .firebaserc.json
 .firebase/
 build/
-env/dev.js
-env/prod.js
+.env.development
+.env.production
 functions/lib/*.js
 firebase-debug.log
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { deselectLocationAction, selectLocationAction } from 'actions/config';
+import { deselectLocationAction, selectLocationAction } from '@actions/config';
 import { selectedLocationsSelector } from './selectedLocations';
 
 export const useSelectedLocation = (locationId) => {

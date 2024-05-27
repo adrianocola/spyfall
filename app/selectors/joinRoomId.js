@@ -1,5 +1,5 @@
-import { useSelectorAndDispatcher } from 'hooks/useSelectorAndDispatcher';
-import { setJoinRoomIdAction } from 'actions/joinRoom';
+import { useSelectorAndDispatcher } from '@hooks/useSelectorAndDispatcher';
+import { setJoinRoomIdAction } from '@actions/joinRoom';
 
 export const joinRoomIdSelector = (state) => state.joinRoom.roomId;
 

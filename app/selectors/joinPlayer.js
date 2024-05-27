@@ -1,5 +1,5 @@
-import { useSelectorAndDispatcher } from 'hooks/useSelectorAndDispatcher';
-import { setJoinPlayerAction } from 'actions/joinRoom';
+import { useSelectorAndDispatcher } from '@hooks/useSelectorAndDispatcher';
+import { setJoinPlayerAction } from '@actions/joinRoom';
 
 export const joinPlayerSelector = (state) => state.joinRoom.player;
 

@@ -1,5 +1,5 @@
-import { isDev } from 'env';
-import { analytics } from 'services/firebase';
+import { isDev } from '@app/env';
+import { analytics } from '@services/firebase';
 
 export const logPageView = (path) => {
   analytics.setCurrentScreen(path);

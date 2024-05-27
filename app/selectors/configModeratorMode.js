@@ -1,6 +1,6 @@
-import { useSelectorAndDispatcher } from 'hooks/useSelectorAndDispatcher';
-import { setModeratorModeAction } from 'actions/config';
-import { store } from 'store';
+import { useSelectorAndDispatcher } from '@hooks/useSelectorAndDispatcher';
+import { setModeratorModeAction } from '@actions/config';
+import { store } from '@app/store';
 
 export const configModeratorModeSelector = (state) => state.config.moderatorMode ?? false;
 

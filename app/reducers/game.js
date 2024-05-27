@@ -1,7 +1,7 @@
 import {
   RESET_GAME,
   UPDATE_GAME,
-} from 'actions/game';
+} from '@actions/game';
 
 const initialState = {
   state: 'new',

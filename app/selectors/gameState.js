@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
-import { useDispatcher } from 'hooks/useDispatcher';
-import { resetGameAction, updateGameAction } from 'actions/game';
+import { useDispatcher } from '@hooks/useDispatcher';
+import { resetGameAction, updateGameAction } from '@actions/game';
 
 export const gameStateSelector = (state) => state.game.state;
 

@@ -2,7 +2,7 @@ import {
   SET_USER_ID,
   SET_LANGUAGE,
   SET_TRANSLATIONS,
-} from 'actions/root';
+} from '@actions/root';
 
 const initialState = {
   userId: null,

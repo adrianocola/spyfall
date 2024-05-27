@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@app/*": ["./app/*"],
+      "@actions/*": ["./app/actions/*"],
+      "@components/*": ["./app/components/*"],
+      "@containers/*": ["./app/containers/*"],
+      "@hooks/*": ["./app/hooks/*"],
+      "@images/*": ["./app/images/*"],
+      "@reducers/*": ["./app/reducers/*"],
+      "@selectors/*": ["./app/selectors/*"],
+      "@services/*": ["./app/services/*"],
+      "@styles/*": ["./app/styles/*"],
+      "@utils/*": ["./app/utils/*"]
+    }
+  }
+}

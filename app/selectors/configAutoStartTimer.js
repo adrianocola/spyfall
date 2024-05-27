@@ -1,6 +1,6 @@
-import { useSelectorAndDispatcher } from 'hooks/useSelectorAndDispatcher';
-import { setAutoStarTimerAction } from 'actions/config';
-import { store } from 'store';
+import { useSelectorAndDispatcher } from '@hooks/useSelectorAndDispatcher';
+import { setAutoStarTimerAction } from '@actions/config';
+import { store } from '@app/store';
 
 export const configAutoStartTimerSelector = (state) => state.config.autoStartTimer ?? false;
 

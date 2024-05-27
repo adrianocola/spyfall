@@ -1,6 +1,6 @@
-import { useSelectorAndDispatcher } from 'hooks/useSelectorAndDispatcher';
-import { setTimeAction } from 'actions/config';
-import { store } from 'store';
+import { useSelectorAndDispatcher } from '@hooks/useSelectorAndDispatcher';
+import { setTimeAction } from '@actions/config';
+import { store } from '@app/store';
 
 export const configTimeSelector = (state) => state.config.time;
 

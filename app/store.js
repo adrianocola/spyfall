@@ -4,12 +4,12 @@ import { persistStore, persistReducer, createMigrate } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 
-import root from 'reducers/root';
-import session from 'reducers/session';
-import game from 'reducers/game';
-import config from 'reducers/config';
-import room from 'reducers/room';
-import joinRoom from 'reducers/joinRoom';
+import root from '@reducers/root';
+import session from '@reducers/session';
+import game from '@reducers/game';
+import config from '@reducers/config';
+import room from '@reducers/room';
+import joinRoom from '@reducers/joinRoom';
 
 const middlewares = [];
 
@@ -38,7 +38,7 @@ const persistConfig = {
 
 /* eslint-disable no-underscore-dangle */
 const composeEnhancers =
-  process.env.NODE_ENV !== 'production' &&
+  import.meta.env.DEV &&
   typeof window === 'object' &&
   window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
     ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({

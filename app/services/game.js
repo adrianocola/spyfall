@@ -1,9 +1,9 @@
 import _ from 'lodash';
-import { store } from 'store';
-import { resetGameAction, updateGameAction } from 'actions/game';
-import { database, databaseServerTimestamp } from 'services/firebase';
-import { gameLocationsSelector } from 'selectors/gameLocations';
-import { logEvent } from 'utils/analytics';
+import { store } from '@app/store';
+import { resetGameAction, updateGameAction } from '@actions/game';
+import { database, databaseServerTimestamp } from '@services/firebase';
+import { gameLocationsSelector } from '@selectors/gameLocations';
+import { logEvent } from '@utils/analytics';
 
 let lastRoom = {};
 let lastLocations = {};
