@@ -3,7 +3,7 @@ import { BounceLoader } from 'react-spinners';
 
 const Spinner = (props) => (
   <BounceLoader
-    sizeUnit="px"
+    sizeunit="px"
     size={32}
     color="#aaaaaa"
     {...props}
