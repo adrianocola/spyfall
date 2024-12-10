@@ -5,13 +5,13 @@ import 'firebase/compat/auth';
 import env from '@app/env';
 
 const config = {
-  apiKey: env.FIREBASE_API_KEY,
+  apiKey: env.EMULATOR ? env.FIREBASE_PROJECT_ID : env.FIREBASE_API_KEY,
   authDomain: `${env.FIREBASE_PROJECT_ID}.firebaseapp.com`,
   databaseURL: `https://${env.FIREBASE_PROJECT_ID}.firebaseio.com`,
   projectId: env.FIREBASE_PROJECT_ID,
   storageBucket: `${env.FIREBASE_PROJECT_ID}.appspot.com`,
   messagingSenderId: env.FIREBASE_SENDER_ID,
-  appId: env.FIREBASE_APP_ID,
+  appId: env.EMULATOR ? env.FIREBASE_PROJECT_ID : env.FIREBASE_APP_ID,
   measurementId: env.FIREBASE_MEASUREMENT_ID,
 };
 firebase.initializeApp(config);
