@@ -4,6 +4,10 @@ body {
   width: 100%;
 }
 
+body.modal-open {
+  transition: none;
+}
+
 body {
   transition: all 0.5s ease;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
