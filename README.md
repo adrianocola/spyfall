@@ -8,7 +8,15 @@ React + Firebase implementation for the card game [Spyfall](http://boardgamegeek
 
 Access [crowdin's](https://crowdin.com/project/adrianocola-spyfall) page to request new translations or help translating existing ones.
 
-### Running the project
+### Running the project (locally)
+
+- Install [node.js](https://nodejs.org/)
+- Clone this project, enter the cloned folder and install dependencies with `npm install`
+- Open a terminal and run the command `npm run emulator`
+- Open another terminal and run the command `npm run dev-emulator`
+- Access it at `http://localhost:5173`
+
+### Running the project (deploy fo Firebase)
 
 - Install [node.js](https://nodejs.org/)
 - Clone this project, enter the cloned folder and install dependencies with `npm install`
@@ -19,4 +27,4 @@ Access [crowdin's](https://crowdin.com/project/adrianocola-spyfall) page to requ
 - Create a copy of the file `.env.sample` named `.env.development` and fill it with the firebase configuration. You don't need to fill all fields.
 - Access your firebase project in the [firebase console](https://console.firebase.google.com/) and enable anonymous authentication (Authentication → Sign-in method → Anonymous)
 - Deploy firebase database security rules `npx firebase deploy --only database`
-- Run the project with `npm run dev` and access it at `http://localhost:4000`
+- Run the project with `npm run dev` and access it at `http://localhost:5173`

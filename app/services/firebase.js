@@ -20,4 +20,9 @@ export const database = firebase.database();
 export const auth = firebase.auth();
 export const analytics = firebase.analytics();
 
+if (env.EMULATOR) {
+  database.useEmulator('localhost', 9000);
+  auth.useEmulator('http://localhost:9099');
+}
+
 export const databaseServerTimestamp = firebase.database.ServerValue.TIMESTAMP;
