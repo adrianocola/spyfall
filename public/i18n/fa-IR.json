@@ -43,7 +43,7 @@
   "interface.export_help": "استفاده از id قبلی برای انتخاب مکان شما در سیستم دیگر(مترجم:خودمم نمیفهمم چی میگه :| )",
   "interface.done": "تمام!",
   "interface.error": "ارور!",
-  "interface.link_copied": "Link copied to clipboard!",
+  "interface.link_copied": "لینک کپی شد",
   "interface.moderator_mode": "Moderator mode",
   "interface.auto_start_timer": "Start timer on game start",
   "interface.hide_spy_count": "Hide spy count",
