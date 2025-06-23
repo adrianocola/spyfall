@@ -18,6 +18,7 @@ export default [
   { id: 'fa-IR', name: 'فارسی', short: 'fa' },
   { id: 'fi-FI', name: 'Suomi', short: 'fi' },
   { id: 'fr-FR', name: 'Français', short: 'fr' },
+  { id: 'ka-GE', name: 'ქართული ენა', short: 'ka' },
   { id: 'he-IL', name: 'עברית', short: 'he' },
   { id: 'hu-HU', name: 'Magyar', short: 'hu' },
   { id: 'id-ID', name: 'Indonesian', short: 'id' },
