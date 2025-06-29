@@ -2,7 +2,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'animate.css';
 
 // Import all the third party stuff
-import React from 'react';
 import ReactDOM from 'react-dom/client'
 import FontFaceObserver from 'fontfaceobserver';
 

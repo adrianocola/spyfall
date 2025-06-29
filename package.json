@@ -22,12 +22,12 @@
     "dev-emulator": "cross-env VITE_EMULATOR=true VITE_FIREBASE_PROJECT_ID=demo-spyfall vite --mode development",
     "dev-build": "vite build --mode development",
     "dev-deploy": "npm run dev-build && firebase deploy --only hosting -P default",
-    "dev-deploy-functions": "cp app/translations.js functions/lib/translations.js && firebase deploy --project default --only functions",
+    "dev-deploy-functions": "firebase deploy --project default --only functions",
     "dev-preview": "vite preview --mode development",
     "prod": "vite --mode production",
     "prod-build": "vite build --mode production",
     "prod-deploy": "npm run prod-build && firebase deploy --only hosting -P prod",
-    "prod-deploy-functions": "cp app/translations.js functions/lib/translations.js && firebase deploy --project prod --only functions",
+    "prod-deploy-functions": "firebase deploy --project prod --only functions",
     "prod-preview": "vite preview --mode production"
   },
   "pre-commit": "lint:staged",
@@ -35,6 +35,9 @@
     "*.js": "eslint --ignore-path .gitignore --ignore-pattern internals/scripts"
   },
   "dependencies": {
+    "@formatjs/intl-displaynames": "6.8.11",
+    "@formatjs/intl-getcanonicallocales": "2.5.5",
+    "@formatjs/intl-locale": "4.2.11",
     "animate.css": "^4.1.1",
     "bootstrap": "4.6.2",
     "emotion": "^10.0.27",
@@ -83,6 +86,6 @@
     "vite": "^5.2.0"
   },
   "engines": {
-    "node": "18"
+    "node": "20"
   }
 }

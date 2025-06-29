@@ -6,13 +6,6 @@ const moment = require('moment');
 const promiseLimit = require('promise-limit');
 const axios = require('axios').default;
 
-const translationsMap = require('./lib/translations.js');
-
-const translationsShortMap = _.reduce(translationsMap, (obj, translation) => {
-  obj[translation.short] = translation.id;
-  return obj;
-}, {});
-
 const CROWDIN_ACCESS_TOKEN = functions.config().crowdin.accesstoken;
 
 admin.initializeApp();
@@ -25,16 +18,12 @@ const getCrowdinTranslations = () =>
   }).then((response) => response.data.data);
 
 const updateTranslations = async () => {
-  const status = {};
   const translations = await getCrowdinTranslations();
+
+  const status = {};
   _.each(translations, (translationData) => {
     const translation = translationData.data;
-    const code = translationsShortMap[translation.languageId];
-    if (!code) {
-      console.log('CODE NOT FOUND', translation.languageId);
-      return;
-    }
-    status[code] = translation.translationProgress;
+    status[translation.language.locale] = translation.translationProgress;
   });
 
   await admin.database().ref('translations').set(status);

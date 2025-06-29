@@ -4,9 +4,11 @@ import {
   SET_TRANSLATIONS,
 } from '@actions/root';
 
+const initialLanguage = (navigator.languages && navigator.languages[0]) || navigator.language || 'en-US';
+
 const initialState = {
   userId: null,
-  language: 'en-US',
+  language: initialLanguage,
   translations: {},
   translationsImportTime: null,
 };

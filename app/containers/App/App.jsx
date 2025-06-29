@@ -1,4 +1,4 @@
-import React, {lazy, Suspense, useEffect, useState} from 'react';
+import {lazy, Suspense, useEffect, useMemo, useState} from 'react';
 import {Helmet} from 'react-helmet';
 import {Link, Route, Switch} from 'react-router-dom';
 import {css} from 'emotion';
@@ -7,7 +7,7 @@ import {ToastContainer} from 'react-toastify';
 import {DarkModeSwitch} from 'react-toggle-dark-mode';
 import {Col, Container, Input, Row} from 'reactstrap';
 import {auth, database} from '@services/firebase';
-import {DARK, LIGHT, TRANSLATIONS} from '@app/consts';
+import {DARK, LIGHT} from '@app/consts';
 import Discord from '@images/discord.png';
 import {useLanguage} from '@selectors/language';
 import {useTranslations} from '@selectors/translations';
@@ -24,6 +24,9 @@ const LoadableSettings = lazy(() => import('@containers/Settings/Settings'));
 const LoadableGame = lazy(() => import('@containers/Game/Game'));
 const LoadableJoinRoom = lazy(() => import('@containers/JoinRoom/JoinRoom'));
 
+const capitalize = (s, locale) =>
+  s.replace(/^./u, c => c.toLocaleUpperCase(locale));
+
 export const App = () => {
   const [loading, setLoading] = useState(true);
   const [, setUserId] = useUserId();
@@ -38,12 +41,31 @@ export const App = () => {
   };
 
   const importTranslations = async () => {
-    // imported less than 24 hours ago
-    if (translationsImportTime && Date.now() - translationsImportTime < 24 * 60 * 60 * 1000) return null;
+    // imported less than 6 hours ago
+    if (translationsImportTime && Date.now() - translationsImportTime < 6 * 60 * 60 * 1000) return null;
 
     const translationsSnapshot = await database.ref('translations').once('value');
     setTranslations(translationsSnapshot.val() || {});
   };
+
+  const translationLanguagesCount = useMemo(() => {
+    return Object.keys(translations).reduce((acc, lang) => {
+      const [id] = lang.split('-');
+      acc[id] = (acc[id] || 0) + 1;
+      return acc;
+    }, {});
+  }, [translations]);
+
+  const getLanguageName = (langId) => {
+    const [id] = langId.split('-');
+    const finalId = translationLanguagesCount[id] === 1 ? id : langId;
+    try {
+      const formatter = new Intl.DisplayNames([id], { type: 'language' });
+      return capitalize(formatter.of(finalId));
+    } catch (e) {
+      return finalId;
+    }
+  }
 
   useEffect(() => {
     i18nInit.then(() => {
@@ -96,8 +118,8 @@ export const App = () => {
             </Col>
             <Col xs="12" sm="7" className={`${styles.topItems} text-center`}>
               <Input type="select" name="languages" id="languages" value={language} onChange={(evt) => changeLanguage(evt.target.value)}>
-                {TRANSLATIONS.map((translation) =>
-                  <option key={translation.id} value={translation.id}>{translation.name} - {translations[translation.id] || 0}%</option>
+                {Object.entries(translations).map(([id, progress]) =>
+                  <option key={id} value={id}>{getLanguageName(id)} ({progress || 0}%)</option>
                 )}
               </Input>
             </Col>

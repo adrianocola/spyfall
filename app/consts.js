@@ -1,5 +1,3 @@
-import translations from './translations';
-
 export const MIN_PLAYERS = 3;
 export const MAX_PLAYERS = 12;
 export const MAX_ROLES = MAX_PLAYERS - 2;
@@ -73,7 +71,5 @@ export const DEFAULT_LOCATIONS = {
   wedding: 2,
   zoo: 2,
 };
-
-export const TRANSLATIONS = translations;
 
 export const DEFAULT_LOCATIONS_LENGTH = Object.keys(DEFAULT_LOCATIONS).length;
