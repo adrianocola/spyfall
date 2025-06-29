@@ -17,7 +17,7 @@
   "interface.pause_timer": "Pause Timer",
   "interface.create_room": "Стварыць пакой",
   "interface.join_room": "Далучыцца да пакою",
-  "interface.leave_room": "Leave Room",
+  "interface.leave_room": "Выйсці з пакою",
   "interface.room": "Пакой",
   "interface.player": "Гулец",
   "interface.room_help": "Ask your players to join with the same player name you defined above!",
