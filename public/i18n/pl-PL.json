@@ -45,7 +45,7 @@
   "interface.error": "Błąd!",
   "interface.link_copied": "Link został skopiowany do schowka!",
   "interface.moderator_mode": "Tryb moderatora",
-  "interface.auto_start_timer": "Start timer on game start",
+  "interface.auto_start_timer": "Mierz czas od początku gry",
   "interface.hide_spy_count": "Ukryj liczbę szpiegów",
   "location.airplane": "Samolot",
   "location.airplane.role1": "Pasażer pierwszej klasy",
