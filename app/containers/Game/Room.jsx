@@ -6,6 +6,7 @@ import { GoClippy } from 'react-icons/go';
 import ButtonWithLoading from '@components/ButtonWithLoading/ButtonWithLoading';
 import Localized from '@components/Localized/Localized';
 import { deleteGame, resetGame } from '@services/game';
+import { database } from '@services/firebase';
 import copyToClipboard from '@utils/copyToClipboard';
 import { showError, showSuccess } from '@utils/toast';
 import { logEvent } from '@utils/analytics';
@@ -43,6 +44,7 @@ export const Room = ({ started }) => {
 
   const onCloseRoom = async () => {
     logEvent('ROOM_CLOSE');
+    await database.ref(`roomsData/${roomId}/online`).set(false);
     await deleteGame();
     setRoomConnected(false);
   };

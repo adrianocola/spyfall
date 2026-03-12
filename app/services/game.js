@@ -17,6 +17,7 @@ const saveGame = (meta = {}) => {
     ...state.game,
     ...meta,
     updatedAt: databaseServerTimestamp,
+    online: true,
   };
 
   const newLocations = gameLocationsSelector(state);

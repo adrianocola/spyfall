@@ -28,7 +28,8 @@
     "prod-build": "vite build --mode production",
     "prod-deploy": "npm run prod-build && firebase deploy --only hosting -P prod",
     "prod-deploy-functions": "firebase deploy --project prod --only functions",
-    "prod-preview": "vite preview --mode production"
+    "prod-preview": "vite preview --mode production",
+    "serve": "cross-env VITE_NO_FIREBASE=true npm run prod-build && node server.mjs"
   },
   "pre-commit": "lint:staged",
   "lint-staged": {
@@ -41,6 +42,7 @@
     "animate.css": "^4.1.1",
     "bootstrap": "4.6.2",
     "emotion": "^10.0.27",
+    "express": "^5.2.1",
     "firebase": "^10.12.1",
     "fontfaceobserver": "^2.3.0",
     "history": "^4.10.1",
@@ -65,6 +67,8 @@
     "redux-persist": "^6.0.0",
     "reselect": "^4.1.8",
     "shortid": "2.2.16",
+    "socket.io": "^4.8.3",
+    "socket.io-client": "^4.8.3",
     "usehooks-ts": "^3.1.0"
   },
   "devDependencies": {

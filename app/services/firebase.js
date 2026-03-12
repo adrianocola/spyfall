@@ -3,6 +3,7 @@ import 'firebase/compat/analytics';
 import 'firebase/compat/database';
 import 'firebase/compat/auth';
 import env from '@app/env';
+import { socketDatabase, socketAuth, socketAnalytics, socketServerTimestamp } from '@services/socket-db';
 
 const config = {
   apiKey: env.EMULATOR ? env.FIREBASE_PROJECT_ID : env.FIREBASE_API_KEY,
@@ -14,15 +15,26 @@ const config = {
   appId: env.EMULATOR ? env.FIREBASE_PROJECT_ID : env.FIREBASE_APP_ID,
   measurementId: env.FIREBASE_MEASUREMENT_ID,
 };
-firebase.initializeApp(config);
 
-export const database = firebase.database();
-export const auth = firebase.auth();
-export const analytics = firebase.analytics();
+let database, auth, analytics, databaseServerTimestamp;
 
-if (env.EMULATOR) {
-  database.useEmulator('localhost', 9000);
-  auth.useEmulator('http://localhost:9099');
+if (import.meta.env.VITE_NO_FIREBASE === 'true') {
+  database = socketDatabase;
+  auth = socketAuth;
+  analytics = socketAnalytics;
+  databaseServerTimestamp = socketServerTimestamp;
+} else {
+  firebase.initializeApp(config);
+  database = firebase.database();
+  auth = firebase.auth();
+  analytics = firebase.analytics();
+
+  if (env.EMULATOR) {
+    database.useEmulator('localhost', 9000);
+    auth.useEmulator('http://localhost:9099');
+  }
+
+  databaseServerTimestamp = firebase.database.ServerValue.TIMESTAMP;
 }
 
-export const databaseServerTimestamp = firebase.database.ServerValue.TIMESTAMP;
+export { database, auth, analytics, databaseServerTimestamp };

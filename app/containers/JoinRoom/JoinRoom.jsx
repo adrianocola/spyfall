@@ -81,7 +81,7 @@ export const JoinRoom = () => {
             type="text"
             placeholder={t('interface.room')}
             value={joinRoomId}
-            onChange={(evt) => setJoinRoomId(evt.target.value)}
+            onChange={(evt) => setJoinRoomId(evt.target.value.toUpperCase())}
             onPaste={onPasteRoomId}
           />
         </Col>

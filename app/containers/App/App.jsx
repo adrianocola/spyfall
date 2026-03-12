@@ -41,8 +41,9 @@ export const App = () => {
   };
 
   const importTranslations = async () => {
+    const hasTranslations = translations && Object.keys(translations).length > 0;
     // imported less than 6 hours ago
-    if (translationsImportTime && Date.now() - translationsImportTime < 6 * 60 * 60 * 1000) return null;
+    if (hasTranslations && translationsImportTime && Date.now() - translationsImportTime < 6 * 60 * 60 * 1000) return null;
 
     const translationsSnapshot = await database.ref('translations').once('value');
     setTranslations(translationsSnapshot.val() || {});
