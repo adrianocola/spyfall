@@ -537,5 +537,7 @@
   "location.zoo.role7": "Voedsel verkoper",
   "location.zoo.role8": "Kassa medewerker",
   "location.zoo.role9": "Dierenverzorger",
-  "location.zoo.role10": "Onderzoeker"
+  "location.zoo.role10": "Onderzoeker",
+  "interface.galeragames_tagline": "More games to play with friends",
+  "interface.galeragames_cta": "Play free"
 }
