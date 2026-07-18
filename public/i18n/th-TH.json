@@ -537,5 +537,7 @@
   "location.zoo.role7": "ผู้ขายอาหาร",
   "location.zoo.role8": "แคชเชียร์",
   "location.zoo.role9": "ผู้ดูแลสวนสัตว์",
-  "location.zoo.role10": "นักวิจัย"
+  "location.zoo.role10": "นักวิจัย",
+  "interface.galeragames_tagline": "More games to play with friends",
+  "interface.galeragames_cta": "Play free"
 }
