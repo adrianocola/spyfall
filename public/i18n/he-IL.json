@@ -537,5 +537,7 @@
   "location.zoo.role7": "מוכר/ת אוכל",
   "location.zoo.role8": "קופאי/ת",
   "location.zoo.role9": "מטפל בגן החיות",
-  "location.zoo.role10": "חוֹקֵר"
+  "location.zoo.role10": "חוֹקֵר",
+  "interface.galeragames_tagline": "More games to play with friends",
+  "interface.galeragames_cta": "Play free"
 }
