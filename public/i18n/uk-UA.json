@@ -537,5 +537,7 @@
   "location.zoo.role7": "Продавець їжі",
   "location.zoo.role8": "Касир",
   "location.zoo.role9": "Наглядач за тваринами",
-  "location.zoo.role10": "Дослідник"
+  "location.zoo.role10": "Дослідник",
+  "interface.galeragames_tagline": "More games to play with friends",
+  "interface.galeragames_cta": "Play free"
 }
