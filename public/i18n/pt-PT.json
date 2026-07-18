@@ -537,5 +537,7 @@
   "location.zoo.role7": "Vendedor de comida",
   "location.zoo.role8": "Caixeiro",
   "location.zoo.role9": "Guarda do zoo",
-  "location.zoo.role10": "Investigador"
+  "location.zoo.role10": "Investigador",
+  "interface.galeragames_tagline": "More games to play with friends",
+  "interface.galeragames_cta": "Play free"
 }
