@@ -4,7 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { database } from '@services/firebase';
 import { logEvent } from '@utils/analytics';
 
-const GALERA_URL = 'https://galeragames.com/';
+const GALERA_URL =
+  'https://galeragames.com/?utm_source=spyfall&utm_medium=banner&utm_campaign=cross_promo';
 
 // White "PlayCircle" dots (center disc ringed by 8) at 45deg steps: the GaleraGames mark.
 const RING = [
