@@ -537,5 +537,7 @@
   "location.zoo.role7": "Vendeur de hot-dogs",
   "location.zoo.role8": "Caissier",
   "location.zoo.role9": "Gardien de zoo",
-  "location.zoo.role10": "Zoologue"
+  "location.zoo.role10": "Zoologue",
+  "interface.galeragames_tagline": "More games to play with friends",
+  "interface.galeragames_cta": "Play free"
 }
