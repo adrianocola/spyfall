@@ -537,5 +537,7 @@
   "location.zoo.role7": "Matselger",
   "location.zoo.role8": "Kasserer",
   "location.zoo.role9": "Dyrepasser",
-  "location.zoo.role10": "Forsker"
+  "location.zoo.role10": "Forsker",
+  "interface.galeragames_tagline": "More games to play with friends",
+  "interface.galeragames_cta": "Play free"
 }
