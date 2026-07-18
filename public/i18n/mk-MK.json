@@ -537,5 +537,7 @@
   "location.zoo.role7": "Food Vendor",
   "location.zoo.role8": "Cashier",
   "location.zoo.role9": "Zookeeper",
-  "location.zoo.role10": "Researcher"
+  "location.zoo.role10": "Researcher",
+  "interface.galeragames_tagline": "Повеќе игри за играње со пријатели",
+  "interface.galeragames_cta": "Играј бесплатно"
 }

@@ -537,5 +537,7 @@
   "location.zoo.role7": "Ételárus",
   "location.zoo.role8": "Pénztáros",
   "location.zoo.role9": "Gondozó",
-  "location.zoo.role10": "Kutató"
+  "location.zoo.role10": "Kutató",
+  "interface.galeragames_tagline": "Több játék, amit barátokkal játszhatsz",
+  "interface.galeragames_cta": "Játssz ingyen"
 }

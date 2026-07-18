@@ -537,5 +537,7 @@
   "location.zoo.role7": "Ruoanmyyjä",
   "location.zoo.role8": "Kassavirkailija",
   "location.zoo.role9": "Eläintenhoitaja",
-  "location.zoo.role10": "Tutkija"
+  "location.zoo.role10": "Tutkija",
+  "interface.galeragames_tagline": "Lisää pelejä ystävien kanssa pelattavaksi",
+  "interface.galeragames_cta": "Pelaa ilmaiseksi"
 }

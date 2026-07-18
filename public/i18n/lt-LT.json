@@ -537,5 +537,7 @@
   "location.zoo.role7": "Maisto prekiautojas",
   "location.zoo.role8": "Kasininkas",
   "location.zoo.role9": "Zoologijos sodo prižiūrėtojas",
-  "location.zoo.role10": "Tyrėjas"
+  "location.zoo.role10": "Tyrėjas",
+  "interface.galeragames_tagline": "Daugiau žaidimų žaisti su draugais",
+  "interface.galeragames_cta": "Žaisk nemokamai"
 }

@@ -537,5 +537,7 @@
   "location.zoo.role7": "Υπεύθυνος Καντίνας",
   "location.zoo.role8": "Ταμίας",
   "location.zoo.role9": "Υπεύθυνος Ζωολογικού Κήπου",
-  "location.zoo.role10": "Μελετητής"
+  "location.zoo.role10": "Μελετητής",
+  "interface.galeragames_tagline": "Περισσότερα παιχνίδια για να παίξεις με φίλους",
+  "interface.galeragames_cta": "Παίξε δωρεάν"
 }

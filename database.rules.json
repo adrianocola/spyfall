@@ -45,6 +45,9 @@
     },
     "translations": {
       ".read": true
+    },
+    "config": {
+      ".read": true
     }
   }
 }

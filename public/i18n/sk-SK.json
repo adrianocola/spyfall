@@ -537,5 +537,7 @@
   "location.zoo.role7": "Predavač jedla",
   "location.zoo.role8": "Pokladníčka",
   "location.zoo.role9": "Ošetrovateľ",
-  "location.zoo.role10": "Výskumník"
+  "location.zoo.role10": "Výskumník",
+  "interface.galeragames_tagline": "Ďalšie hry, ktoré si zahráš s priateľmi",
+  "interface.galeragames_cta": "Hraj zadarmo"
 }

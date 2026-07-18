@@ -537,5 +537,7 @@
   "location.zoo.role7": "Prodavač hrane",
   "location.zoo.role8": "Blagajnik",
   "location.zoo.role9": "Čuvar",
-  "location.zoo.role10": "Istraživač"
+  "location.zoo.role10": "Istraživač",
+  "interface.galeragames_tagline": "Više igara za igranje sa prijateljima",
+  "interface.galeragames_cta": "Igraj besplatno"
 }

@@ -19,6 +19,7 @@ import {logEvent} from '@utils/analytics';
 import SpinnerModal from '@components/SpinnerModal/SpinnerModal';
 import SpyIcon from '@components/SpyIcon/SpyIcon';
 import {AdBanner} from '@components/AdBanner/AdBanner';
+import {GaleraBanner} from '@components/GaleraBanner/GaleraBanner';
 
 const LoadableSettings = lazy(() => import('@containers/Settings/Settings'));
 const LoadableGame = lazy(() => import('@containers/Game/Game'));
@@ -125,6 +126,8 @@ export const App = () => {
             </Col>
           </Row>
           <AdBanner />
+          {/* Home-only GaleraGames banner */}
+          <Route exact path="/" render={() => <GaleraBanner />} />
           <Suspense fallback={<SpinnerModal />}>
             <Switch>
               <Route exact path="/settings" component={LoadableSettings} />

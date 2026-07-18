@@ -537,5 +537,7 @@
   "location.zoo.role7": "Essensverkäufer",
   "location.zoo.role8": "Kassierer",
   "location.zoo.role9": "Zoowärter",
-  "location.zoo.role10": "Wissenschaftler"
+  "location.zoo.role10": "Wissenschaftler",
+  "interface.galeragames_tagline": "Mehr Spiele zum Spielen mit Freunden",
+  "interface.galeragames_cta": "Kostenlos spielen"
 }
