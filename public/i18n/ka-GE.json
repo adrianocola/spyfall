@@ -537,5 +537,7 @@
   "location.zoo.role7": "საჭმლის გამყიდველი",
   "location.zoo.role8": "მოლარე",
   "location.zoo.role9": "ზოოპარკის მომვლელი",
-  "location.zoo.role10": "მკვლევარი"
+  "location.zoo.role10": "მკვლევარი",
+  "interface.galeragames_tagline": "More games to play with friends",
+  "interface.galeragames_cta": "Play free"
 }
